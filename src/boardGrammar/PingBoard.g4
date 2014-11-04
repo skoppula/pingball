@@ -53,11 +53,10 @@ action : whitespace ACTIONID equals NAME;
 
 
 root : board EOF;
-board : boardInit bodyLine*;
-irrelevantLine : ( '' | comment) ; // either the line is only whitespace, in which case bodyLine will grab that whitespace, or the line has a comment
-comment : COMMENT;
-boardInit : BOARDINITID name gravity? friction1? friction2?;
-bodyLine : EXTRAWHITESPACE (ball | squareBumper | circleBumper | triangleBumper | rightFlipper | leftFlipper | absorber | fire | irrelevant) EXTRAWHITESPACE;
+board : irrelevantLine* boardInit bodyLine*;
+irrelevantLine : ( '' | COMMENT) ; // either the line is only whitespace, in which case bodyLine will grab that whitespace, or the line has a comment
+boardInit : EXTRAWHITESPACE BOARDINITID name gravity? friction1? friction2? EXTRAWHITESPACE;
+bodyLine : EXTRAWHITESPACE (ball | squareBumper | circleBumper | triangleBumper | rightFlipper | leftFlipper | absorber | fire | irrelevantLine) EXTRAWHITESPACE;
 ball : BALLID name floatX floatY xVelocity yVelocity ;
 squareBumper : SQUAREBUMPERID name intX intY;
 circleBumper : CIRCLEBUMPERID name intX intY;
