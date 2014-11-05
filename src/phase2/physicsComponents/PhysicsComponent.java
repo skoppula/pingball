@@ -1,4 +1,4 @@
-package warmup;
+package phase2.physicsComponents;
 import physics.*;
 
 /**
@@ -6,7 +6,7 @@ import physics.*;
  * so that we can treat them all with the same set of methods.
  * Classes that extend this physics component can be mutable
  */
-interface PhysicsComponent {
+public interface PhysicsComponent {
     
     /**
      * 
