@@ -15,10 +15,12 @@ import physics.Geometry.DoublePair;
 public abstract class Gadget {
     
     private double reflectionCoef;
+    private String name;
     private GridPoint location; // the (x,y) coordinates of the top left bounding box of the gadget
     
-    public Gadget(GridPoint location) {
+    public Gadget(GridPoint location, String name) {
         this.location = location;
+        this.name = name;
     }
 
     /**
