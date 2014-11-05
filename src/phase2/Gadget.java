@@ -1,8 +1,6 @@
 package phase2;
 
 
-import Gadget;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,20 +14,17 @@ import physics.Geometry.DoublePair;
 
 public abstract class Gadget {
     
+
+    protected String name;
     protected final double reflectionCoef;
-    private String name;
     private ArrayList<Gadget> gadgetsToTrigger;
-    private GridPoint location; // the (x,y) coordinates of the top left bounding box of the gadget
+    protected final GridPoint location; // the (x,y) coordinates of the top left bounding box of the gadget
     
     public Gadget(GridPoint location, String name) {
         this.location = location;
         this.name = name;
     }
 
-    /**
-     * @return DoublePair representing the (width,height) of the Gadget on the Board
-     */
-    public DoublePair getBoardRepSize;
     
     /**
      * @return DoublePair representing the (width,height) of the Gadget

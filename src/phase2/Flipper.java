@@ -43,6 +43,12 @@ public class Flipper extends Gadget {
     final private Orientation orientation;
     // orientation of the flipper
 
+    private boolean isActive;
+    // whether the flipper is currently rotating
+    
+    private final List<PhysicsComponent> physicsComponentList = new ArrayList<>();
+    // a list representing the physical components of this flipper
+    
     /**
      * Determines which type the bumper is.
      *
@@ -71,6 +77,7 @@ public class Flipper extends Gadget {
         super(location, name);
         this.side = side;
         this.orientation = orientation;
+        this.isActive = false;
 
         // Will our bumper start out by moving clockwise or counterclockwise?
         switch(side){
@@ -90,23 +97,23 @@ public class Flipper extends Gadget {
         // stored in pivotCorner. This is
         // calculated from the orientation and the type of flipper.
 
-        if((side == BumperSide.LEFT) && orientation.equals(Angle.ZERO) ||
-                side == BumperSide.RIGHT && orientation.equals(Angle.DEG_270)){
+        if((side == BumperSide.LEFT) && orientation.equals(Orientation.ZERO) ||
+                side == BumperSide.RIGHT && orientation.equals(Orientation.TWO_HUNDRED_SEVENTY)){
             this.pivotCorner = Corner.TOPLEFT;
             this.pivot = new Vect(this.getX(), this.getY());
         }
-        else if((side == BumperSide.LEFT) && orientation.equals(Angle.DEG_90) ||
-                side == BumperSide.RIGHT && orientation.equals(Angle.ZERO)){
+        else if((side == BumperSide.LEFT) && orientation.equals(Orientation.NINETY) ||
+                side == BumperSide.RIGHT && orientation.equals(Orientation.ZERO)){
             this.pivotCorner = Corner.TOPRIGHT;
             this.pivot = new Vect(this.getX() + 2, this.getY());
         }
-        else if((side == BumperSide.LEFT) && orientation.equals(Angle.DEG_180) ||
-                side == BumperSide.RIGHT && orientation.equals(Angle.DEG_90)){
+        else if((side == BumperSide.LEFT) && orientation.equals(Orientation.ONE_HUNDRED_EIGHTY) ||
+                side == BumperSide.RIGHT && orientation.equals(Orientation.NINETY)){
             this.pivotCorner = Corner.BOTTOMRIGHT;
             this.pivot = new  Vect(this.getX()+2, this.getY()+2);
         }
-        else if((side == BumperSide.LEFT) && orientation.equals(Angle.DEG_270) ||
-                side == BumperSide.RIGHT && orientation.equals(Angle.DEG_180)){
+        else if((side == BumperSide.LEFT) && orientation.equals(Orientation.TWO_HUNDRED_SEVENTY) ||
+                side == BumperSide.RIGHT && orientation.equals(Orientation.ONE_HUNDRED_EIGHTY)){
             this.pivotCorner = Corner.BOTTOMLEFT;
             this.pivot = new Vect(this.getX(), this.getY() + 2);
         }
@@ -115,9 +122,6 @@ public class Flipper extends Gadget {
                     + "either 0, 90, 180, or 270");
         }
 
-        // Now determine the physical structure of the bumper, from the pivotCorner and willMoveClockwise
-        centerOfRotationCircle = new Circle(this.getCenterOfRotation(), 0.01);
-        endOfFlipperCircle = new Circle(this.getDefaultEndOfFlipper(), 0.01);
         
         // This is the pivot corner.
         Vect rotatingTip;
@@ -125,34 +129,34 @@ public class Flipper extends Gadget {
         switch(pivotCorner){
         case BOTTOMLEFT:
             if(willMoveClockwise){
-                rotatingTip = new Vect(x, y);
+                rotatingTip = new Vect(location.getX(), location.getY());
             }
             else{
-                rotatingTip = new Vect(x + 2, y + 2);
+                rotatingTip = new Vect(location.getX() + 2, location.getY() + 2);
             }
             break;
         case BOTTOMRIGHT:
             if(willMoveClockwise){
-                rotatingTip = new Vect(x, y + 2);
+                rotatingTip = new Vect(location.getX(), location.getY() + 2);
             }
             else{
-                rotatingTip = new Vect(x + 2, y);
+                rotatingTip = new Vect(location.getX() + 2, location.getY());
             }
             break;
         case TOPLEFT:
             if(willMoveClockwise){
-                rotatingTip = new Vect(x + 2, y);
+                rotatingTip = new Vect(location.getX() + 2, location.getY());
             }
             else{
-                rotatingTip = new Vect(x, y + 2);
+                rotatingTip = new Vect(location.getX(), location.getY() + 2);
             }
             break;
         case TOPRIGHT:
             if(willMoveClockwise){
-                rotatingTip = new Vect(x, y + 2);
+                rotatingTip = new Vect(location.getX(), location.getY() + 2);
             }
             else{
-                rotatingTip = new Vect(x, y);
+                rotatingTip = new Vect(location.getX(), location.getY());
             }
             break;
         default:
@@ -171,47 +175,47 @@ public class Flipper extends Gadget {
      * @return a representation of the flipper as a series of grid symbols. 
      * The occupied symbols are the pivot corner, and the corner from which the next swing will originate.
      * For example, a left flipper at orientation 0 would have a symbol at x, y and a symbol at x, y + 1
-     * The character used relies on getRepChar()
+     * The character used relies on charRep()
      */
     @Override
-    public List<GridSymbol> getGridSymbolRep(){
+    public List<GridSymbol> getSymbolRep(){
         List<GridSymbol> symbolList = new ArrayList<>();
 
         switch(pivotCorner){
         case BOTTOMLEFT:
-            symbolList.add(new GridSymbol(location.getX(), location.getY() + 1, this.getRepChar()));
+            symbolList.add(new GridSymbol(location.getX(), location.getY() + 1, this.charRep()));
             if(willMoveClockwise){
-                symbolList.add(new GridSymbol(location.getX(), location.getY(), this.getRepChar()));
+                symbolList.add(new GridSymbol(location.getX(), location.getY(), this.charRep()));
             }
             else{
-                symbolList.add(new GridSymbol(location.getX() + 1, location.getY() + 1, this.getRepChar()));
+                symbolList.add(new GridSymbol(location.getX() + 1, location.getY() + 1, this.charRep()));
             }
             break;
         case BOTTOMRIGHT:
-            symbolList.add(new GridSymbol(location.getX() + 1, location.getY() + 1, this.getRepChar()));
+            symbolList.add(new GridSymbol(location.getX() + 1, location.getY() + 1, this.charRep()));
             if(willMoveClockwise){
-                symbolList.add(new GridSymbol(location.getX(), location.getY() + 1, this.getRepChar()));
+                symbolList.add(new GridSymbol(location.getX(), location.getY() + 1, this.charRep()));
             }
             else{
-                symbolList.add(new GridSymbol(location.getX() + 1, location.getY(), this.getRepChar()));
+                symbolList.add(new GridSymbol(location.getX() + 1, location.getY(), this.charRep()));
             }
             break;
         case TOPLEFT:
-            symbolList.add(new GridSymbol(location.getX(), location.getY(), this.getRepChar()));
+            symbolList.add(new GridSymbol(location.getX(), location.getY(), this.charRep()));
             if(willMoveClockwise){
-                symbolList.add(new GridSymbol(location.getX() + 1, location.getY(), this.getRepChar()));
+                symbolList.add(new GridSymbol(location.getX() + 1, location.getY(), this.charRep()));
             }
             else{
-                symbolList.add(new GridSymbol(location.getX(), location.getY() + 1, this.getRepChar()));
+                symbolList.add(new GridSymbol(location.getX(), location.getY() + 1, this.charRep()));
             }
             break;
         case TOPRIGHT:
-            symbolList.add(new GridSymbol(location.getX() + 1, location.getY(), this.getRepChar()));
+            symbolList.add(new GridSymbol(location.getX() + 1, location.getY(), this.charRep()));
             if(willMoveClockwise){
-                symbolList.add(new GridSymbol(location.getX() + 1, location.getY() + 1, this.getRepChar()));
+                symbolList.add(new GridSymbol(location.getX() + 1, location.getY() + 1, this.charRep()));
             }
             else{
-                symbolList.add(new GridSymbol(location.getX(), location.getY(), this.getRepChar()));
+                symbolList.add(new GridSymbol(location.getX(), location.getY(), this.charRep()));
             }
             break;
         default:
@@ -223,56 +227,56 @@ public class Flipper extends Gadget {
     }
 
 
-    /**
-     * Handles the rotating function for flippers with pivotCorner = BOTTOMLEFT
-     * @param timestep the amount of time for which to rotate
-     */
-    public void rotateBottomLeft(double timestep){
-        if(willMoveClockwise){
-            if(this.angle.compareTo(Angle.DEG_90) >= 0){ //this angle is greater than 90 degrees- set it back to 90 and set the rotational velocity to 0 
-                for(PhysicsComponent physicsComponent: physicsComponentList){
-                    if(physicsComponent.canRotate()){
-                        physicsComponent.rotateToAngle(Angle.DEG_90);
-                        physicsComponent.setAngularVelocity(0);
-                    }
-                }
-                this.willMoveClockwise = false;
-                isAction = false;
-
-            }
-            else{ //this physics component needs to keep rotating until it is at 90 degrees 
-                for(PhysicsComponent physicsComponent: physicsComponentList){
-                    if(physicsComponent.canRotate()){                               
-                        physicsComponent.setAngularVelocity(DEFAULT_ANGULAR_VELOCITY); // rotate clockwise
-                        physicsComponent.rotateForTime(timestep);
-                    }
-                }
-            }
-        }
-        else{
-            // Note that this relies on the fact that a timestep does not swing through 180 degrees,
-            // i.e. timestep must be greater than .2 seconds TODO ensure this is true!
-            if(this.angle.compareTo(Angle.DEG_180) > 0){
-                for(PhysicsComponent physicsComponent: physicsComponentList){
-                    if(physicsComponent.canRotate()){
-                        physicsComponent.rotateToAngle(Angle.ZERO);
-                        physicsComponent.setAngularVelocity(0);
-                    }
-                }
-                this.willMoveClockwise = true;
-                isAction = false;
-
-            }
-            else{
-                for(PhysicsComponent physicsComponent: physicsComponentList){
-                    if(physicsComponent.canRotate()){                               
-                        physicsComponent.setAngularVelocity(-1*DEFAULT_ANGULAR_VELOCITY); // rotate clockwise
-                        physicsComponent.rotateForTime(timestep);
-                    }
-                }
-            }
-        }
-    }
+//    /**
+//     * Handles the rotating function for flippers with pivotCorner = BOTTOMLEFT
+//     * @param timestep the amount of time for which to rotate
+//     */
+//    public void rotateBottomLeft(double timestep){
+//        if(willMoveClockwise){
+//            if(this.angle.compareTo(Angle.DEG_90) >= 0){ //this angle is greater than 90 degrees- set it back to 90 and set the rotational velocity to 0 
+//                for(PhysicsComponent physicsComponent: physicsComponentList){
+//                    if(physicsComponent.canRotate()){
+//                        physicsComponent.rotateToAngle(Angle.DEG_90);
+//                        physicsComponent.setAngularVelocity(0);
+//                    }
+//                }
+//                this.willMoveClockwise = false;
+//                isActive = false;
+//
+//            }
+//            else{ //this physics component needs to keep rotating until it is at 90 degrees 
+//                for(PhysicsComponent physicsComponent: physicsComponentList){
+//                    if(physicsComponent.canRotate()){                               
+//                        physicsComponent.setAngularVelocity(DEFAULT_ANGULAR_VELOCITY); // rotate clockwise
+//                        physicsComponent.rotateForTime(timestep);
+//                    }
+//                }
+//            }
+//        }
+//        else{
+//            // Note that this relies on the fact that a timestep does not swing through 180 degrees,
+//            // i.e. timestep must be greater than .2 seconds TODO ensure this is true!
+//            if(this.angle.compareTo(Angle.DEG_180) > 0){
+//                for(PhysicsComponent physicsComponent: physicsComponentList){
+//                    if(physicsComponent.canRotate()){
+//                        physicsComponent.rotateToAngle(Angle.ZERO);
+//                        physicsComponent.setAngularVelocity(0);
+//                    }
+//                }
+//                this.willMoveClockwise = true;
+//                isActive = false;
+//
+//            }
+//            else{
+//                for(PhysicsComponent physicsComponent: physicsComponentList){
+//                    if(physicsComponent.canRotate()){                               
+//                        physicsComponent.setAngularVelocity(-1*DEFAULT_ANGULAR_VELOCITY); // rotate clockwise
+//                        physicsComponent.rotateForTime(timestep);
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     /**
      * Steps the flipper forward in time. If the flipper has been triggered, causes it to begin swinging.
@@ -280,8 +284,8 @@ public class Flipper extends Gadget {
      * and prepare it to swing back.
      */
     @Override
-    public void update(double timestep) {
-        if (isAction){
+    public void updateGadgetPosition(double timestep) {
+        if (isActive){
             switch(pivotCorner){
             case BOTTOMLEFT:
                 if(willMoveClockwise){
@@ -293,7 +297,7 @@ public class Flipper extends Gadget {
                             }
                         }
                         this.willMoveClockwise = false;
-                        isAction = false;
+                        isActive = false;
 
                     }
                     else{ //this physics component needs to keep rotating until it is at 90 degrees 
@@ -316,7 +320,7 @@ public class Flipper extends Gadget {
                             }
                         }
                         this.willMoveClockwise = true;
-                        isAction = false;
+                        isActive = false;
 
                     }
                     else{
@@ -341,7 +345,7 @@ public class Flipper extends Gadget {
                             }
                         }
                         this.willMoveClockwise = false;
-                        isAction = false;
+                        isActive = false;
 
                     }
                     else{
@@ -362,7 +366,7 @@ public class Flipper extends Gadget {
                             }
                         }
                         this.willMoveClockwise = true;
-                        isAction = false;
+                        isActive = false;
 
                     }
                     else{
@@ -385,7 +389,7 @@ public class Flipper extends Gadget {
                             }
                         }
                         this.willMoveClockwise = false;
-                        isAction = false;
+                        isActive = false;
 
                     }
                     else{
@@ -406,7 +410,7 @@ public class Flipper extends Gadget {
                             }
                         }
                         this.willMoveClockwise = true;
-                        isAction = false;
+                        isActive = false;
 
                     }
                     else{
@@ -429,7 +433,7 @@ public class Flipper extends Gadget {
                             }
                         }
                         this.willMoveClockwise = false;
-                        isAction = false;
+                        isActive = false;
 
                     }
                     else{
@@ -450,7 +454,7 @@ public class Flipper extends Gadget {
                             }
                         }
                         this.willMoveClockwise = true;
-                        isAction = false;
+                        isActive = false;
 
                     }
                     else{
@@ -484,7 +488,7 @@ public class Flipper extends Gadget {
      * Return which character represents flipper when displaying it on a BoardMatrix grid.
      */
     @Override
-    public char getRepChar() {
+    public char charRep() {
         switch(pivotCorner){
         case BOTTOMLEFT:
             if(willMoveClockwise){
@@ -520,4 +524,14 @@ public class Flipper extends Gadget {
                     + "either 0, 90, 180, or 270");
         }
     }
+
+	@Override
+	public String toString() {
+		return name;
+	}
+
+	@Override
+	public void action() {
+		isActive = true;
+	}
 }
