@@ -217,21 +217,14 @@ public class Board {
      */
     public String generateBoardRep() {
     	BoardMatrix boardMatrix = new BoardMatrix();
-    	
 
         for (Gadget gadget : gadgets) {
             boardMatrix.addTiles(gadget.getSymbolRep());
         }
         for (Ball ball : balls) {
-
-            // System.out.println("x " + ball.getPosition().d1 + " y " + ball.getPosition().d2);
-
-            int x = (int) ball.getPosition().d1;
-            int y = (int) ball.getPosition().d2;
-
-            boardRep[y + 1][x + 1] = ball.charRep();
+        	boardMatrix.addTiles(ball.getSymbolRep());
         }
-        return boardRep;
+        return boardMatrix.printString();
     }
 
     public int getWidth() {
