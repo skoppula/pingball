@@ -14,8 +14,6 @@ import physics.Geometry.DoublePair;
 
 public abstract class Gadget {
     
-    private int positionWidth;
-    private int positionHeight;
     private double reflectionCoef;
     private GridPoint location; // the (x,y) coordinates of the top left bounding box of the gadget
     
@@ -95,10 +93,10 @@ public abstract class Gadget {
     public enum Orientation {ZERO, NINETY, ONE_HUNDRED_EIGHTY, TWO_HUNDRED_SEVENTY};
     
     protected int getX() {
-        return this.x;
+        return this.location.getX();
     }
 
     protected int getY() {
-        return this.y;
+        return this.location.getY();
     }
 }
