@@ -41,12 +41,11 @@ public class Absorber extends Gadget {
      * @param mMultiplier - the size of the height
      * @throws InvalidInvariantException 
      */
-    public Absorber(int xCoord, int yCoord, int kMultiplier, int mMultiplier) throws InvalidInvariantException {
-
-        setPosition(xCoord, yCoord);
+    public Absorber(int xCoord, int yCoord, int kMultiplier, int mMultiplier, String name) throws InvalidInvariantException {
         
-        setTriggers(new ArrayList<GameObject>());
-        setCoefficient(1);
+        super(new GridPoint(xCoord, yCoord), name);
+        setTriggers(new ArrayList<Gadget>) = 1;
+        this.reflectionCoef = 1;
 
         this.m = mMultiplier;
         this.k = kMultiplier;

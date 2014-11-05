@@ -16,7 +16,7 @@ import physics.Geometry.DoublePair;
 
 public abstract class Gadget {
     
-    private double reflectionCoef;
+    protected final double reflectionCoef;
     private String name;
     private ArrayList<Gadget> gadgetsToTrigger;
     private GridPoint location; // the (x,y) coordinates of the top left bounding box of the gadget
