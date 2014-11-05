@@ -15,7 +15,7 @@ import physics.Geometry.DoublePair;
 public abstract class Gadget {
     
     private double reflectionCoef;
-    private String name;
+    protected String name;
     private GridPoint location; // the (x,y) coordinates of the top left bounding box of the gadget
     
     public Gadget(GridPoint location, String name) {
@@ -23,10 +23,6 @@ public abstract class Gadget {
         this.name = name;
     }
 
-    /**
-     * @return DoublePair representing the (width,height) of the Gadget on the Board
-     */
-    public DoublePair getBoardRepSize;
     
     /**
      * @return DoublePair representing the (width,height) of the Gadget
