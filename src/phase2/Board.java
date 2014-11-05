@@ -5,12 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import Gadget.Orientation;
+import phase2.Gadget.Orientation;
 import physics.Geometry;
 import physics.Geometry.DoublePair;
 import physics.Vect;
 
 public class Board {
+	//Rep Invariant: triggerMap: if triggerMap[key] = value, then must have triggerMap[value] = key
 
     /*
      * 
@@ -31,6 +32,10 @@ public class Board {
     private List<Gadget> gadgetsWithoutWalls = new ArrayList<Gadget>();
 
     private Map<Ball, List<Collidable>> ballToCollidables = new HashMap<Ball, List<Collidable>>();
+    
+    /** A map from names of gadgets to the gadgets themselves */
+    Map<String, Gadget> nameToGadgetMap = new HashMap<>();
+    
     
 
     public Board(List<Gadget> gadgets) {
