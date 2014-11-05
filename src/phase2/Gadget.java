@@ -72,4 +72,12 @@ public abstract class Gadget {
      * Enum representing the four orientations for gadgets 
      */
     public enum Orientation {ZERO, NINETY, ONE_HUNDRED_EIGHTY, TWO_HUNDRED_SEVENTY};
+    
+    protected int getX() {
+        return this.x;
+    }
+
+    protected int getY() {
+        return this.y;
+    }
 }
