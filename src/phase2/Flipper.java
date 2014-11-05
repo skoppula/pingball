@@ -122,9 +122,6 @@ public class Flipper extends Gadget {
                     + "either 0, 90, 180, or 270");
         }
 
-        // Now determine the physical structure of the bumper, from the pivotCorner and willMoveClockwise
-        centerOfRotationCircle = new Circle(this.getCenterOfRotation(), 0.01);
-        endOfFlipperCircle = new Circle(this.getDefaultEndOfFlipper(), 0.01);
         
         // This is the pivot corner.
         Vect rotatingTip;
@@ -132,34 +129,34 @@ public class Flipper extends Gadget {
         switch(pivotCorner){
         case BOTTOMLEFT:
             if(willMoveClockwise){
-                rotatingTip = new Vect(x, y);
+                rotatingTip = new Vect(location.getX(), location.getY());
             }
             else{
-                rotatingTip = new Vect(x + 2, y + 2);
+                rotatingTip = new Vect(location.getX() + 2, location.getY() + 2);
             }
             break;
         case BOTTOMRIGHT:
             if(willMoveClockwise){
-                rotatingTip = new Vect(x, y + 2);
+                rotatingTip = new Vect(location.getX(), location.getY() + 2);
             }
             else{
-                rotatingTip = new Vect(x + 2, y);
+                rotatingTip = new Vect(location.getX() + 2, location.getY());
             }
             break;
         case TOPLEFT:
             if(willMoveClockwise){
-                rotatingTip = new Vect(x + 2, y);
+                rotatingTip = new Vect(location.getX() + 2, location.getY());
             }
             else{
-                rotatingTip = new Vect(x, y + 2);
+                rotatingTip = new Vect(location.getX(), location.getY() + 2);
             }
             break;
         case TOPRIGHT:
             if(willMoveClockwise){
-                rotatingTip = new Vect(x, y + 2);
+                rotatingTip = new Vect(location.getX(), location.getY() + 2);
             }
             else{
-                rotatingTip = new Vect(x, y);
+                rotatingTip = new Vect(location.getX(), location.getY());
             }
             break;
         default:
