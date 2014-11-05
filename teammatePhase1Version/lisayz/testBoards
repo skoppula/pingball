@@ -1,0 +1,135 @@
+   /**
+     * @return test board
+     */
+    public static Board leftTestBoard() {
+        
+        List<Gadget> emptyList = new ArrayList<Gadget>();
+        
+        // setup initial positions & orientations
+        DoublePair initialBallPosition = new DoublePair(5, 5);
+        DoublePair leftFlipperPosition = new DoublePair(5, 10);
+        Vect ballVect = new Vect(0, 0);
+        
+        // make ball & gadgets
+        Ball ball = new Ball(ballVect, initialBallPosition);
+        LeftFlipper lf = new LeftFlipper(leftFlipperPosition, Orientation.ZERO, emptyList, false);
+        System.out.println(lf.getEndOfFlipper());
+        List<Gadget> gadgetList = new ArrayList<Gadget>();
+
+        DoublePair absorberPosition = new DoublePair(0,19);
+        int absorberK = 20;
+        int absorberM = 1;
+<<<<<<< HEAD
+=======
+        
+        // make ball & gadgets
+        Ball ball1 = new Ball(Vect.ZERO, ballPosition1);
+        Ball ball2 = new Ball(Vect.ZERO, ballPosition2);
+        Ball ball3 = new Ball(Vect.ZERO, ballPosition3);
+        Ball ball4 = new Ball(Vect.ZERO, ballPosition4);
+        Ball ball5 = new Ball(Vect.ZERO, ballPosition5);
+        CircleBumper circle1 = new CircleBumper(circlePosition1, emptyList, false); 
+        CircleBumper circle2 = new CircleBumper(circlePosition2, emptyList, false); 
+        LeftFlipper leftFlipper1 = new LeftFlipper(leftFlipperPosition1, leftFlipperOrientation, emptyList, false);
+        LeftFlipper leftFlipper2 = new LeftFlipper(leftFlipperPosition2, leftFlipperOrientation, emptyList, false);
+        LeftFlipper leftFlipper3 = new LeftFlipper(leftFlipperPosition3, leftFlipperOrientation, emptyList, false);
+        LeftFlipper leftFlipper4 = new LeftFlipper(leftFlipperPosition4, leftFlipperOrientation, emptyList, false);
+        List<Gadget> trigLF1 = new ArrayList<Gadget>();
+        trigLF1.add(leftFlipper1);
+        CircleBumper circle3 = new CircleBumper(circlePosition3, trigLF1, false); // triggers LeftFlipper1
+        CircleBumper circle4 = new CircleBumper(circlePosition4, emptyList, false);
+        List<Gadget> trigLF3 = new ArrayList<Gadget>();
+        trigLF3.add(leftFlipper3);
+        CircleBumper circle5 = new CircleBumper(circlePosition5, trigLF3, false); // triggers LeftFlipper3
+        List<Gadget> trigLF4 = new ArrayList<Gadget>();
+        trigLF3.add(leftFlipper4);
+        CircleBumper circle6 = new CircleBumper(circlePosition6, trigLF4, false); // triggers LeftFlipper4
+        TriangleBumper triangle1 = new TriangleBumper(trianglePosition1, triangleOrientation1, emptyList, false);
+        TriangleBumper triangle2 = new TriangleBumper(trianglePosition2, triangleOrientation2, emptyList, false);
+        RightFlipper rightFlipper1 = new RightFlipper(rightFlipperPosition1, rightFlipperOrientation, emptyList, false);
+        RightFlipper rightFlipper2 = new RightFlipper(rightFlipperPosition2, rightFlipperOrientation, emptyList, false);
+>>>>>>> a61ddd9a0e9623edf71aa89043ff430aaa139af5
+
+        List<Gadget> trigForAbsorber = new ArrayList<Gadget>();
+        trigForAbsorber.add(lf);
+
+        Absorber absorber = new Absorber(absorberPosition, absorberK, absorberM, trigForAbsorber, true); // triggers lf, Absorber
+        
+        gadgetList.addAll(Arrays.asList(lf, absorber));
+
+        Board board = new Board(gadgetList);
+        board.addBall(ball);
+        return board;
+  
+    }
+    
+
+    
+    /**
+     * @return test board
+     */
+    public static Board leftTestBoardHorizontal() {
+        
+        List<Gadget> emptyList = new ArrayList<Gadget>();
+        
+        // setup initial positions & orientations
+        DoublePair initialBallPosition = new DoublePair(6, 5);
+        DoublePair leftFlipperPosition = new DoublePair(5, 10);
+        Vect ballVect = new Vect(0, 0);
+        
+        // make ball & gadgets
+        Ball ball = new Ball(ballVect, initialBallPosition);
+        LeftFlipper lf = new LeftFlipper(leftFlipperPosition, Orientation.NINETY, emptyList, false);
+        List<Gadget> gadgetList = new ArrayList<Gadget>();
+
+        DoublePair absorberPosition = new DoublePair(0,19);
+        int absorberK = 20;
+        int absorberM = 1;
+
+        List<Gadget> trigForAbsorber = new ArrayList<Gadget>();
+        trigForAbsorber.add(lf);
+
+        Absorber absorber = new Absorber(absorberPosition, absorberK, absorberM, trigForAbsorber, true); // triggers lf, Absorber
+        
+        gadgetList.addAll(Arrays.asList(lf, absorber));
+
+        Board board = new Board(gadgetList);
+        board.addBall(ball);
+        return board;
+  
+    }
+    
+    /**
+     * @return test board
+     */
+    public static Board rightTestBoard() {
+        
+        List<Gadget> emptyList = new ArrayList<Gadget>();
+        
+        // setup initial positions & orientations
+        DoublePair initialBallPosition = new DoublePair(11, 14);
+        DoublePair rightFlipperPosition = new DoublePair(18, 10);
+        Vect ballVect = new Vect(0, 0);
+        
+        // make ball & gadgets
+        Ball ball = new Ball(ballVect, initialBallPosition);
+        RightFlipper rf = new RightFlipper(rightFlipperPosition, Orientation.ZERO, emptyList, false);
+        List<Gadget> gadgetList = new ArrayList<Gadget>();
+
+        DoublePair absorberPosition = new DoublePair(0,19);
+        int absorberK = 20;
+        int absorberM = 1;
+
+        List<Gadget> trigForAbsorber = new ArrayList<Gadget>();
+        trigForAbsorber.add(rf);
+
+        Absorber absorber = new Absorber(absorberPosition, absorberK, absorberM, trigForAbsorber, true); // triggers RightFlipper1, RightFlipper2, Absorber
+        
+        gadgetList.addAll(Arrays.asList(rf, absorber));
+
+        Board board = new Board(gadgetList);
+        board.addBall(ball);
+        return board;
+  
+    }
+    
