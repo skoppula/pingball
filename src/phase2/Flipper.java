@@ -22,13 +22,10 @@ import physics.Vect;
 public class Flipper extends Gadget {
     // Rep. Invariant: 
 
-    final double DEGREES_TO_RADIANS = Math.PI/180;
-    // Convenience for conversion between degrees and radians
-
     private Angle angle;
     // The angle that the flipper is at, clockwise from north.
 
-    final private double DEFAULT_ANGULAR_VELOCITY = 1080*DEGREES_TO_RADIANS;
+    final private double DEFAULT_ANGULAR_VELOCITY = Math.toRadians(1080);
     // The angular velocity that the flipper moves at when triggered, in radians per second.
 
     final private BumperSide side;
@@ -42,6 +39,9 @@ public class Flipper extends Gadget {
 
     final private Corner pivotCorner; 
     // the corner that the flipper pivots around. Like pivot, but as an enum.
+    
+    final private Orientation orientation;
+    // orientation of the flipper
 
     /**
      * Determines which type the bumper is.
@@ -67,16 +67,10 @@ public class Flipper extends Gadget {
      * @param side - either LEFT or RIGHT bumper
      * @param orientation - offset angle measured clockwise from north
      */
-    public Flipper(int x, int y, BumperSide side, Angle orientation){
-        this.coefficientOfReflection = 0.95;
-        this.orientation = orientation;
-        this.angle = orientation.plus(Angle.RAD_PI); // always starts out 
-        this.location = new GridPoint(x, y);
-        this.width = 2;
-        this.height = 2;
+    public Flipper(GridPoint location, String name, BumperSide side, Orientation orientation){
+        super(location, name);
         this.side = side;
-        this.isAction = false;
-        this.gadgetsToActivate = new HashSet<Gadget>();
+        this.orientation = orientation;
 
         // Will our bumper start out by moving clockwise or counterclockwise?
         switch(side){
@@ -99,22 +93,22 @@ public class Flipper extends Gadget {
         if((side == BumperSide.LEFT) && orientation.equals(Angle.ZERO) ||
                 side == BumperSide.RIGHT && orientation.equals(Angle.DEG_270)){
             this.pivotCorner = Corner.TOPLEFT;
-            this.pivot = new Vect(x, y);
+            this.pivot = new Vect(this.getX(), this.getY());
         }
         else if((side == BumperSide.LEFT) && orientation.equals(Angle.DEG_90) ||
                 side == BumperSide.RIGHT && orientation.equals(Angle.ZERO)){
             this.pivotCorner = Corner.TOPRIGHT;
-            this.pivot = new Vect(x + 2, y);
+            this.pivot = new Vect(this.getX() + 2, this.getY());
         }
         else if((side == BumperSide.LEFT) && orientation.equals(Angle.DEG_180) ||
                 side == BumperSide.RIGHT && orientation.equals(Angle.DEG_90)){
             this.pivotCorner = Corner.BOTTOMRIGHT;
-            this.pivot = new  Vect(x+2, y+2);
+            this.pivot = new  Vect(this.getX()+2, this.getY()+2);
         }
         else if((side == BumperSide.LEFT) && orientation.equals(Angle.DEG_270) ||
                 side == BumperSide.RIGHT && orientation.equals(Angle.DEG_180)){
             this.pivotCorner = Corner.BOTTOMLEFT;
-            this.pivot = new Vect(x, y + 2);
+            this.pivot = new Vect(this.getX(), this.getY() + 2);
         }
         else{
             throw new IllegalStateException("Should not be able to reach this spot. Orientation must be"
@@ -122,7 +116,9 @@ public class Flipper extends Gadget {
         }
 
         // Now determine the physical structure of the bumper, from the pivotCorner and willMoveClockwise
-        this.physicsComponentList.add(new StaticCircle(new Circle(pivot, 0.01), coefficientOfReflection));
+        centerOfRotationCircle = new Circle(this.getCenterOfRotation(), 0.01);
+        endOfFlipperCircle = new Circle(this.getDefaultEndOfFlipper(), 0.01);
+        
         // This is the pivot corner.
         Vect rotatingTip;
         // This is the rotating tip of the flipper.
