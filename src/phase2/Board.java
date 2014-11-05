@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import Pingball.Gadget.Orientation;
+import Gadget.Orientation;
 import physics.Geometry;
 import physics.Geometry.DoublePair;
 import physics.Vect;
@@ -200,15 +200,7 @@ public class Board {
      * Prints string representation of board
      */
     public void printBoard() {
-
-        String boardString = "";
-
-        char[][] boardRep = generateBoardRep();
-        for (char[] row : boardRep) {
-            boardString += new String(row) + "\n";
-        }
-
-        System.out.println(boardString);
+        System.out.println(generateBoardRep());
     }
 
     /**
