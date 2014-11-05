@@ -20,7 +20,9 @@ public abstract class Gadget {
      * each 1L x 1L space that the gadget is in
      * from top to bottom, left to right
      */
-    public String toString;
+    @Override
+    public abstract String toString();
+
 
     /**
      * @return DoublePair representing (x,y) coordinates of the Gadget on the board
