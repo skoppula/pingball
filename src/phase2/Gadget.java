@@ -1,11 +1,27 @@
 package phase2;
 
+
+import java.util.ArrayList;
+import java.util.List;
+
+import physics.Angle;
+import physics.Circle;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import physics.Geometry.DoublePair;
 
 public abstract class Gadget {
+    
+    private int positionWidth;
+    private int positionHeight;
+    private double reflectionCoef;
+    private GridPoint location; // the (x,y) coordinates of the top left bounding box of the gadget
+    
+    public Gadget(GridPoint location) {
+        this.location = location;
+    }
 
     /**
      * @return DoublePair representing the (width,height) of the Gadget on the Board
@@ -16,6 +32,16 @@ public abstract class Gadget {
      * @return DoublePair representing the (width,height) of the Gadget
      */
     public DoublePair getSize;
+    
+    /**
+     * @return the gadget's coefficient of reflection
+     */
+    public double coefficientOfReflection;
+    
+    /**
+     * @return the x-coordinate of the gadget's origin
+     */
+    
 
     /**
      * @return list of characters in the form of a String
@@ -27,10 +53,6 @@ public abstract class Gadget {
     public abstract String toString();
 
 
-    /**
-     * @return DoublePair representing (x,y) coordinates of the Gadget on the board
-     */
-    public DoublePair getBoardRepPosition;
     
     /**
      * Triggers any actions on other Gadgets that it may need to
