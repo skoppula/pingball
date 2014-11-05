@@ -10,7 +10,7 @@ import physics.LineSegment;
 import physics.Vect;
 import physics.Geometry.DoublePair;
 
-public class Absorber implements Gadget {
+public class Absorber extends GameObject {
 
     private final LineSegment leftBumper;
     private final LineSegment rightBumper;
@@ -26,7 +26,7 @@ public class Absorber implements Gadget {
     private final DoublePair ballPosition;
     private final DoublePair size;
     
-    private final List<Gadget> gadgetsToTrigger;
+    private final List<GameObject> gadgetsToTrigger;
 
     private List<Ball> balls = new ArrayList<Ball>();
     
@@ -38,7 +38,7 @@ public class Absorber implements Gadget {
      * @param m positive integer <=20
      * @param list of Gadgets that the Absorber should trigger when hit
      */
-    public Absorber(DoublePair position, int k, int m, List<Gadget> gadgetsToTrigger, boolean triggersSelf) {
+    public Absorber(DoublePair position, int k, int m, List<GameObject> gadgetsToTrigger, boolean triggersSelf) {
         this.gadgetsToTrigger = Collections.unmodifiableList(gadgetsToTrigger);
         this.triggersSelf = triggersSelf;
         
@@ -139,7 +139,7 @@ public class Absorber implements Gadget {
      * If not, it should do nothing
      */
     @Override
-    public void action() {
+    public void doTriggerAction() {
         if (!balls.isEmpty()) {
             Ball nextBall = balls.remove(0);
             nextBall.setPosition(new DoublePair(nextBall.getPosition().d1, position.d2));
@@ -162,5 +162,17 @@ public class Absorber implements Gadget {
     @Override
     public DoublePair getSize() {
         return this.size;
+    }
+
+    @Override
+    public double timeUntilCollision(Ball ball) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void reactWhenHit(Ball ball, double time) {
+        // TODO Auto-generated method stub
+        
     }
 }
