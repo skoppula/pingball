@@ -20,12 +20,13 @@ public interface Gadget {
      * each 1L x 1L space that the gadget is in
      * from top to bottom, left to right
      */
+    @Override
     public String toString();
 
-    /**
-     * @return DoublePair representing (x,y) coordinates of the Gadget on the board
-     */
-    public DoublePair getBoardRepPosition();
+//    /**
+//     * @return DoublePair representing (x,y) coordinates of the Gadget on the board
+//     */
+//    public DoublePair getBoardRepPosition();
     
     /**
      * Triggers any actions on other Gadgets that it may need to
