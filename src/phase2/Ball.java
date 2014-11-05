@@ -40,7 +40,7 @@ public class Ball {
      * @param newVector a Vect representing the ball's velocity 
      */
     public Ball(double x, double y, Vect newVector){
-        this.ballCircle = new Circle( x, y, 0.24); 
+        this.ballCircle = new Circle( x, y, 0.25); 
         this.velocity = newVector; 
         this.coefficentOfReflection = 1.0; 
         this.checkRep();
@@ -196,7 +196,7 @@ public class Ball {
     /**
      * @return a list of GridSymbols that give
      */
-    public List<GridSymbol> getGridSymbolRep(){
+    public List<GridSymbol> getSymbolRep(){
         List<GridSymbol> symbolList = new ArrayList<>();
         symbolList.add(new GridSymbol(this.ballCircle.getCenter(), '*'));
         return symbolList;

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import physics.Geometry.DoublePair;
-import warmup.GridSymbol;
 
 public abstract class Gadget {
 
@@ -52,17 +51,17 @@ public abstract class Gadget {
 
      * @return character representing one space of that Gadget
      */
-    public char charRep();
+    public abstract char charRep();
     
     /**
      * The visual representation of a gadget.
-     * @return the symbols to be placed on a BoardMatrix.
+     * @return the symbols representing this gadget, as a function of location, width, and height.
      */
-    public List<GridSymbol> getGridSymbolRep(){
+    public List<GridSymbol> getSymbolRep(){
         List<GridSymbol> symbolList = new ArrayList<>();
         for(int i=0; i<this.width; i++){
             for(int j=0; j<this.height; j++){
-                symbolList.add(new GridSymbol(location.getX() + i, location.getY() + j, getRepChar()));
+                symbolList.add(new GridSymbol(location.getX() + i, location.getY() + j, charRep()));
             }
         }
         return symbolList;
