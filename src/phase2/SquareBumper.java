@@ -34,6 +34,8 @@ public class SquareBumper extends GameObject {
      */
     public SquareBumper(int xCoord, int yCoord) throws InvalidInvariantException {
         setPosition(xCoord, yCoord);
+        this.width = 1;
+        this.height = 1;
 
         setCoefficient(1.0);
         upperEdge = new LineSegment(this.getX(), this.getY(), this.getX() + 1,

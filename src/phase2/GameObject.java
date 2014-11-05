@@ -18,8 +18,8 @@ public abstract class GameObject {
 
     private int x;
     private int y;
-    private int width;
-    private int height;
+    protected final int width;
+    protected final int height;
     private double reflectionCoef;
     private List<GameObject> triggersThis = new ArrayList<GameObject>();
 
@@ -158,6 +158,11 @@ public abstract class GameObject {
         }
         return symbolList;
     }
+    
+    /*
+     * Enum representing the four orientations for gadgets 
+     */
+    public enum Orientation {ZERO, NINETY, ONE_HUNDRED_EIGHTY, TWO_HUNDRED_SEVENTY};
     
     
     /**
