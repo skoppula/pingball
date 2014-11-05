@@ -1,4 +1,5 @@
 grammar PingBoard;
+// This is the grammar definition for our ANTLR-based parser for pingball board files.
 
 INTEGER : [0-9]+ ;
 FLOAT : -?([0-9]+.[0-9]*|.?[0-9]+) ;
@@ -54,7 +55,7 @@ action : whitespace ACTIONID equals NAME;
 
 root : board EOF;
 board : irrelevantLine* boardInit bodyLine*;
-irrelevantLine : ( '' | COMMENT) ; // either the line is only whitespace, in which case bodyLine will grab that whitespace, or the line has a comment
+irrelevantLine : COMMENT? ; // either the line is blank or the line has a comment
 boardInit : EXTRAWHITESPACE BOARDINITID name gravity? friction1? friction2? EXTRAWHITESPACE;
 bodyLine : EXTRAWHITESPACE (ball | squareBumper | circleBumper | triangleBumper | rightFlipper | leftFlipper | absorber | fire | irrelevantLine) EXTRAWHITESPACE;
 ball : BALLID name floatX floatY xVelocity yVelocity ;
