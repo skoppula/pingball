@@ -1,4 +1,4 @@
-package phase1;
+package phase2;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,8 +16,10 @@ import physics.Geometry.DoublePair;
 
 public abstract class GameObject {
 
-    private int positionWidth;
-    private int positionHeight;
+    private int x;
+    private int y;
+    private int width;
+    private int height;
     private double reflectionCoef;
     private List<GameObject> triggersThis = new ArrayList<GameObject>();
 
@@ -35,8 +37,8 @@ public abstract class GameObject {
      * @param yCoord = y coordinate of origin
      */
     public void setPosition(int xCoord, int yCoord) {
-        this.positionWidth = xCoord;
-        this.positionHeight = yCoord;
+        this.x = xCoord;
+        this.y = yCoord;
     }
     
     /**
@@ -60,7 +62,7 @@ public abstract class GameObject {
      * @return the X coordinate of this game object
      */
     public int getX() {
-        return positionWidth;
+        return x;
     }
 
     /**
@@ -68,7 +70,7 @@ public abstract class GameObject {
      * @return the Y coordinate of this game object
      */
     public int getY() {
-        return positionHeight;
+        return y;
     }
     
     /**
@@ -83,7 +85,7 @@ public abstract class GameObject {
      * @param newX = the new X coordinate of this game object
      */
     public void setX(int newX) {
-        this.positionWidth = newX;
+        this.x = newX;
     }
 
     /**
@@ -91,7 +93,7 @@ public abstract class GameObject {
      * @param newY =  the Y coordinate of this game object
      */
     public void setY(int newY) {
-        this.positionHeight = newY;
+        this.y = newY;
     }
 
     /**
@@ -136,6 +138,25 @@ public abstract class GameObject {
     public static boolean collisionTimesEqual(double T1, double T2) {
         final double THRESHOLD = 0.02;
         return Math.abs(T1-T2) < THRESHOLD;
+    }
+    
+    /**
+     * @return the character that this GameObject is represented by.
+     */
+    public abstract char getRepChar();
+    
+    /**
+     * The visual representation of a gameObject.
+     * @return the symbols to be placed on a BoardMatrix.
+     */
+    public List<GridSymbol> getGridSymbolRep(){
+        List<GridSymbol> symbolList = new ArrayList<>();
+        for(int i=0; i<width; i++){
+            for(int j=0; j<height; j++){
+                symbolList.add(new GridSymbol(x + i, y + j, getRepChar()));
+            }
+        }
+        return symbolList;
     }
     
     

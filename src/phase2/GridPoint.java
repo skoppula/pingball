@@ -1,4 +1,4 @@
-package warmup;
+package phase2;
 
 /**
  * An immutable class to represent a point on a board grid.
