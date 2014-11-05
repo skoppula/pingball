@@ -212,42 +212,19 @@ public class Board {
     }
 
     /**
-     * Generates the char[][] representation of all the gadgets and ball
-     * currently on the board The char[][] is a list of
-     * 
-     * @return String representation of the board
+     * Generates the ASCII character representation of the board
+     * @return String representation of the board as ASCII characters
      */
-    public char[][] generateBoardRep() {
-
-        char[][] boardRep = new char[22][22];
-        for(int i = 0; i < boardRep.length; i++) {
-            for(int j = 0; j < boardRep[0].length; j++) {
-                boardRep[i][j] = ' '; 
-            }
-        }
+    public String generateBoardRep() {
+    	BoardMatrix boardMatrix = new BoardMatrix();
 
         for (Gadget gadget : gadgets) {
-            char gadgetChar = gadget.charRep();
-
-            int x = (int) gadget.getBoardRepPosition().d1;
-            int y = (int) gadget.getBoardRepPosition().d2;            
-
-            for (int j = y; j < y + gadget.getBoardRepSize().d2; j++) {
-                for (int i = x; i < x + gadget.getBoardRepSize().d1; i++) {
-                    boardRep[j + 1][i + 1] = gadgetChar; 
-                }
-            }
+            boardMatrix.addTiles(gadget.getSymbolRep());
         }
         for (Ball ball : balls) {
-
-            // System.out.println("x " + ball.getPosition().d1 + " y " + ball.getPosition().d2);
-
-            int x = (int) ball.getPosition().d1;
-            int y = (int) ball.getPosition().d2;
-
-            boardRep[y + 1][x + 1] = ball.charRep();
+        	boardMatrix.addTiles(ball.getSymbolRep());
         }
-        return boardRep;
+        return boardMatrix.printString();
     }
 
     public int getWidth() {
