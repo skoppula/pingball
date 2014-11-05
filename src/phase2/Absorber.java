@@ -1,178 +1,261 @@
 package phase2;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
+import phase2.Util.InvalidInvariantException;
 import physics.Circle;
 import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
 import physics.Geometry.DoublePair;
 
-public class Absorber extends GameObject {
+public class Absorber extends Gadget {
 
-    private final LineSegment leftBumper;
-    private final LineSegment rightBumper;
-    private final LineSegment topBumper;
-    private final LineSegment bottomBumper;
+    private final int m;
+    private final int k;
+    private boolean loaded;
+    private Ball loadedBall;
 
-    private final Circle topLeftCorner;
-    private final Circle topRightCorner;
-    private final Circle bottomLeftCorner;
-    private final Circle bottomRightCorner;
+    private final LineSegment top;
+    private final LineSegment bottom;
+    private final LineSegment left;
+    private final LineSegment right;
+    private final List<LineSegment> edges;
     
-    private final DoublePair position;
-    private final DoublePair ballPosition;
-    private final DoublePair size;
-    
-    private final List<GameObject> gadgetsToTrigger;
-
-    private List<Ball> balls = new ArrayList<Ball>();
-    
-    private final boolean triggersSelf;
-    /**
-     * Creates an Absorber with the given k & m such that the absorber is a 
-     * rectangle with size kL x mL
-     * @param k positive integer <=20
-     * @param m positive integer <=20
-     * @param list of Gadgets that the Absorber should trigger when hit
-     */
-    public Absorber(DoublePair position, int k, int m, List<GameObject> gadgetsToTrigger, boolean triggersSelf) {
-        this.gadgetsToTrigger = Collections.unmodifiableList(gadgetsToTrigger);
-        this.triggersSelf = triggersSelf;
-        
-        this.position = position;
-        this.size = new DoublePair(k, m);
-                
-        double x = position.d1;
-        double y = position.d2;
-        
-        leftBumper = new LineSegment(x, y, x, y+m);
-        rightBumper = new LineSegment(x+k, y, x+k, y+m);
-        topBumper = new LineSegment(x, y, x+k, y);
-        bottomBumper = new LineSegment(x, y+m, x+k, y+m);
-
-        topLeftCorner = new Circle(new Vect(x, y), 0);
-        topRightCorner = new Circle(new Vect(x+k, y), 0);
-        bottomLeftCorner = new Circle(new Vect(x, y+m), 0);
-        bottomRightCorner = new Circle(new Vect(x+k, y+m), 0);
-
-        ballPosition = new DoublePair(x+k - 0.25, y+m - 0.25);
-    }
+    private final Circle upLeftCircle;
+    private final Circle upRightCircle;
+    private final Circle downLeftCircle;
+    private final Circle downRightCircle;
+    private final List<Circle> circles;
     
     /**
-     * Returns (width, height)
+     * A game object that represents an absorber as described in the notes
+     * It has top, bottom, right, and left edges as LineSegments
+     * 
+     * @param xCoord - x coordinate
+     * @param yCoord - y coordinate
+     * @param kMultiplier - the size of the length
+     * @param mMultiplier - the size of the height
+     * @throws InvalidInvariantException 
      */
-    @Override
-    public DoublePair getBoardRepSize() {
-        return size;
-    }
+    public Absorber(int xCoord, int yCoord, int kMultiplier, int mMultiplier) throws InvalidInvariantException {
 
-    @Override
-    public double getTimeUntilCollision(Ball ball) {
-        double topLeftCollisionTime = Geometry.timeUntilCircleCollision(topLeftCorner, ball.getGirth(),
-                ball.getVelocity());
-        double topRightCollisionTime = Geometry.timeUntilCircleCollision(topRightCorner, ball.getGirth(),
-                ball.getVelocity());
-        double bottomLeftCollisionTime = Geometry.timeUntilCircleCollision(bottomLeftCorner, ball.getGirth(),
-                ball.getVelocity());
-        double bottomRightCollisionTime = Geometry.timeUntilCircleCollision(bottomRightCorner, ball.getGirth(),
-                ball.getVelocity());
-
-        double minCornerCollision = Math.min(topLeftCollisionTime, Math.min(topRightCollisionTime, Math.min(bottomLeftCollisionTime, bottomRightCollisionTime)));
+        setPosition(xCoord, yCoord);
         
-        double leftCollisionTime = Geometry.timeUntilWallCollision(leftBumper, ball.getGirth(),
-                ball.getVelocity());
-        double rightCollisionTime = Geometry.timeUntilWallCollision(rightBumper, ball.getGirth(),
-                ball.getVelocity());
-        double topCollisionTime = Geometry.timeUntilWallCollision(topBumper, ball.getGirth(),
-                ball.getVelocity());
-        double bottomCollisionTime = Geometry.timeUntilWallCollision(bottomBumper, ball.getGirth(),
-                ball.getVelocity());
-        
-        double minWallCollision = Math.min(leftCollisionTime, Math.min(rightCollisionTime, Math.min(topCollisionTime, bottomCollisionTime)));
-        
-        return Math.min(minCornerCollision, minWallCollision);
-    }
+        setTriggers(new ArrayList<GameObject>());
+        setCoefficient(1);
 
-    /**
-     * Returns position of top left corner of the absorber as (x,y)
-     */
-    @Override
-    public DoublePair getBoardRepPosition() {
-        return position;
-    }
-    
-    
-
-    /**
-     * Mutates ball to express effects of collision
-     * Specifically, will change the position of the ball to be .25L from the bottom and .25L from the right side of the absorber and give it 0 velocity
-     * @param ball that the collision will happen with
-     */
-    @Override
-    public void collision(Ball ball) {
-        if(!balls.contains(ball)) {
-            ball.setPosition(ballPosition);
-            ball.setVelocity(new Vect(0, 0));
-            
-            balls.add(ball);
-            trigger();
+        this.m = mMultiplier;
+        this.k = kMultiplier;
+        this.loaded = false;
+        
+        this.top = new LineSegment(this.getX(), this.getY(), this.getX() + this.getK(), this.getY());
+        this.bottom = new LineSegment(this.getX(), this.getY() + this.getM(), this.getX() + this.getK(), this.getY() + this.getM());
+        this.left = new LineSegment(this.getX(), this.getY(), this.getX(), this.getY() + this.getM());
+        this.right = new LineSegment(this.getX() + this.getK(), this.getY(), this.getX() + this.getK(), this.getY() + this.getM());
+        this.edges = new ArrayList<LineSegment>(Arrays.asList(top, bottom, right, left));
+      
+        this.upLeftCircle = new Circle(this.getX(), this.getY(), 0.01);
+        this.upRightCircle = new Circle(this.getX() + this.getK(), this.getY(), 0.01);
+        this.downLeftCircle = new Circle(this.getX(), this.getY() + this.getM(), 0.01);
+        this.downRightCircle = new Circle(this.getX() + this.getK(), this.getY() + this.getM(), 0.01);
+        this.circles = new ArrayList<Circle>(Arrays.asList(upRightCircle, upLeftCircle, downRightCircle, downLeftCircle));
+        
+        if (!this.checkRep()) {
+            throw new Util.InvalidInvariantException();
         }
     }
 
     /**
-     * Triggers any associated gadgets (including itself)
+     * Function that checks the representation invariant of absorber
+     * The absorber's origin must be within the board
+     * @return a boolean that specifies whether or not the rep invariant is preserved
+     */
+    protected boolean checkRep() {
+        if ( this.getX() < 0 || this.getY() < 0 || this.getX() >= Board.width || this.getY() >= Board.height ) {
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Function that sets if the absorber contains a ball or not
+     * It changes the state of toggle whenever the absorber contains or not a ball
+     */
+    public void setLoaded(boolean b) {
+        this.loaded = b;
+    }
+    
+    /**
+     * @return string representation of absorber
      */
     @Override
-    public void trigger() {
-        if(this.triggersSelf) {
-            this.action();
-        }
-        for(Gadget gadget: gadgetsToTrigger)
-            gadget.action();
+    public String toString() {
+        return "=";
     }
 
     /**
-     * If the absorber is holding a ball, it should mutate that ball to have an initial velocity of 50L/sec
-     * If not, it should do nothing
+     * @param ball is the ball that collides with this absorber
+     * @return the time that the ball takes to collide with this absorber
      */
-    @Override
-    public void doTriggerAction() {
-        if (!balls.isEmpty()) {
-            Ball nextBall = balls.remove(0);
-            nextBall.setPosition(new DoublePair(nextBall.getPosition().d1, position.d2));
-            nextBall.setVelocity(new Vect(0, -50));
-        }        
-    }
-    
-    public char charRep() {
-        return '=';
-    }
-
-    @Override
-    public void updateGadgetPosition(double timeDelta) {}
-    
-    @Override
-    public String toString(){
-        return "Absorber";
-    }
-
-    @Override
-    public DoublePair getSize() {
-        return this.size;
-    }
-
-    @Override
     public double timeUntilCollision(Ball ball) {
-        // TODO Auto-generated method stub
-        return 0;
+        double minCollisionTime = Double.POSITIVE_INFINITY;
+
+        for (LineSegment edge : this.getEdges()) {
+            minCollisionTime = Math.min(minCollisionTime, Geometry
+                    .timeUntilWallCollision(edge, ball.getCircle(),
+                            ball.getVelocity()));
+        }
+        
+        for (Circle circle : this.getCircles()) {
+            minCollisionTime = Math.min(minCollisionTime, Geometry
+                    .timeUntilCircleCollision(circle, ball.getCircle(),
+                            ball.getVelocity()));
+        }
+        return minCollisionTime;
     }
 
+    /**
+     * This function triggers the reactions given by the collisions of the ball with this absorber
+     * @param ball is the ball that collides with this absorber
+     * @param the time that the ball takes to collide with this absorber
+     * @throws InvalidInvariantException 
+     */
     @Override
-    public void reactWhenHit(Ball ball, double time) {
-        // TODO Auto-generated method stub
-        
+    public void reactWhenHit(Ball ball, double time) throws UnsupportedOperationException, InvalidInvariantException {
+        final double BALL_RADIUS = 0.25;
+        if(!this.loaded) {
+            ball.updateCenterX(this.getX() + this.getK() - BALL_RADIUS);
+            ball.updateCenterY(this.getY() + this.getM() - BALL_RADIUS);
+            ball.updateVelocity(new Vect(0.0, 0.0));
+            this.loadedBall = ball;
+            ball.inAbsorber = true;
+            setLoaded(true);
+            
+        } else {
+            
+            Circle oldCircle = ball.getCircle();
+            boolean hitMinEdge = false;
+            
+            double CenterX = ball.getCenterX() + ball.getVelocity().x() * time;
+            double CenterY = ball.getCenterY() + ball.getVelocity().y() * time;
+
+            ball.updateCenterX(CenterX);
+            ball.updateCenterY(CenterY);
+            
+            for (LineSegment edge : this.getEdges()) {
+                double currCollisionTime = Geometry.timeUntilWallCollision(edge, oldCircle, ball.getVelocity());
+                if (collisionTimesEqual(time, currCollisionTime)) {
+                    ball.updateVelocityWithGravityAndFriction(Geometry.reflectWall(edge, ball.getVelocity(), this.getCoef()), time);
+                    hitMinEdge = true;
+                }
+            }
+
+            if (!hitMinEdge) {
+                for (Circle circle : this.getCircles()) {
+                    double currCollisionTime = Geometry.timeUntilCircleCollision(circle, oldCircle, ball.getVelocity());
+                    if (collisionTimesEqual(time, currCollisionTime)) {
+                        ball.updateVelocityWithGravityAndFriction(Geometry.reflectCircle(circle.getCenter(), ball.getCircle().getCenter(), ball.getVelocity(), this.getCoef()), time);
+                    }
+                }
+            }
+        }
+
+        for(GameObject obj:this.getTriggers()) {
+            obj.doTriggerAction();
+        }
+
+    }
+
+    /**
+     * Function that maps every absorber cell to a (x,y) coordinate
+     * @param pointToObject is the hashMap of every (x,y) point to the object that exists there, if any
+     */
+    public void putPoint(HashMap<DoublePair, GameObject> pointToObject) {
+        for (int k = 0; k < this.getK(); k++) {
+            for (int m = 0; m < this.getM(); m++) {
+            pointToObject.put(new DoublePair((int) Math.floor(this.getX() + k),
+                    (int) Math.floor(this.getY() + m)), this);
+            }
+        }
+    }
+    
+    /**
+     * This function triggers the trigger action specific to this absorber
+     * @throws InvalidInvariantException 
+     */
+    @Override
+    public void doTriggerAction() throws UnsupportedOperationException, InvalidInvariantException {
+        final double BALL_RADIUS = 0.25;
+        if (this.loaded == true) {
+            setLoaded(false);
+            this.loadedBall.updateVelocityWithGravityAndFriction(new Vect(this.loadedBall.getVelocityX(), this.loadedBall.getVelocityY() - 50), Board.timeStep);
+            loadedBall.updateCenterX(this.getX() + k - BALL_RADIUS);
+            loadedBall.updateCenterY(this.getY() - BALL_RADIUS);
+            
+            this.loadedBall.inAbsorber = false;
+        }
+    }
+
+    /** 
+     * @return a line segment representing the upper edge of the absorber
+     */
+    public LineSegment getUpperEdge() {
+        return this.top;
+    }
+
+    /**
+     * @return a line segment representing the lower edge of the absorber
+     */
+    public LineSegment getLowerEdge() {
+        return this.bottom;
+    }
+
+    /**
+     * 
+     * @return a line segment representing the right edge of the absorber
+     */
+    public LineSegment getRightEdge() {
+        return this.right;
+    }
+
+    /**
+     * 
+     * @return a line segment representing the left edge of the absorber
+     */
+    public LineSegment getLeftEdge() {
+        return this.left;
+    }
+
+    /**
+     * 
+     * @return a list of line segments representing the edges of the absorber
+     */
+    public List<LineSegment> getEdges() {
+        return this.edges;
+    }
+    
+    /**
+     * @return an int m representing the height of the absorber
+     */
+    public int getM() {
+        return this.m;
+    }
+    
+    /**
+     * @return an int m representing the height of the absorber
+     */
+    public int getK() {
+        return this.k;
+    }
+
+    /**
+     * @return a list of circles representing the corners of the bumper
+     */
+    public List<Circle> getCircles() {
+        return this.circles;
     }
 }
