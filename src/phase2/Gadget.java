@@ -18,11 +18,16 @@ public abstract class Gadget {
     protected String name;
     protected final double reflectionCoef;
     private ArrayList<Gadget> gadgetsToTrigger;
-    protected final GridPoint location; // the (x,y) coordinates of the top left bounding box of the gadget
+    protected final GridPoint location; // the (x,y) coordinates of the top left bounding box of the gadget\
+    protected final int width;
+    protected final int height;
     
-    public Gadget(GridPoint location, String name) {
+    public Gadget(GridPoint location, String name, int width, int height, double reflectionCoef) {
         this.location = location;
         this.name = name;
+        this.width = width;
+        this.height = height;
+        this.reflectionCoef = reflectionCoef;
     }
 
     
