@@ -5,7 +5,7 @@ import physics.LineSegment;
 import physics.Vect;
 import physics.Geometry.DoublePair;
 
-public class Wall implements Gadget{
+public class Wall extends Gadget {
     
     private final LineSegment wall;
     private final DoublePair position;
