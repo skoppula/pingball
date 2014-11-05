@@ -11,7 +11,7 @@ import physics.Geometry;
 import physics.LineSegment;
 import physics.Geometry.DoublePair;
 
-public class SquareBumper extends GameObject {
+public class SquareBumper extends Gadget {
 
     private final LineSegment upperEdge;
     private final LineSegment lowerEdge;
@@ -28,12 +28,11 @@ public class SquareBumper extends GameObject {
     /**
      * Create a square-shaped bumper with these parameters:
      * 
-     * @param xCoord - the x coordinate of the bumper's origin
-     * @param yCoord - the y coordinate of the bumper's origin
-     * @throws InvalidInvariantException 
+     * @param xCoord - the x coordinate of the bumper's origin, must be between 0 and 19
+     * @param yCoord - the y coordinate of the bumper's origin, must be between 0 and 19
      */
-    public SquareBumper(int xCoord, int yCoord) throws InvalidInvariantException {
-        setPosition(xCoord, yCoord);
+    public SquareBumper(int x, int y, String name){
+    	super(new GridPoint(x, y), name);
         this.width = 1;
         this.height = 1;
 
