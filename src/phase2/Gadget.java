@@ -14,8 +14,10 @@ import physics.Geometry.DoublePair;
 
 public abstract class Gadget {
     
-    private double reflectionCoef;
+
     protected String name;
+    protected final double reflectionCoef;
+    private ArrayList<Gadget> gadgetsToTrigger;
     private GridPoint location; // the (x,y) coordinates of the top left bounding box of the gadget
     
     public Gadget(GridPoint location, String name) {
@@ -53,7 +55,11 @@ public abstract class Gadget {
     /**
      * Triggers any actions on other Gadgets that it may need to
      */
-    public abstract void trigger();
+    public void trigger() {
+        for (Gadget gadget: gadgetsToTrigger) {
+            gadget.action();
+        }
+    }
 
     /**
      * Performs the action of the gadget
@@ -64,6 +70,13 @@ public abstract class Gadget {
      * @param deltaTime the time frame over which to update the gadget
      */
     public abstract void updateGadgetPosition(double timeDelta);
+    
+    /**
+     * Adds the gadgets that this Gadget should trigger to gadgetsToTrigger
+     */
+    public void setGadgetsToTrigger(ArrayList<Gadget> gadgetsToTrigger) {
+        this.gadgetsToTrigger = gadgetsToTrigger;
+    }
     
     /**
 
