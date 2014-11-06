@@ -109,20 +109,7 @@ public class Absorber extends Gadget {
             this.loadedBall.inAbsorber = true;
             this.loadedBall.setVelocity(new Vect(0.0, 0.0));
             setLoaded(true);
-        } else {
-            PhysicsComponent gadgetPartToCollideWith = this.physicsComponentList.get(0);
-            double minTimeUntilCollision = Double.MAX_VALUE;
-            for(PhysicsComponent gadgetPart: physicsComponentList){
-                double timeUntilCollisionPart = gadgetPart.timeUntilCollision(ball.getBallCircle(), ball.getVelocity());
-                if (timeUntilCollisionPart < minTimeUntilCollision){ 
-                    minTimeUntilCollision = timeUntilCollisionPart;
-                    gadgetPartToCollideWith = gadgetPart;
-                }
-            }
-            Vect newVelocity = gadgetPartToCollideWith.reflect(ball.getBallCircle(), ball.getVelocity(), ball.getCoefficentOfReflection()); 
-            ball.setVelocity(newVelocity);
-        }
-        //TODO what happens if a ball isn't in the absorber?
+        } //NEIGHTER BALL NOR ABSORBER IS AFFECTED IF ABSORBER ALREADY LOADED (PASS THROUGH FUNCTIONALITY) 
     }
 
     /**
@@ -138,7 +125,6 @@ public class Absorber extends Gadget {
         for(Gadget obj:this.gadgetsToTrigger) {
             obj.action();
         }
-        throw new UnsupportedOperationException("Is this method doing the right thing?"); // TODO make this right
     }
     
     /**
