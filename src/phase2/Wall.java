@@ -50,7 +50,7 @@ public class Wall extends Gadget {
      * @return four walls, each of length 22, covering each of the sides.
      * They are named "leftWall", "topWall", "rightWall", and "bottomWall"
      */
-    public List<Wall> makeWalls(){
+    public static List<Wall> makeWalls(){
     	List<Wall> wallList = new ArrayList<>();
     	wallList.add(new Wall(-1, -1, "leftWall", 1, 22, Orientation.ZERO)); // add left wall
     	wallList.add(new Wall(-1, -1, "topWall", 22, 1, Orientation.NINETY)); // add top wall

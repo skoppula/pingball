@@ -43,6 +43,13 @@ public abstract class Gadget implements Collidable{
     }
 
 
+    /**
+     * 
+     * @return the name of the gadget.
+     */
+    public String getName(){
+    	return name;
+    }
     
     /**
      * Triggers any actions on other Gadgets that it may need to
