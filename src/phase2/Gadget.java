@@ -4,18 +4,17 @@ package phase2;
 import java.util.ArrayList;
 import java.util.List;
 
-import physics.Angle;
-import physics.Circle;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import physics.Geometry.DoublePair;
 
 public abstract class Gadget implements Collidable{
     
 
     protected String name;
+    /**
+     * the gadget's coefficient of reflection
+     */
     protected final double reflectionCoef;
     protected ArrayList<Gadget> gadgetsToTrigger;
     protected final GridPoint location; // the (x,y) coordinates of the top left bounding box of the gadget\
@@ -33,20 +32,6 @@ public abstract class Gadget implements Collidable{
     protected void setTriggers(ArrayList<Gadget> lst) {
         this.gadgetsToTrigger = lst;
     }
-    
-    /**
-     * @return DoublePair representing the (width,height) of the Gadget
-     */
-    public DoublePair getSize;
-    
-    /**
-     * @return the gadget's coefficient of reflection
-     */
-    public double coefficientOfReflection;
-    
-    /**
-     * @return the x-coordinate of the gadget's origin
-     */
     
 
     /**
