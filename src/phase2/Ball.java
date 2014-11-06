@@ -38,11 +38,11 @@ public class Ball {
      * Creates a new ball
      * @param x coordinate between (.5, .5) and ( 19.5, 19.5) 
      * @param y coordinate between (.5, .5) and ( 19.5, 19.5) 
-     * @param newVector a Vect representing the ball's velocity 
+     * @param newVelocity a Vect representing the ball's velocity 
      */
-    public Ball(double x, double y, Vect newVector){
+    public Ball(double x, double y, Vect newVelocity){
         this.ballCircle = new Circle( x, y, 0.25); 
-        this.velocity = newVector; 
+        this.velocity = newVelocity; 
         this.coefficentOfReflection = 1.0; 
         this.checkRep();
     }

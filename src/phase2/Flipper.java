@@ -74,8 +74,8 @@ public class Flipper extends Gadget {
      * @param side - either LEFT or RIGHT bumper
      * @param orientation - offset angle measured clockwise from north
      */
-    public Flipper(GridPoint location, String name, BumperSide side, Orientation orientation){
-        super(location, name, 2, 2, .95);
+    public Flipper(int x, int y, String name, BumperSide side, Orientation orientation){
+        super(new GridPoint(x, y), name, 2, 2, .95);
         this.side = side;
         this.orientation = orientation;
         this.isActive = false;
