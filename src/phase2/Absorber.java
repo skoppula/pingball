@@ -14,8 +14,7 @@ import physics.Geometry.DoublePair;
 
 public class Absorber extends Gadget {
 
-    private final int m;
-    private final int k;
+
     private boolean loaded;
     private Ball loadedBall;
 
@@ -41,26 +40,22 @@ public class Absorber extends Gadget {
      * @param mMultiplier - the size of the height
      * @throws InvalidInvariantException 
      */
-    public Absorber(int xCoord, int yCoord, int kMultiplier, int mMultiplier, String name) throws InvalidInvariantException {
+    public Absorber(int x, int y, String name, int width, int height) throws InvalidInvariantException {
         
-        super(new GridPoint(xCoord, yCoord), name);
+        super(new GridPoint(x, y), name, width, height, 1); // the reflection coefficient doesn't matter in this case;
         setTriggers(new ArrayList<Gadget>());
-        this.reflectionCoef = 1;
-
-        this.m = mMultiplier;
-        this.k = kMultiplier;
         this.loaded = false;
         
-        this.top = new LineSegment(this.getX(), this.getY(), this.getX() + this.getK(), this.getY());
-        this.bottom = new LineSegment(this.getX(), this.getY() + this.getM(), this.getX() + this.getK(), this.getY() + this.getM());
-        this.left = new LineSegment(this.getX(), this.getY(), this.getX(), this.getY() + this.getM());
-        this.right = new LineSegment(this.getX() + this.getK(), this.getY(), this.getX() + this.getK(), this.getY() + this.getM());
+        this.top = new LineSegment(this.getX(), this.getY(), this.getX() + this.width, this.getY());
+        this.bottom = new LineSegment(this.getX(), this.getY() + this.height, this.getX() + this.width, this.getY() + this.height);
+        this.left = new LineSegment(this.getX(), this.getY(), this.getX(), this.getY() + this.height);
+        this.right = new LineSegment(this.getX() + this.width, this.getY(), this.getX() + this.width, this.getY() + this.height);
         this.edges = new ArrayList<LineSegment>(Arrays.asList(top, bottom, right, left));
       
         this.upLeftCircle = new Circle(this.getX(), this.getY(), 0.01);
-        this.upRightCircle = new Circle(this.getX() + this.getK(), this.getY(), 0.01);
-        this.downLeftCircle = new Circle(this.getX(), this.getY() + this.getM(), 0.01);
-        this.downRightCircle = new Circle(this.getX() + this.getK(), this.getY() + this.getM(), 0.01);
+        this.upRightCircle = new Circle(this.getX() + this.width, this.getY(), 0.01);
+        this.downLeftCircle = new Circle(this.getX(), this.getY() + this.height, 0.01);
+        this.downRightCircle = new Circle(this.getX() + this.width, this.getY() + this.height, 0.01);
         this.circles = new ArrayList<Circle>(Arrays.asList(upRightCircle, upLeftCircle, downRightCircle, downLeftCircle));
         
     }
@@ -86,7 +81,8 @@ public class Absorber extends Gadget {
      * @param ball is the ball that collides with this absorber
      * @return the time that the ball takes to collide with this absorber
      */
-    public double timeUntilCollision(Ball ball) {
+    @Override
+    public double getTimeUntilCollision(Ball ball) {
         double minCollisionTime = Double.POSITIVE_INFINITY;
 
         for (LineSegment edge : this.getEdges()) {
@@ -103,11 +99,12 @@ public class Absorber extends Gadget {
         return minCollisionTime;
     }
     
+    @Override
     public void collision(Ball ball) {
         if(!this.loaded) {
             this.loadedBall = ball;
-            this.loadedBall.updateCenterX(this.getX() + this.getK() - this.loadedBall.getBallCircle().getRadius());
-            this.loadedBall.updateCenterY(this.getY() + this.getM() - this.loadedBall.getBallCircle().getRadius());
+            this.loadedBall.updateCenterX(this.getX() + width - this.loadedBall.getBallCircle().getRadius());
+            this.loadedBall.updateCenterY(this.getY() + height - this.loadedBall.getBallCircle().getRadius());
             this.loadedBall.inAbsorber = true;
             this.loadedBall.setVelocity(new Vect(0.0, 0.0));
             setLoaded(true);
@@ -127,19 +124,7 @@ public class Absorber extends Gadget {
         for(Gadget obj:this.gadgetsToTrigger) {
             obj.action();
         }
-    }
-
-    /**
-     * Function that maps every absorber cell to a (x,y) coordinate
-     * @param pointToObject is the hashMap of every (x,y) point to the object that exists there, if any
-     */
-    public void putPoint(HashMap<DoublePair, Gadget> pointToObject) {
-        for (int k = 0; k < this.getK(); k++) {
-            for (int m = 0; m < this.getM(); m++) {
-            pointToObject.put(new DoublePair((int) Math.floor(this.getX() + k),
-                    (int) Math.floor(this.getY() + m)), this);
-            }
-        }
+        throw new UnsupportedOperationException("Is this method doing the right thing?"); // TODO make this right
     }
     
     /**
@@ -152,42 +137,13 @@ public class Absorber extends Gadget {
         if (this.loaded == true) {
             setLoaded(false);
             this.loadedBall.setVelocity(new Vect(0, this.loadedBall.getVelocity().y() - 50));
-            loadedBall.updateCenterX(this.getX() + k - BALL_RADIUS);
+            loadedBall.updateCenterX(this.getX() + width - BALL_RADIUS); 
             loadedBall.updateCenterY(this.getY() - BALL_RADIUS);
             
             this.loadedBall.inAbsorber = false;
         }
     }
 
-    /** 
-     * @return a line segment representing the upper edge of the absorber
-     */
-    public LineSegment getUpperEdge() {
-        return this.top;
-    }
-
-    /**
-     * @return a line segment representing the lower edge of the absorber
-     */
-    public LineSegment getLowerEdge() {
-        return this.bottom;
-    }
-
-    /**
-     * 
-     * @return a line segment representing the right edge of the absorber
-     */
-    public LineSegment getRightEdge() {
-        return this.right;
-    }
-
-    /**
-     * 
-     * @return a line segment representing the left edge of the absorber
-     */
-    public LineSegment getLeftEdge() {
-        return this.left;
-    }
 
     /**
      * 
@@ -195,20 +151,6 @@ public class Absorber extends Gadget {
      */
     public List<LineSegment> getEdges() {
         return this.edges;
-    }
-    
-    /**
-     * @return an int m representing the height of the absorber
-     */
-    public int getM() {
-        return this.m;
-    }
-    
-    /**
-     * @return an int m representing the height of the absorber
-     */
-    public int getK() {
-        return this.k;
     }
 
     /**
@@ -220,7 +162,6 @@ public class Absorber extends Gadget {
 
     @Override
     public char charRep() {
-        // TODO Auto-generated method stub
-        return 0;
+        return '=';
     }
 }

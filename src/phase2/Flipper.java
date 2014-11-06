@@ -167,9 +167,9 @@ public class Flipper extends Gadget {
         }
         // Now that we know where our other end of the flipper is, we can make the rest of the physical rep.
         this.physicsComponentList.add(new RotatingCircle(new Circle(rotatingTip, 0.01), pivot, 
-                0, coefficientOfReflection));
+                0, reflectionCoef));
         this.physicsComponentList.add(new RotatingLine(new LineSegment(pivot, rotatingTip), pivot,
-                0, coefficientOfReflection));
+                0, reflectionCoef));
     }
 
     /**
