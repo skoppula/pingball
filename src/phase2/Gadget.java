@@ -12,17 +12,22 @@ import java.util.List;
 
 import physics.Geometry.DoublePair;
 
-public abstract class Gadget {
+public abstract class Gadget implements Collidable{
     
 
     protected String name;
-    protected double reflectionCoef;
+    protected final double reflectionCoef;
     protected ArrayList<Gadget> gadgetsToTrigger;
-    protected final GridPoint location; // the (x,y) coordinates of the top left bounding box of the gadget
+    protected final GridPoint location; // the (x,y) coordinates of the top left bounding box of the gadget\
+    protected final int width;
+    protected final int height;
     
-    public Gadget(GridPoint location, String name) {
+    public Gadget(GridPoint location, String name, int width, int height, double reflectionCoef) {
         this.location = location;
         this.name = name;
+        this.width = width;
+        this.height = height;
+        this.reflectionCoef = reflectionCoef;
     }
 
     protected void setTriggers(ArrayList<Gadget> lst) {

@@ -3,48 +3,39 @@ package phase2.physicsComponents;
 import physics.Angle;
 import physics.Circle;
 import physics.Geometry;
+import physics.LineSegment;
 import physics.Vect;
 
 /**
- * A physical circle, which does not rotate or move in other ways.
+ * A class that wraps a LineSegment from the Physics Package
  */
-public class StaticCircle implements PhysicsComponent {
-    // Rep. Invariant: circle radius must be non-zero.
-    
-    
-    /*
-     * The geometry component representing our StaticCircle
-     */
-    private final Circle circle;
-    
-    /*
-     * The reflection coefficient for collisions with our StaticCircle;
-     */
-    private final double reflectionCoefficient;
+/* A staticLine is valid if: 
+ *      its lineSegment is inside of the boardMatrix 
+ *      its lineSegment has size greater than 0
+ */
+public class StaticLine implements PhysicsComponent {
+    LineSegment lineSegment;
+    double reflectionCoefficient;
     
     /**
-     * Creates a new static circle.
-     * @param circle - must be a circle of nonzero radius.
-     * @param reflectionCoefficient - the reflection coefficient for collisions with our StaticCircle.
+     * Creates a new StaticLine 
+     * @param lineSegment the lineSegment that represents this staticLine. Must be inside the boardMatrix. 
+     * @param reflectionCoefficient 
      */
-    public StaticCircle(Circle circle, double reflectionCoefficient){
-        if (circle.getRadius() == 0){
-            throw new IllegalArgumentException("Circles cannot have radius exactly 0. Just make it small :P");
-        }
-        this.circle = circle;
+    public StaticLine(LineSegment lineSegment, double reflectionCoefficient){
+        this.lineSegment = lineSegment;
         this.reflectionCoefficient = reflectionCoefficient;
     }
 
-    
     @Override
     public double timeUntilCollision(Circle ballCircle, Vect ballVelocity) {
-        return Geometry.timeUntilCircleCollision(circle, ballCircle, ballVelocity);
+        return Geometry.timeUntilWallCollision(lineSegment, ballCircle, ballVelocity);
     }
 
     @Override
     public Vect reflect(Circle ballCircle, Vect ballVelocity,
             double reflectionCoefficient) {
-        return Geometry.reflectCircle(circle.getCenter(), ballCircle.getCenter(), ballVelocity, this.reflectionCoefficient*reflectionCoefficient);
+        return Geometry.reflectWall(lineSegment, ballVelocity, reflectionCoefficient*this.reflectionCoefficient);
     }
 
     @Override

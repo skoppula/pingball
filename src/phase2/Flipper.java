@@ -1,5 +1,6 @@
 package phase2;
 
+import phase2.physicsComponents.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -74,7 +75,7 @@ public class Flipper extends Gadget {
      * @param orientation - offset angle measured clockwise from north
      */
     public Flipper(GridPoint location, String name, BumperSide side, Orientation orientation){
-        super(location, name);
+        super(location, name, 2, 2, .95);
         this.side = side;
         this.orientation = orientation;
         this.isActive = false;
@@ -533,5 +534,23 @@ public class Flipper extends Gadget {
 	@Override
 	public void action() {
 		isActive = true;
+	}
+
+	@Override
+	public double getTimeUntilCollision(Ball ball) {
+		double minTime = Double.POSITIVE_INFINITY;
+		for(PhysicsComponent physicsComponent: physicsComponentList){
+			double newTime = physicsComponent.timeUntilCollision(ball.getBallCircle(), ball.getVelocity());
+			if(newTime > minTime){
+				newTime = minTime;
+			}
+		}
+		return minTime;
+	}
+
+	@Override
+	public void collision(Ball ball) {
+		// TODO Auto-generated method stub
+		
 	}
 }
