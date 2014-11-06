@@ -32,11 +32,9 @@ public class SquareBumper extends Gadget {
      * @param yCoord - the y coordinate of the bumper's origin, must be between 0 and 19
      */
     public SquareBumper(int x, int y, String name){
-    	super(new GridPoint(x, y), name);
+    	super(new GridPoint(x, y), name, 1, 1, 1);
         this.width = 1;
         this.height = 1;
-
-        setCoefficient(1.0);
         upperEdge = new LineSegment(this.getX(), this.getY(), this.getX() + 1,
                 this.getY());
         lowerEdge = new LineSegment(this.getX(), this.getY() + 1,
