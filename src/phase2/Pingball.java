@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+
+import phase2.Gadget.Orientation;
 //import Pingball.Gadget.Orientation;
 import physics.Vect;
 import physics.Geometry.DoublePair;
@@ -56,30 +58,22 @@ public class Pingball {
      */
     public static Board defaultBoard() {
         
+    	//TODO figure out how to add names to a map in a board
         List<Gadget> emptyList = new ArrayList<Gadget>();
         
         // setup initial positions & orientations
         DoublePair initialBallPosition = new DoublePair(1.25, 1.25);
-        DoublePair circlePosition1 = new DoublePair(1,10);
-        DoublePair circlePosition2 = new DoublePair(7,18);
-        DoublePair circlePosition3 = new DoublePair(8,18);
-        DoublePair circlePosition4 = new DoublePair(9,18);
-        DoublePair trianglePosition = new DoublePair(12,15);
-        DoublePair squarePosition1 = new DoublePair(0,17); 
-        DoublePair squarePosition2 = new DoublePair(1,17); 
-        DoublePair squarePosition3 = new DoublePair(2,17); 
-        Orientation triangleOrientation = Orientation.ONE_HUNDRED_EIGHTY;
         
         // make ball & gadgets
         Ball ball = new Ball(Vect.ZERO, initialBallPosition);
-        CircleBumper circle1 = new CircleBumper(circlePosition1, emptyList, false);
-        TriangleBumper triangle = new TriangleBumper(trianglePosition, triangleOrientation, emptyList, false);
-        SquareBumper square1 = new SquareBumper(squarePosition1, emptyList, false);
-        SquareBumper square2 = new SquareBumper(squarePosition2, emptyList, false);
-        SquareBumper square3 = new SquareBumper(squarePosition3, emptyList, false);
-        CircleBumper circle2 = new CircleBumper(circlePosition2, emptyList, false);
-        CircleBumper circle3 = new CircleBumper(circlePosition3, emptyList, false);
-        CircleBumper circle4 = new CircleBumper(circlePosition4, emptyList, false);
+        CircleBumper circle1 = new CircleBumper(1, 10, "circle1");
+        TriangleBumper triangle = new TriangleBumper(12, 15, "triangle", Orientation.ONE_HUNDRED_EIGHTY);
+        SquareBumper square1 = new SquareBumper(0, 17, "square1");
+        SquareBumper square2 = new SquareBumper(1, 17, "square2");
+        SquareBumper square3 = new SquareBumper(2, 17, "square3");
+        CircleBumper circle2 = new CircleBumper(7, 18, "circle2");
+        CircleBumper circle3 = new CircleBumper(8, 18, "circle3");
+        CircleBumper circle4 = new CircleBumper(9, 18, "circle4");
         
         List<Gadget> gadgetList = new ArrayList<Gadget>();
 
@@ -101,32 +95,28 @@ public class Pingball {
         DoublePair ballPosition1 = new DoublePair(10.25, 15.25);
         DoublePair ballPosition2 = new DoublePair(19.25, 3.25);
         DoublePair ballPosition3 = new DoublePair(1.25, 5.25);
-        DoublePair absorberPosition = new DoublePair(0,18);
-        int absorberK = 20;
-        int absorberM = 2;
-        DoublePair trianglePosition = new DoublePair(19,0);
-        Orientation triangleOrientation = Orientation.NINETY;
-        DoublePair circlePosition1 = new DoublePair(1,10);
-        DoublePair circlePosition2 = new DoublePair(2,10);
-        DoublePair circlePosition3 = new DoublePair(3,10);
-        DoublePair circlePosition4 = new DoublePair(4,10);
-        DoublePair circlePosition5 = new DoublePair(5,10);
-        List<Gadget> emptyList = new ArrayList<Gadget>();
-        emptyList = Collections.unmodifiableList(emptyList);
         
         // make ball & gadgets
         Ball ball1 = new Ball(Vect.ZERO, ballPosition1);
         Ball ball2 = new Ball(Vect.ZERO, ballPosition2);
         Ball ball3 = new Ball(Vect.ZERO, ballPosition3);
-        Absorber absorber = new Absorber(absorberPosition, absorberK, absorberM, emptyList, false);
+        Absorber absorber = new Absorber(0, 18, "absorber", 20, 2);
         List<Gadget> triggersAbsorber = new ArrayList<Gadget>();
         triggersAbsorber.add(absorber);
-        TriangleBumper triangle = new TriangleBumper(trianglePosition, triangleOrientation, emptyList, false);
-        CircleBumper circle1 = new CircleBumper(circlePosition1, triggersAbsorber, false); // triggers absorber
-        CircleBumper circle2 = new CircleBumper(circlePosition2, triggersAbsorber, false); // triggers absorber
-        CircleBumper circle3 = new CircleBumper(circlePosition3, triggersAbsorber, false); // triggers absorber
-        CircleBumper circle4 = new CircleBumper(circlePosition4, triggersAbsorber, false); // triggers absorber
-        CircleBumper circle5 = new CircleBumper(circlePosition5, triggersAbsorber, false); // triggers absorber
+        TriangleBumper triangle = new TriangleBumper(19, 0, "triangle", Orientation.NINETY);
+        CircleBumper circle1 = new CircleBumper(1, 10, "circle1"); // triggers absorber
+        CircleBumper circle2 = new CircleBumper(2, 10, "circle2"); // triggers absorber
+        CircleBumper circle3 = new CircleBumper(3, 10, "circle3"); // triggers absorber
+        CircleBumper circle4 = new CircleBumper(4, 10, "circle4"); // triggers absorber
+        CircleBumper circle5 = new CircleBumper(5, 10, "circle5"); // triggers absorber
+        
+        //set up the triggers
+        circle1.setTriggers(triggersAbsorber);
+        circle2.setTriggers(triggersAbsorber);
+        circle3.setTriggers(triggersAbsorber);
+        circle4.setTriggers(triggersAbsorber);
+        circle5.setTriggers(triggersAbsorber);
+        
         
         List<Gadget> gadgetList = new ArrayList<Gadget>();
         gadgetList.addAll(Arrays.asList(absorber, triangle, circle1, circle2, circle3, circle4, circle5));

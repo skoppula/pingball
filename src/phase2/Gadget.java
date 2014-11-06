@@ -16,7 +16,7 @@ public abstract class Gadget implements Collidable{
      * the gadget's coefficient of reflection
      */
     protected final double reflectionCoef;
-    protected ArrayList<Gadget> gadgetsToTrigger;
+    protected List<Gadget> gadgetsToTrigger = new ArrayList<>();
     protected final GridPoint location; // the (x,y) coordinates of the top left bounding box of the gadget\
     protected final int width;
     protected final int height;
@@ -29,8 +29,8 @@ public abstract class Gadget implements Collidable{
         this.reflectionCoef = reflectionCoef;
     }
 
-    protected void setTriggers(ArrayList<Gadget> lst) {
-        this.gadgetsToTrigger = lst;
+    protected void setTriggers(List<Gadget> lst) {
+        this.gadgetsToTrigger = new ArrayList<>(lst);
     }
     
 
