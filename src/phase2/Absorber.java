@@ -109,6 +109,7 @@ public class Absorber extends Gadget {
             this.loadedBall.setVelocity(new Vect(0.0, 0.0));
             setLoaded(true);
         }
+        //TODO what happens if a ball isn't in the absorber?
     }
 
     /**
