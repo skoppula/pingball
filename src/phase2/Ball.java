@@ -17,7 +17,7 @@ import physics.Vect;
  *  immutable coefficient of reflection that is set during construction
  *  
  */
-public class Ball {
+public class Ball implements Collidable{
 
     private Circle ballCircle;
     private Vect velocity;
@@ -25,11 +25,6 @@ public class Ball {
     protected boolean inAbsorber = false;
     private static double L = 1;
     
-    private boolean isTeleporting = false;
-    // when we are teleporting out from within an absorber, this is true
-    
-    private Gadget gadgetBeingTeleportedThrough;
-    // when our ball needs to teleport through a certain gadget, this specifies that gadget
 
     private boolean doNotUpdate = false;
     // this is true if a ball is in an absorber, for example.
@@ -215,33 +210,19 @@ public class Ball {
      * Make two balls collide. Ball positions and velocities are updated until
      * immediately after the collision.
      * @param ballCollidedWith - the ball that this is colliding with
-     * @param timeUntilCollision - the time until the two balls collide, in seconds
      */
-    public void collideWithBall(Ball ballCollidedWith){
+    public void collision(Ball ballCollidedWith){
         Geometry.VectPair vectPair = Geometry.reflectBalls(this.ballCircle.getCenter(), 1, this.velocity,
                 ballCollidedWith.ballCircle.getCenter(), 1, ballCollidedWith.velocity);
         this.setVelocity(vectPair.v1);
         ballCollidedWith.setVelocity(vectPair.v2);
     }
 
+	@Override
+	public double getTimeUntilCollision(Ball other) {
+		double timeUntilCollision = Geometry.timeUntilBallBallCollision(this.getBallCircle(), this.getVelocity(),
+                other.getBallCircle(), other.getVelocity());
+		return timeUntilCollision;
+	}
 
-    public boolean isTeleporting() {
-        return isTeleporting;
-    }
-
-
-    public void setWhetherTeleporting(boolean isTeleporting) {
-        this.isTeleporting = isTeleporting;
-    }
-
-
-    public Gadget getGadgetBeingTeleportedThrough() {
-        return gadgetBeingTeleportedThrough;
-    }
-
-
-    public void setGadgetBeingTeleportedThrough(
-            Gadget gadgetBeingTeleportedThrough) {
-        this.gadgetBeingTeleportedThrough = gadgetBeingTeleportedThrough;
-    }
 }
