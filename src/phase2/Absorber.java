@@ -44,7 +44,7 @@ public class Absorber extends Gadget {
     public Absorber(int xCoord, int yCoord, int kMultiplier, int mMultiplier, String name) throws InvalidInvariantException {
         
         super(new GridPoint(xCoord, yCoord), name);
-        setTriggers(new ArrayList<Gadget>) = 1;
+        setTriggers(new ArrayList<Gadget>());
         this.reflectionCoef = 1;
 
         this.m = mMultiplier;
@@ -63,22 +63,8 @@ public class Absorber extends Gadget {
         this.downRightCircle = new Circle(this.getX() + this.getK(), this.getY() + this.getM(), 0.01);
         this.circles = new ArrayList<Circle>(Arrays.asList(upRightCircle, upLeftCircle, downRightCircle, downLeftCircle));
         
-        if (!this.checkRep()) {
-            throw new Util.InvalidInvariantException();
-        }
     }
 
-    /**
-     * Function that checks the representation invariant of absorber
-     * The absorber's origin must be within the board
-     * @return a boolean that specifies whether or not the rep invariant is preserved
-     */
-    protected boolean checkRep() {
-        if ( this.getX() < 0 || this.getY() < 0 || this.getX() >= Board.width || this.getY() >= Board.height ) {
-            return false;
-        }
-        return true;
-    }
     
     /**
      * Function that sets if the absorber contains a ball or not
@@ -105,16 +91,27 @@ public class Absorber extends Gadget {
 
         for (LineSegment edge : this.getEdges()) {
             minCollisionTime = Math.min(minCollisionTime, Geometry
-                    .timeUntilWallCollision(edge, ball.getCircle(),
+                    .timeUntilWallCollision(edge, ball.getBallCircle(),
                             ball.getVelocity()));
         }
         
         for (Circle circle : this.getCircles()) {
             minCollisionTime = Math.min(minCollisionTime, Geometry
-                    .timeUntilCircleCollision(circle, ball.getCircle(),
+                    .timeUntilCircleCollision(circle, ball.getBallCircle(),
                             ball.getVelocity()));
         }
         return minCollisionTime;
+    }
+    
+    public void collision(Ball ball) {
+        if(!this.loaded) {
+            this.loadedBall = ball;
+            this.loadedBall.updateCenterX(this.getX() + this.getK() - this.loadedBall.getBallCircle().getRadius());
+            this.loadedBall.updateCenterY(this.getY() + this.getM() - this.loadedBall.getBallCircle().getRadius());
+            this.loadedBall.inAbsorber = true;
+            this.loadedBall.setVelocity(new Vect(0.0, 0.0));
+            setLoaded(true);
+        }
     }
 
     /**
@@ -124,56 +121,19 @@ public class Absorber extends Gadget {
      * @throws InvalidInvariantException 
      */
     @Override
-    public void reactWhenHit(Ball ball, double time) throws UnsupportedOperationException, InvalidInvariantException {
+    public void updateGadgetPosition(double time) {
         final double BALL_RADIUS = 0.25;
-        if(!this.loaded) {
-            ball.updateCenterX(this.getX() + this.getK() - BALL_RADIUS);
-            ball.updateCenterY(this.getY() + this.getM() - BALL_RADIUS);
-            ball.updateVelocity(new Vect(0.0, 0.0));
-            this.loadedBall = ball;
-            ball.inAbsorber = true;
-            setLoaded(true);
-            
-        } else {
-            
-            Circle oldCircle = ball.getCircle();
-            boolean hitMinEdge = false;
-            
-            double CenterX = ball.getCenterX() + ball.getVelocity().x() * time;
-            double CenterY = ball.getCenterY() + ball.getVelocity().y() * time;
 
-            ball.updateCenterX(CenterX);
-            ball.updateCenterY(CenterY);
-            
-            for (LineSegment edge : this.getEdges()) {
-                double currCollisionTime = Geometry.timeUntilWallCollision(edge, oldCircle, ball.getVelocity());
-                if (collisionTimesEqual(time, currCollisionTime)) {
-                    ball.updateVelocityWithGravityAndFriction(Geometry.reflectWall(edge, ball.getVelocity(), this.getCoef()), time);
-                    hitMinEdge = true;
-                }
-            }
-
-            if (!hitMinEdge) {
-                for (Circle circle : this.getCircles()) {
-                    double currCollisionTime = Geometry.timeUntilCircleCollision(circle, oldCircle, ball.getVelocity());
-                    if (collisionTimesEqual(time, currCollisionTime)) {
-                        ball.updateVelocityWithGravityAndFriction(Geometry.reflectCircle(circle.getCenter(), ball.getCircle().getCenter(), ball.getVelocity(), this.getCoef()), time);
-                    }
-                }
-            }
+        for(Gadget obj:this.gadgetsToTrigger) {
+            obj.action();
         }
-
-        for(GameObject obj:this.getTriggers()) {
-            obj.doTriggerAction();
-        }
-
     }
 
     /**
      * Function that maps every absorber cell to a (x,y) coordinate
      * @param pointToObject is the hashMap of every (x,y) point to the object that exists there, if any
      */
-    public void putPoint(HashMap<DoublePair, GameObject> pointToObject) {
+    public void putPoint(HashMap<DoublePair, Gadget> pointToObject) {
         for (int k = 0; k < this.getK(); k++) {
             for (int m = 0; m < this.getM(); m++) {
             pointToObject.put(new DoublePair((int) Math.floor(this.getX() + k),
@@ -187,11 +147,11 @@ public class Absorber extends Gadget {
      * @throws InvalidInvariantException 
      */
     @Override
-    public void doTriggerAction() throws UnsupportedOperationException, InvalidInvariantException {
+    public void action() {
         final double BALL_RADIUS = 0.25;
         if (this.loaded == true) {
             setLoaded(false);
-            this.loadedBall.updateVelocityWithGravityAndFriction(new Vect(this.loadedBall.getVelocityX(), this.loadedBall.getVelocityY() - 50), Board.timeStep);
+            this.loadedBall.setVelocity(new Vect(0, this.loadedBall.getVelocity().y() - 50));
             loadedBall.updateCenterX(this.getX() + k - BALL_RADIUS);
             loadedBall.updateCenterY(this.getY() - BALL_RADIUS);
             
@@ -256,5 +216,11 @@ public class Absorber extends Gadget {
      */
     public List<Circle> getCircles() {
         return this.circles;
+    }
+
+    @Override
+    public char charRep() {
+        // TODO Auto-generated method stub
+        return 0;
     }
 }

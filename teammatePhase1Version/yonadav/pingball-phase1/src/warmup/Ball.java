@@ -1,4 +1,4 @@
-package phase2;
+package warmup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,6 @@ public class Ball {
     private Circle ballCircle;
     private Vect velocity;
     final private double coefficentOfReflection;
-    protected boolean inAbsorber = false;
     private static double L = 1;
     
     private boolean isTeleporting = false;
@@ -41,7 +40,7 @@ public class Ball {
      * @param newVector a Vect representing the ball's velocity 
      */
     public Ball(double x, double y, Vect newVector){
-        this.ballCircle = new Circle( x, y, 0.25); 
+        this.ballCircle = new Circle( x, y, 0.24); 
         this.velocity = newVector; 
         this.coefficentOfReflection = 1.0; 
         this.checkRep();
@@ -60,14 +59,6 @@ public class Ball {
      */
     public boolean canUpdate(){
         return ! this.doNotUpdate;
-    }
-
-    public void updateCenterX(double x) {
-        this.ballCircle = new Circle(x, this.ballCircle.getCenter().y(), this.ballCircle.getRadius());
-    }
-    
-    public void updateCenterY(double y) {
-        this.ballCircle = new Circle(this.ballCircle.getCenter().x(), y, this.ballCircle.getRadius());
     }
 
     /**
@@ -205,7 +196,7 @@ public class Ball {
     /**
      * @return a list of GridSymbols that give
      */
-    public List<GridSymbol> getSymbolRep(){
+    public List<GridSymbol> getGridSymbolRep(){
         List<GridSymbol> symbolList = new ArrayList<>();
         symbolList.add(new GridSymbol(this.ballCircle.getCenter(), '*'));
         return symbolList;
