@@ -27,39 +27,37 @@ public class TriangleBumper extends Gadget {
         super(new GridPoint(x, y), name, 1, 1, 1);
         this.orientation = orientation;
         
-        double dx = (double) x;
-        double dy = (double) y;
         if(orientation.equals(Orientation.ZERO)){
-            this.physicsComponentList.add(new StaticLine(new LineSegment(dx, dy, dx + 1, dy), coefficientOfReflection));
-            this.physicsComponentList.add(new StaticLine(new LineSegment(dx, dy, dx, dy + 1), coefficientOfReflection));
-            this.physicsComponentList.add(new StaticLine(new LineSegment(dx + 1, dy, dx, dy + 1), coefficientOfReflection));
-            this.physicsComponentList.add(new StaticCircle(new Circle(dx, dy, 0.01), coefficientOfReflection));
-            this.physicsComponentList.add(new StaticCircle(new Circle(dx + 1, dy, 0.01), coefficientOfReflection));
-            this.physicsComponentList.add(new StaticCircle(new Circle(dx, dy + 1, 0.01), coefficientOfReflection));
+            this.physicsComponentList.add(new StaticLine(new LineSegment(x, y, x + 1, y), reflectionCoef));
+            this.physicsComponentList.add(new StaticLine(new LineSegment(x, y, x, y + 1), reflectionCoef));
+            this.physicsComponentList.add(new StaticLine(new LineSegment(x + 1, y, x, y + 1), reflectionCoef));
+            this.physicsComponentList.add(new StaticCircle(new Circle(x, y, 0.01), reflectionCoef));
+            this.physicsComponentList.add(new StaticCircle(new Circle(x + 1, y, 0.01), reflectionCoef));
+            this.physicsComponentList.add(new StaticCircle(new Circle(x, y + 1, 0.01), reflectionCoef));
         }
         else if(orientation.equals(Orientation.NINETY)){
-            this.physicsComponentList.add(new StaticLine(new LineSegment(dx, dy, dx + 1, dy), coefficientOfReflection));
-            this.physicsComponentList.add(new StaticLine(new LineSegment(dx + 1, dy, dx + 1, dy + 1), coefficientOfReflection));
-            this.physicsComponentList.add(new StaticLine(new LineSegment(dx, dy, dx + 1, dy + 1), coefficientOfReflection));
-            this.physicsComponentList.add(new StaticCircle(new Circle(dx, dy, 0.01), coefficientOfReflection));
-            this.physicsComponentList.add(new StaticCircle(new Circle(dx + 1, dy, 0.01), coefficientOfReflection));
-            this.physicsComponentList.add(new StaticCircle(new Circle(dx + 1, dy + 1, 0.01), coefficientOfReflection));
+            this.physicsComponentList.add(new StaticLine(new LineSegment(x, y, x + 1, y), reflectionCoef));
+            this.physicsComponentList.add(new StaticLine(new LineSegment(x + 1, y, x + 1, y + 1), reflectionCoef));
+            this.physicsComponentList.add(new StaticLine(new LineSegment(x, y, x + 1, y + 1), reflectionCoef));
+            this.physicsComponentList.add(new StaticCircle(new Circle(x, y, 0.01), reflectionCoef));
+            this.physicsComponentList.add(new StaticCircle(new Circle(x + 1, y, 0.01), reflectionCoef));
+            this.physicsComponentList.add(new StaticCircle(new Circle(x + 1, y + 1, 0.01), reflectionCoef));
         }
         else if(orientation.equals(Orientation.ONE_HUNDRED_EIGHTY)){
-            this.physicsComponentList.add(new StaticLine(new LineSegment(dx, dy + 1, dx + 1, dy + 1), coefficientOfReflection));
-            this.physicsComponentList.add(new StaticLine(new LineSegment(dx + 1, dy, dx + 1, dy + 1), coefficientOfReflection));
-            this.physicsComponentList.add(new StaticLine(new LineSegment(dx + 1, dy, dx, dy + 1), coefficientOfReflection));
-            this.physicsComponentList.add(new StaticCircle(new Circle(dx, dy + 1, 0.01), coefficientOfReflection));
-            this.physicsComponentList.add(new StaticCircle(new Circle(dx + 1, dy, 0.01), coefficientOfReflection));
-            this.physicsComponentList.add(new StaticCircle(new Circle(dx + 1, dy + 1, 0.01), coefficientOfReflection));
+            this.physicsComponentList.add(new StaticLine(new LineSegment(x, y + 1, x + 1, y + 1), reflectionCoef));
+            this.physicsComponentList.add(new StaticLine(new LineSegment(x + 1, y, x + 1, y + 1), reflectionCoef));
+            this.physicsComponentList.add(new StaticLine(new LineSegment(x + 1, y, x, y + 1), reflectionCoef));
+            this.physicsComponentList.add(new StaticCircle(new Circle(x, y + 1, 0.01), reflectionCoef));
+            this.physicsComponentList.add(new StaticCircle(new Circle(x + 1, y, 0.01), reflectionCoef));
+            this.physicsComponentList.add(new StaticCircle(new Circle(x + 1, y + 1, 0.01), reflectionCoef));
         }
         else if(orientation.equals(Orientation.TWO_HUNDRED_SEVENTY)){
-            this.physicsComponentList.add(new StaticLine(new LineSegment(dx, dy, dx, dy + 1), coefficientOfReflection));
-            this.physicsComponentList.add(new StaticLine(new LineSegment(dx, dy + 1, dx + 1, dy + 1), coefficientOfReflection));
-            this.physicsComponentList.add(new StaticLine(new LineSegment(dx, dy, dx + 1, dy + 1), coefficientOfReflection));
-            this.physicsComponentList.add(new StaticCircle(new Circle(dx, dy, 0.01), coefficientOfReflection));
-            this.physicsComponentList.add(new StaticCircle(new Circle(dx, dy + 1, 0.01), coefficientOfReflection));
-            this.physicsComponentList.add(new StaticCircle(new Circle(dx + 1, dy + 1, 0.01), coefficientOfReflection));
+            this.physicsComponentList.add(new StaticLine(new LineSegment(x, y, x, y + 1), reflectionCoef));
+            this.physicsComponentList.add(new StaticLine(new LineSegment(x, y + 1, x + 1, y + 1), reflectionCoef));
+            this.physicsComponentList.add(new StaticLine(new LineSegment(x, y, x + 1, y + 1), reflectionCoef));
+            this.physicsComponentList.add(new StaticCircle(new Circle(x, y, 0.01), reflectionCoef));
+            this.physicsComponentList.add(new StaticCircle(new Circle(x, y + 1, 0.01), reflectionCoef));
+            this.physicsComponentList.add(new StaticCircle(new Circle(x + 1, y + 1, 0.01), reflectionCoef));
         }
         else{
             throw new IllegalStateException("TriangleBumper's orientation must be 0, 90, 180, or 270. Was "
