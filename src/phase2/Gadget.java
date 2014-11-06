@@ -50,13 +50,12 @@ public abstract class Gadget implements Collidable{
     
 
     /**
-     * @return list of characters in the form of a String
-     * The characters represent the string representation of
-     * each 1L x 1L space that the gadget is in
-     * from top to bottom, left to right
+     * @return a string which identifies this object (usually a name)
      */
     @Override
-    public abstract String toString();
+    public String toString(){
+    	return name;
+    }
 
 
     

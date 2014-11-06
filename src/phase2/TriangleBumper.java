@@ -1,17 +1,12 @@
 package phase2;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import phase2.Util.InvalidInvariantException;
-import physics.Angle;
 import physics.Circle;
-import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
-import physics.Geometry.DoublePair;
 import phase2.physicsComponents.*;
 
 public class TriangleBumper extends Gadget {
