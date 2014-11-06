@@ -5,11 +5,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import Pingball.Gadget.Orientation;
+//import Pingball.Gadget.Orientation;
 import physics.Vect;
 import physics.Geometry.DoublePair;
-import Pingball.Ball;
-import Pingball.Board;
+//import Pingball.Ball;
+//import Pingball.Board;
 
 public class Pingball {
     
@@ -22,6 +22,7 @@ public class Pingball {
      */
     public static void main(String[] args) throws InterruptedException {
         
+/*
         double timeInSeconds = TIME_DELTA_MILLISECONDS * .001;
         Board board;
 
@@ -44,6 +45,7 @@ public class Pingball {
             board.updateBoard(timeInSeconds);
             board.printBoard();
         }
+        */
     }
     
     
