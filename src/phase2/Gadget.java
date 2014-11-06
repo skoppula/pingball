@@ -12,7 +12,7 @@ import java.util.List;
 
 import physics.Geometry.DoublePair;
 
-public abstract class Gadget {
+public abstract class Gadget implements Collidable{
     
 
     protected String name;
