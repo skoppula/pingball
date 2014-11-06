@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import phase2.Util.InvalidInvariantException;
+import phase2.physicsComponents.PhysicsComponent;
 import physics.Circle;
 import physics.Geometry;
 import physics.LineSegment;
@@ -108,6 +109,18 @@ public class Absorber extends Gadget {
             this.loadedBall.inAbsorber = true;
             this.loadedBall.setVelocity(new Vect(0.0, 0.0));
             setLoaded(true);
+        } else {
+            PhysicsComponent gadgetPartToCollideWith = this.physicsComponentList.get(0);
+            double minTimeUntilCollision = Double.MAX_VALUE;
+            for(PhysicsComponent gadgetPart: physicsComponentList){
+                double timeUntilCollisionPart = gadgetPart.timeUntilCollision(ball.getBallCircle(), ball.getVelocity());
+                if (timeUntilCollisionPart < minTimeUntilCollision){ 
+                    minTimeUntilCollision = timeUntilCollisionPart;
+                    gadgetPartToCollideWith = gadgetPart;
+                }
+            }
+            Vect newVelocity = gadgetPartToCollideWith.reflect(ball.getBallCircle(), ball.getVelocity(), ball.getCoefficentOfReflection()); 
+            ball.setVelocity(newVelocity);
         }
         //TODO what happens if a ball isn't in the absorber?
     }

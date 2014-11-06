@@ -11,11 +11,11 @@ public class Util {
      * @return a list of all game objects
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public static List<GameObject> combineLists(List ... lists){
+    public static List<Gadget> combineLists(List ... lists){
 
-        List<GameObject> outList = new ArrayList<GameObject>();
+        List<Gadget> outList = new ArrayList<Gadget>();
 
-        for(List<GameObject> list:lists)
+        for(List<Gadget> list:lists)
             outList.addAll(list);
 
         return outList;
@@ -28,38 +28,26 @@ public class Util {
      * @return a list of all game objects
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public static List<List<GameObject>> shallowCombineLists(List ... lists){
+    public static List<List<Gadget>> shallowCombineLists(List ... lists){
 
-        List<List<GameObject>> outList = new ArrayList<List<GameObject>>();
+        List<List<Gadget>> outList = new ArrayList<List<Gadget>>();
 
-        for(List<GameObject> list:lists)
+        for(List<Gadget> list:lists)
             outList.add(list);
 
         return outList;
     }
     
-    /**
-     * Function that takes a list of game objects and converts them to the specific type of object they represent
-     * @param gameObjects - a list of gadgets 
-     * @return a list of same gadgets converted to balls
-     */
-    public static List<Ball> convertListToBall(List<GameObject> gameObjects) {
-        List<Ball> out = new ArrayList<Ball>();
-        for(GameObject o:gameObjects) {
-            out.add((Ball) o);
-        }
-        return out;
-    }
 
     /**
      * Function that takes a list of game objects and converts them to the specific type of object they represent
      * @param gameObjects - a list of gadgets 
      * @return a list of same gadgets converted to boundaries
      */
-    public static List<Boundary> convertListToBoundary(List<GameObject> gameObjects) {
-        List<Boundary> out = new ArrayList<Boundary>();
-        for(GameObject o:gameObjects) {
-            out.add((Boundary) o);
+    public static List<Wall> convertListToBoundary(List<Gadget> gameObjects) {
+        List<Wall> out = new ArrayList<Wall>();
+        for(Gadget o:gameObjects) {
+            out.add((Wall) o);
         }
         return out;
     }
@@ -69,9 +57,9 @@ public class Util {
      * @param gameObjects - a list of gadgets 
      * @return a list of same gadgets converted to triangle bumpers
      */
-    public static List<TriangleBumper> convertListToTriangleBumper(List<GameObject> gameObjects) {
+    public static List<TriangleBumper> convertListToTriangleBumper(List<Gadget> gameObjects) {
         List<TriangleBumper> out = new ArrayList<TriangleBumper>();
-        for(GameObject o:gameObjects) {
+        for(Gadget o:gameObjects) {
             out.add((TriangleBumper) o);
         }
         return out;
@@ -82,9 +70,9 @@ public class Util {
      * @param gameObjects - a list of gadgets 
      * @return a list of same gadgets converted to circle bumpers
      */
-    public static List<CircleBumper> convertListToCircleBumper(List<GameObject> gameObjects) {
+    public static List<CircleBumper> convertListToCircleBumper(List<Gadget> gameObjects) {
         List<CircleBumper> out = new ArrayList<CircleBumper>();
-        for(GameObject o:gameObjects) {
+        for(Gadget o:gameObjects) {
             out.add((CircleBumper) o);
         }
         return out;
@@ -95,9 +83,9 @@ public class Util {
      * @param gameObjects - a list of gadgets 
      * @return a list of same gadgets converted to square bumpers
      */
-    public static List<SquareBumper> convertListToSquareBumper(List<GameObject> gameObjects) {
+    public static List<SquareBumper> convertListToSquareBumper(List<Gadget> gameObjects) {
         List<SquareBumper> out = new ArrayList<SquareBumper>();
-        for(GameObject o:gameObjects) {
+        for(Gadget o:gameObjects) {
             out.add((SquareBumper) o);
         }
         return out;
@@ -108,9 +96,9 @@ public class Util {
      * @param gameObjects - a list of gadgets 
      * @return a list of same gadgets converted to absorbers
      */
-    public static List<Absorber> convertListToAbsorber(List<GameObject> gameObjects) {
+    public static List<Absorber> convertListToAbsorber(List<Gadget> gameObjects) {
         List<Absorber> out = new ArrayList<Absorber>();
-        for(GameObject o:gameObjects) {
+        for(Gadget o:gameObjects) {
             out.add((Absorber) o);
         }
         return out;
@@ -121,9 +109,9 @@ public class Util {
      * @param gameObjects - a list of gadgets 
      * @return a list of same gadgets converted to flippers
      */
-    public static List<Flipper> convertListToFlipper(List<GameObject> gameObjects) {
+    public static List<Flipper> convertListToFlipper(List<Gadget> gameObjects) {
         List<Flipper> out = new ArrayList<Flipper>();
-        for(GameObject o:gameObjects) {
+        for(Gadget o:gameObjects) {
             out.add((Flipper) o);
         }
         return out;
