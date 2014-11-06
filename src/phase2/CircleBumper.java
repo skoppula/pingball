@@ -1,13 +1,17 @@
 package phase2;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
-import phase1.Util.InvalidInvariantException;
+import phase2.Util.InvalidInvariantException;
+import phase2.physicsComponents.PhysicsComponent;
+import phase2.physicsComponents.StaticCircle;
 import physics.Circle;
-import physics.Geometry;
-import physics.Geometry.DoublePair;
+import physics.Vect;
 
-public class CircleBumper extends GameObject {
+public class CircleBumper extends Gadget {
+	
+	List<PhysicsComponent> physicsComponentList = new ArrayList<>();
 
     /**
      * Create a square-shaped bumper with these parameters:
@@ -15,9 +19,11 @@ public class CircleBumper extends GameObject {
      * @param yCoord = the y coordinate of the bumper's origin
      * @throws InvalidInvariantException 
      */
-    public CircleBumper(int xCoord, int yCoord) throws InvalidInvariantException {
-        setPosition(xCoord, yCoord);
-        setCoefficient(1.0);
+    public CircleBumper(int x, int y, String name) throws InvalidInvariantException {
+    	super(new GridPoint(x, y), name, 1, 1, 1);
+    	final double CIRCLE_RADIUS = .5;
+    	physicsComponentList.add(new StaticCircle(new Circle(new Vect(this.getX() + CIRCLE_RADIUS, this.getY() + CIRCLE_RADIUS), CIRCLE_RADIUS),
+    			this.reflectionCoef));
         if (!this.checkRep()) {
             throw new Util.InvalidInvariantException();
         }
@@ -29,18 +35,10 @@ public class CircleBumper extends GameObject {
      * @return a boolean that specifies whether or not the rep invariant is preserved
      */
     protected boolean checkRep() {
-        if ( this.getX() < 0 || this.getY() < 0 || this.getX() >= Board.width || this.getY() >= Board.height ) {
+        if ( this.getX() < 0 || this.getY() < 0 || this.getX() >= 20 || this.getY() >= 20 ) {
             return false;
         }
         return true;
-    }
-    
-    /**
-     * @return the circle representation of the bumper
-     */
-    public Circle getCircle() {
-        final double CIRCLE_RADIUS = 0.5;
-        return new Circle(this.getX() + CIRCLE_RADIUS, this.getY() + CIRCLE_RADIUS, CIRCLE_RADIUS);
     }
 
     /**
@@ -48,50 +46,22 @@ public class CircleBumper extends GameObject {
      */
     @Override
     public String toString() {
-        return "o";
+        return "0";
     }
 
     /**
      * @param ball is the ball that collides with this bumper
-     * @return the time that the ball takes to collide with this bumper
-     */
-    public double timeUntilCollision(Ball ball) {
-        double collisionTime = Geometry.timeUntilCircleCollision(
-                this.getCircle(), ball.getCircle(), ball.getVelocity());
-        return collisionTime;
-    }
-
-    /**
-     * This function triggers the reactions given by the collisions of the ball with this bumper
-     * @param ball is the ball that collides with this bumper
-     * @param the time that the ball takes to collide with this bumper
-     * @throws InvalidInvariantException 
+     * @return the time that it takes until the ball will collide with this bumper
      */
     @Override
-    public void reactWhenHit(Ball ball, double time) throws UnsupportedOperationException, InvalidInvariantException {
-        
-        double CenterX = ball.getCenterX() + ball.getVelocity().x() * time;
-        double CenterY = ball.getCenterY() + ball.getVelocity().y() * time;
-        
-        ball.updateCenterX(CenterX);
-        ball.updateCenterY(CenterY);
-        
-        ball.updateVelocityWithGravityAndFriction(Geometry.reflectCircle(
-                this.getCircle().getCenter(), ball.getCircle().getCenter(),
-                ball.getVelocity(), this.getCoef()), time);
-        
-        for (GameObject obj : this.getTriggers()) {
-            obj.doTriggerAction();
-        }
-    }
+    public double getTimeUntilCollision(Ball ball) {
+    	double minCollisionTime = Double.POSITIVE_INFINITY;
 
-    /**
-     * Function that maps the circleBumper to a (x,y) coordinate
-     * @param pointToObject is the hashMap of every (x,y) point to the object that exists there, if any
-     */
-    public void putPoint(HashMap<DoublePair, GameObject> pointToObject) {
-        pointToObject.put(new DoublePair((int) Math.floor(this.getX()),
-                (int) Math.floor(this.getY())), this);
+        for (PhysicsComponent physicsComponent: physicsComponentList) {
+            double currCollisionTime = physicsComponent.timeUntilCollision(ball.getBallCircle(), ball.getVelocity());
+            minCollisionTime = Math.min(minCollisionTime, currCollisionTime);
+        }
+        return minCollisionTime;
     }
     
     /**
@@ -99,7 +69,38 @@ public class CircleBumper extends GameObject {
      * @throws UnsupportedOperationException 
      */
     @Override
-    public void doTriggerAction() throws UnsupportedOperationException {
-        throw new UnsupportedOperationException();
+    public void action(){
+        return;
     }
+
+    /**
+     * Redirects (by changing the velocity) the ball which is going to collide with CircleBumper.
+     * Also sends out triggers, following the collision.
+     * @param ball the ball colliding with circleBumper
+     */
+	@Override
+	public void collision(Ball ball) {
+        PhysicsComponent gadgetPartToCollideWith = this.physicsComponentList.get(0);
+        double minTimeUntilCollision = Double.MAX_VALUE;
+        for(PhysicsComponent gadgetPart: physicsComponentList){
+            double timeUntilCollisionPart = gadgetPart.timeUntilCollision(ball.getBallCircle(), ball.getVelocity());
+            if (timeUntilCollisionPart < minTimeUntilCollision){ 
+                minTimeUntilCollision = timeUntilCollisionPart;
+                gadgetPartToCollideWith = gadgetPart;
+            }
+        }
+        Vect newVelocity = gadgetPartToCollideWith.reflect(ball.getBallCircle(), ball.getVelocity(), ball.getCoefficentOfReflection()); 
+        ball.setVelocity(newVelocity);
+        trigger();
+	}
+
+	@Override
+	public void updateGadgetPosition(double timeDelta) {
+		return;
+	}
+
+	@Override
+	public char charRep() {
+		return '0';
+	}
 }
