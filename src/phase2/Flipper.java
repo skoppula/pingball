@@ -264,7 +264,7 @@ public class Flipper extends Gadget {
                 }
                 else{
                     // Note that this relies on the fact that a timestep does not swing through 180 degrees,
-                    // i.e. timestep must be greater than .2 seconds TODO ensure this is true!
+                    // i.e. timestep must be greater than .2 seconds 
                     if(this.angle.compareTo(Angle.DEG_180) > 0){
                         for(PhysicsComponent physicsComponent: physicsComponentList){
                             if(physicsComponent.canRotate()){
@@ -289,7 +289,7 @@ public class Flipper extends Gadget {
             case BOTTOMRIGHT:
                 if(willMoveClockwise){
                     // Note that this relies on the fact that a timestep does not swing throug 180 degrees,
-                    // i.e. timestep must be greater than .2 seconds TODO ensure this is true!
+                    // i.e. timestep must be greater than .2 seconds 
                     if(this.angle.compareTo(Angle.DEG_180) <= 0){
                         for(PhysicsComponent physicsComponent: physicsComponentList){
                             if(physicsComponent.canRotate()){
