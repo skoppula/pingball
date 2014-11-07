@@ -50,14 +50,13 @@ public class Board {
         this.gadgets = gadgets;
         this.gadgetsWithoutWalls = gadgets;
         // set up walls
-        Wall leftWall = new Wall(Orientation.ZERO);
-        Wall topWall = new Wall(Orientation.NINETY);
-        Wall rightWall = new Wall(Orientation.ONE_HUNDRED_EIGHTY);
-        Wall bottomWall = new Wall(Orientation.TWO_HUNDRED_SEVENTY);
-        gadgets.add(leftWall);
-        gadgets.add(topWall);
-        gadgets.add(rightWall);
-        gadgets.add(bottomWall);
+        gadgets.addAll(Wall.makeWalls());
+        for(Gadget gadget: gadgets){
+        	if(nameToGadgetMap.containsKey(gadget.getName())){
+        		throw new IllegalArgumentException("The provided list of gadgets has at least two gadgets with the same name:" + gadget.getName());
+        	}
+        	nameToGadgetMap.put(gadget.getName(), gadget);
+        }
         checkRep();
     }
 

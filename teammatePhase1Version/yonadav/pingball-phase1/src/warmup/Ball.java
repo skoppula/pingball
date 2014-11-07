@@ -1,4 +1,4 @@
-package phase2;
+package warmup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +17,18 @@ import physics.Vect;
  *  immutable coefficient of reflection that is set during construction
  *  
  */
-public class Ball implements Collidable{
+public class Ball {
 
     private Circle ballCircle;
     private Vect velocity;
     final private double coefficentOfReflection;
-    protected boolean inAbsorber = false;
     private static double L = 1;
     
+    private boolean isTeleporting = false;
+    // when we are teleporting out from within an absorber, this is true
+    
+    private Gadget gadgetBeingTeleportedThrough;
+    // when our ball needs to teleport through a certain gadget, this specifies that gadget
 
     private boolean doNotUpdate = false;
     // this is true if a ball is in an absorber, for example.
@@ -33,11 +37,11 @@ public class Ball implements Collidable{
      * Creates a new ball
      * @param x coordinate between (.5, .5) and ( 19.5, 19.5) 
      * @param y coordinate between (.5, .5) and ( 19.5, 19.5) 
-     * @param newVelocity a Vect representing the ball's velocity 
+     * @param newVector a Vect representing the ball's velocity 
      */
-    public Ball(double x, double y, Vect newVelocity){
-        this.ballCircle = new Circle( x, y, 0.25); 
-        this.velocity = newVelocity; 
+    public Ball(double x, double y, Vect newVector){
+        this.ballCircle = new Circle( x, y, 0.24); 
+        this.velocity = newVector; 
         this.coefficentOfReflection = 1.0; 
         this.checkRep();
     }
@@ -55,14 +59,6 @@ public class Ball implements Collidable{
      */
     public boolean canUpdate(){
         return ! this.doNotUpdate;
-    }
-
-    public void updateCenterX(double x) {
-        this.ballCircle = new Circle(x, this.ballCircle.getCenter().y(), this.ballCircle.getRadius());
-    }
-    
-    public void updateCenterY(double y) {
-        this.ballCircle = new Circle(this.ballCircle.getCenter().x(), y, this.ballCircle.getRadius());
     }
 
     /**
@@ -200,7 +196,7 @@ public class Ball implements Collidable{
     /**
      * @return a list of GridSymbols that give
      */
-    public List<GridSymbol> getSymbolRep(){
+    public List<GridSymbol> getGridSymbolRep(){
         List<GridSymbol> symbolList = new ArrayList<>();
         symbolList.add(new GridSymbol(this.ballCircle.getCenter(), '*'));
         return symbolList;
@@ -210,19 +206,33 @@ public class Ball implements Collidable{
      * Make two balls collide. Ball positions and velocities are updated until
      * immediately after the collision.
      * @param ballCollidedWith - the ball that this is colliding with
+     * @param timeUntilCollision - the time until the two balls collide, in seconds
      */
-    public void collision(Ball ballCollidedWith){
+    public void collideWithBall(Ball ballCollidedWith){
         Geometry.VectPair vectPair = Geometry.reflectBalls(this.ballCircle.getCenter(), 1, this.velocity,
                 ballCollidedWith.ballCircle.getCenter(), 1, ballCollidedWith.velocity);
         this.setVelocity(vectPair.v1);
         ballCollidedWith.setVelocity(vectPair.v2);
     }
 
-	@Override
-	public double getTimeUntilCollision(Ball other) {
-		double timeUntilCollision = Geometry.timeUntilBallBallCollision(this.getBallCircle(), this.getVelocity(),
-                other.getBallCircle(), other.getVelocity());
-		return timeUntilCollision;
-	}
 
+    public boolean isTeleporting() {
+        return isTeleporting;
+    }
+
+
+    public void setWhetherTeleporting(boolean isTeleporting) {
+        this.isTeleporting = isTeleporting;
+    }
+
+
+    public Gadget getGadgetBeingTeleportedThrough() {
+        return gadgetBeingTeleportedThrough;
+    }
+
+
+    public void setGadgetBeingTeleportedThrough(
+            Gadget gadgetBeingTeleportedThrough) {
+        this.gadgetBeingTeleportedThrough = gadgetBeingTeleportedThrough;
+    }
 }

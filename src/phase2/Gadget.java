@@ -4,53 +4,52 @@ package phase2;
 import java.util.ArrayList;
 import java.util.List;
 
-import physics.Angle;
-import physics.Circle;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import physics.Geometry.DoublePair;
 
 public abstract class Gadget implements Collidable{
     
 
     protected String name;
+    /**
+     * the gadget's coefficient of reflection
+     */
     protected final double reflectionCoef;
-    private ArrayList<Gadget> gadgetsToTrigger;
-    protected final GridPoint location; // the (x,y) coordinates of the top left bounding box of the gadget
+    protected List<Gadget> gadgetsToTrigger = new ArrayList<>();
+    protected final GridPoint location; // the (x,y) coordinates of the top left bounding box of the gadget\
+    protected final int width;
+    protected final int height;
     
-    public Gadget(GridPoint location, String name) {
+    public Gadget(GridPoint location, String name, int width, int height, double reflectionCoef) {
         this.location = location;
         this.name = name;
+        this.width = width;
+        this.height = height;
+        this.reflectionCoef = reflectionCoef;
     }
 
-    
-    /**
-     * @return DoublePair representing the (width,height) of the Gadget
-     */
-    public DoublePair getSize;
-    
-    /**
-     * @return the gadget's coefficient of reflection
-     */
-    public double coefficientOfReflection;
-    
-    /**
-     * @return the x-coordinate of the gadget's origin
-     */
+    protected void setTriggers(List<Gadget> lst) {
+        this.gadgetsToTrigger = new ArrayList<>(lst);
+    }
     
 
     /**
-     * @return list of characters in the form of a String
-     * The characters represent the string representation of
-     * each 1L x 1L space that the gadget is in
-     * from top to bottom, left to right
+     * @return a string which identifies this object (usually a name)
      */
     @Override
-    public abstract String toString();
+    public String toString(){
+    	return name;
+    }
 
 
+    /**
+     * 
+     * @return the name of the gadget.
+     */
+    public String getName(){
+    	return name;
+    }
     
     /**
      * Triggers any actions on other Gadgets that it may need to

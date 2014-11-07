@@ -1,90 +1,67 @@
 package phase2;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
-import phase1.Util.InvalidInvariantException;
+import phase2.Util.InvalidInvariantException;
 import physics.Circle;
-import physics.Geometry;
 import physics.LineSegment;
-import physics.Geometry.DoublePair;
+import physics.Vect;
+import phase2.physicsComponents.*;
 
-public class TriangleBumper extends GameObject {
+public class TriangleBumper extends Gadget {
 
-    public enum TriangleBumperType {
-        UPLEFT, UPRIGHT, DOWNLEFT, DOWNRIGHT
-    }
-
-    private TriangleBumperType bumperType;
-
-    private final LineSegment upperEdge;
-    private final LineSegment lowerEdge;
-    private final LineSegment rightEdge;
-    private final LineSegment leftEdge;
-    private final LineSegment forwardDiagonal;
-    private final LineSegment backwardDiagonal;
-    private List<LineSegment> edges = new ArrayList<LineSegment>();
-    
-    private Circle firstCircle;
-    private Circle secondCircle;
-    private Circle thirdCircle;
-    private Circle fourthCircle;
-    private List<Circle> circles = new ArrayList<Circle>();
+    private List<PhysicsComponent> physicsComponentList = new ArrayList<>();
+    private Orientation orientation;
 
     /**
      * Create a triangle-shaped bumper with these parameters:
      * @param xCoord = the x coordinate of the bumper's origin
      * @param yCoord = the y coordinate of the bumper's origin
-     * @param type = the type of the bumper: the right angle of the triangle is:
-     *  - the upleft corner
-     *  - the upright corner
-     *  - the downleft corner
-     *  - the downright corner
+     * @param orientation = the number of degrees the triangle is rotated clockwise,
+     * with respect to its "zero-degree orientation" with the point in the top-left corner and the hypoteneuse going
+     * northeast to southwest.
      * @throws InvalidInvariantException 
      */
-    public TriangleBumper(int xCoord, int yCoord, TriangleBumperType type) throws InvalidInvariantException {
-        setPosition(xCoord, yCoord);
+    public TriangleBumper(int x, int y, String name, Orientation orientation) throws InvalidInvariantException {
+        super(new GridPoint(x, y), name, 1, 1, 1);
+        this.orientation = orientation;
         
-        firstCircle = new Circle(this.getX(), this.getY(), 0);
-        secondCircle = new Circle(this.getX() + 1, this.getY(), 0);
-        thirdCircle = new Circle(this.getX(), this.getY() + 1, 0);
-        fourthCircle = new Circle(this.getX() + 1, this.getY() + 1, 0);
-        
-        upperEdge = new LineSegment(this.getX(), this.getY(), this.getX() + 1, this.getY());
-        lowerEdge = new LineSegment(this.getX(), this.getY() + 1, this.getX() + 1, this.getY() + 1);
-        rightEdge = new LineSegment(this.getX() + 1, this.getY(), this.getX() + 1, this.getY() + 1);
-        leftEdge = new LineSegment(this.getX(), this.getY(), this.getX(), this.getY() + 1);
-        forwardDiagonal = new LineSegment(this.getX(), this.getY() + 1, this.getX() + 1, this.getY());
-        backwardDiagonal = new LineSegment(this.getX(), this.getY(), this.getX() + 1, this.getY() + 1);
-
-        setCoefficient(1.0);
-        this.bumperType = type;
-        switch (type) {
-        case UPLEFT:
-            edges = new ArrayList<LineSegment>(Arrays.asList(upperEdge,
-                    forwardDiagonal, leftEdge));
-            circles = new ArrayList<Circle>(Arrays.asList(firstCircle, secondCircle, thirdCircle));
-            break;
-        case UPRIGHT:
-            edges = new ArrayList<LineSegment>(Arrays.asList(upperEdge,
-                    backwardDiagonal, rightEdge));
-            circles = new ArrayList<Circle>(Arrays.asList(firstCircle, secondCircle, fourthCircle));
-            break;
-        case DOWNLEFT:
-            edges = new ArrayList<LineSegment>(Arrays.asList(lowerEdge,
-                    backwardDiagonal, leftEdge));
-            circles = new ArrayList<Circle>(Arrays.asList(firstCircle, fourthCircle, thirdCircle));
-            break;
-        case DOWNRIGHT:
-            edges = new ArrayList<LineSegment>(Arrays.asList(lowerEdge,
-                    forwardDiagonal, rightEdge));
-            circles = new ArrayList<Circle>(Arrays.asList(fourthCircle, secondCircle, thirdCircle));
-            break;
-
-        default:
-            break;
+        if(orientation.equals(Orientation.ZERO)){
+            this.physicsComponentList.add(new StaticLine(new LineSegment(x, y, x + 1, y), reflectionCoef));
+            this.physicsComponentList.add(new StaticLine(new LineSegment(x, y, x, y + 1), reflectionCoef));
+            this.physicsComponentList.add(new StaticLine(new LineSegment(x + 1, y, x, y + 1), reflectionCoef));
+            this.physicsComponentList.add(new StaticCircle(new Circle(x, y, 0.01), reflectionCoef));
+            this.physicsComponentList.add(new StaticCircle(new Circle(x + 1, y, 0.01), reflectionCoef));
+            this.physicsComponentList.add(new StaticCircle(new Circle(x, y + 1, 0.01), reflectionCoef));
+        }
+        else if(orientation.equals(Orientation.NINETY)){
+            this.physicsComponentList.add(new StaticLine(new LineSegment(x, y, x + 1, y), reflectionCoef));
+            this.physicsComponentList.add(new StaticLine(new LineSegment(x + 1, y, x + 1, y + 1), reflectionCoef));
+            this.physicsComponentList.add(new StaticLine(new LineSegment(x, y, x + 1, y + 1), reflectionCoef));
+            this.physicsComponentList.add(new StaticCircle(new Circle(x, y, 0.01), reflectionCoef));
+            this.physicsComponentList.add(new StaticCircle(new Circle(x + 1, y, 0.01), reflectionCoef));
+            this.physicsComponentList.add(new StaticCircle(new Circle(x + 1, y + 1, 0.01), reflectionCoef));
+        }
+        else if(orientation.equals(Orientation.ONE_HUNDRED_EIGHTY)){
+            this.physicsComponentList.add(new StaticLine(new LineSegment(x, y + 1, x + 1, y + 1), reflectionCoef));
+            this.physicsComponentList.add(new StaticLine(new LineSegment(x + 1, y, x + 1, y + 1), reflectionCoef));
+            this.physicsComponentList.add(new StaticLine(new LineSegment(x + 1, y, x, y + 1), reflectionCoef));
+            this.physicsComponentList.add(new StaticCircle(new Circle(x, y + 1, 0.01), reflectionCoef));
+            this.physicsComponentList.add(new StaticCircle(new Circle(x + 1, y, 0.01), reflectionCoef));
+            this.physicsComponentList.add(new StaticCircle(new Circle(x + 1, y + 1, 0.01), reflectionCoef));
+        }
+        else if(orientation.equals(Orientation.TWO_HUNDRED_SEVENTY)){
+            this.physicsComponentList.add(new StaticLine(new LineSegment(x, y, x, y + 1), reflectionCoef));
+            this.physicsComponentList.add(new StaticLine(new LineSegment(x, y + 1, x + 1, y + 1), reflectionCoef));
+            this.physicsComponentList.add(new StaticLine(new LineSegment(x, y, x + 1, y + 1), reflectionCoef));
+            this.physicsComponentList.add(new StaticCircle(new Circle(x, y, 0.01), reflectionCoef));
+            this.physicsComponentList.add(new StaticCircle(new Circle(x, y + 1, 0.01), reflectionCoef));
+            this.physicsComponentList.add(new StaticCircle(new Circle(x + 1, y + 1, 0.01), reflectionCoef));
+        }
+        else{
+            throw new IllegalStateException("TriangleBumper's orientation must be 0, 90, 180, or 270. Was "
+                    + orientation.toString());
         }
         
         if (!this.checkRep()) {
@@ -99,117 +76,75 @@ public class TriangleBumper extends GameObject {
      * @return a boolean that specifies whether or not the rep invariant is preserved
      */
     protected boolean checkRep() {
-        if ( this.getX() < 0 || this.getY() < 0 || this.getX() >= Board.width || this.getY() >= Board.height ) {
+        if ( this.getX() < 0 || this.getY() < 0 || this.getX() >= 20 || this.getY() >= 20 ) {
             return false;
         }
         return true;
     }
     
-    /**
-     * @return the type of the triangle bumper, as defined above
-     */
-    public TriangleBumperType getType() {
-        return this.bumperType;
-    }
-
-    /**
-     * 
-     * @return a list of line segments representing the edges of the bumper
-     */
-    public List<LineSegment> getEdges() {
-        return this.edges;
-    }
-    
-    /**
-     * 
-     * @return a list of circles representing the corners of the bumper
-     */
-    public List<Circle> getCircles() {
-        return this.circles;
-    }
 
     /**
      * @return string representation of the triangular bumper
      */
     @Override
     public String toString() {
-        return (bumperType == TriangleBumperType.UPLEFT)
-                || (bumperType == TriangleBumperType.DOWNRIGHT) ? "/" : "\\";
+        return Character.toString(charRep());
     }
 
-    /**
-     * @param ball is the ball that collides with this bumper
-     * @return the time that the ball takes to collide with this bumper
-     */
-    @Override
-    public double timeUntilCollision(Ball ball) {
-        double minCollisionTime = Double.POSITIVE_INFINITY;
+	@Override
+	public double getTimeUntilCollision(Ball ball) {
+		double minCollisionTime = Double.POSITIVE_INFINITY;
 
-        for (LineSegment edge : this.getEdges()) {
-            minCollisionTime = Math.min(minCollisionTime, Geometry.timeUntilWallCollision(edge, ball.getCircle(), ball.getVelocity()));
+        for (PhysicsComponent physicsComponent: physicsComponentList) {
+            double currCollisionTime = physicsComponent.timeUntilCollision(ball.getBallCircle(), ball.getVelocity());
+            minCollisionTime = Math.min(minCollisionTime, currCollisionTime);
         }
-        
-        for (Circle circle : this.getCircles()) {
-            minCollisionTime = Math.min(minCollisionTime, Geometry.timeUntilCircleCollision(circle, ball.getCircle(), ball.getVelocity()));
-        }
-
         return minCollisionTime;
-    }
+	}
 
-    /**
-     * This function triggers the reactions given by the collisions of the ball with this bumper
-     * @param ball is the ball that collides with this bumper
-     * @param the time that the ball takes to collide with this bumper
-     * @throws InvalidInvariantException 
+	/**
+     * Redirects (by changing the velocity) the ball which is going to collide with CircleBumper.
+     * Also sends out triggers, following the collision.
+     * @param ball the ball colliding with circleBumper
      */
-    @Override
-    public void reactWhenHit(Ball ball, double time) throws UnsupportedOperationException, InvalidInvariantException {
-        Circle oldCircle = ball.getCircle();
-        boolean hitMinEdge = false;
-        
-        double CenterX = ball.getCenterX() + ball.getVelocity().x() * time;
-        double CenterY = ball.getCenterY() + ball.getVelocity().y() * time;
-        
-        ball.updateCenterX(CenterX);
-        ball.updateCenterY(CenterY);
-        
-        for (LineSegment edge : this.getEdges()) {
-            double currCollisionTime = Geometry.timeUntilWallCollision(edge, oldCircle, ball.getVelocity());
-            if (collisionTimesEqual(time, currCollisionTime)) {
-                ball.updateVelocityWithGravityAndFriction(Geometry.reflectWall(edge, ball.getVelocity(), this.getCoef()), time);
-                hitMinEdge = true;
+	@Override
+	public void collision(Ball ball) {
+        PhysicsComponent gadgetPartToCollideWith = this.physicsComponentList.get(0);
+        double minTimeUntilCollision = Double.MAX_VALUE;
+        for(PhysicsComponent gadgetPart: physicsComponentList){
+            double timeUntilCollisionPart = gadgetPart.timeUntilCollision(ball.getBallCircle(), ball.getVelocity());
+            if (timeUntilCollisionPart < minTimeUntilCollision){ 
+                minTimeUntilCollision = timeUntilCollisionPart;
+                gadgetPartToCollideWith = gadgetPart;
             }
         }
+        Vect newVelocity = gadgetPartToCollideWith.reflect(ball.getBallCircle(), ball.getVelocity(), ball.getCoefficentOfReflection()); 
+        ball.setVelocity(newVelocity);
+        trigger();
+	}
 
-        if (!hitMinEdge) {
-            for (Circle circle : this.getCircles()) {
-                double currCollisionTime = Geometry.timeUntilCircleCollision(circle, oldCircle, ball.getVelocity());
-                if (collisionTimesEqual(time, currCollisionTime)) {
-                    ball.updateVelocityWithGravityAndFriction(Geometry.reflectCircle(circle.getCenter(), ball.getCircle().getCenter(), ball.getVelocity(), this.getCoef()), time);
-                }
-            }
+	@Override
+	public void action() {
+		return;
+	}
+
+	@Override
+	public void updateGadgetPosition(double timeDelta) {
+		return;
+	}
+
+	@Override
+	public char charRep() {
+		if(orientation.equals(Orientation.ZERO) || orientation.equals(Orientation.ONE_HUNDRED_EIGHTY)){
+            return '/';
         }
-
-        for (GameObject obj : this.getTriggers()) {
-            obj.doTriggerAction();
+        else if(orientation.equals(Orientation.NINETY) || orientation.equals(Orientation.TWO_HUNDRED_SEVENTY)){
+            return '\\';
         }
-    }
-
-    /**
-     * Function that maps the triangle bumper to a (x,y) coordinate
-     * @param pointToObject is the hashMap of every (x,y) point to the object that exists there, if any
-     */
-    public void putPoint(HashMap<DoublePair, GameObject> pointToObject) {
-       pointToObject.put(new DoublePair((int) Math.floor(this.getX()),
-                (int) Math.floor(this.getY())), this);
-    }
+        else{
+            throw new IllegalStateException("TriangleBumper's orientation must be 0, 90, 180, or 270. Was:"
+                    + orientation.toString());
+        }
+	}
     
-    /**
-     * This function triggers the trigger action specific to this bumper
-     * @throws UnsupportedOperationException 
-     */
-    @Override
-    public void doTriggerAction() throws UnsupportedOperationException {
-        throw new UnsupportedOperationException();
-    }
 }
