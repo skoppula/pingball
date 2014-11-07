@@ -509,6 +509,7 @@ public class Flipper extends Gadget {
 
 	@Override
 	public void collision(Ball ball) {
+	    System.out.println("here");
 		PhysicsComponent gadgetPartToCollideWith = this.physicsComponentList.get(0);
         double minTimeUntilCollision = Double.MAX_VALUE;
         for(PhysicsComponent gadgetPart: physicsComponentList){
