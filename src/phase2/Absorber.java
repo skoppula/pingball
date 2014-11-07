@@ -130,21 +130,6 @@ public class Absorber extends Gadget {
         }
     }
 
-    /**
-     * 
-     * @return a list of line segments representing the edges of the absorber
-     */
-    public List<LineSegment> getEdges() {
-        return this.edges;
-    }
-
-    /**
-     * @return a list of circles representing the corners of the bumper
-     */
-    public List<Circle> getCircles() {
-        return this.circles;
-    }
-
     @Override
     public char charRep() {
         return '=';
