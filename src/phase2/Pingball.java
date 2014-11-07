@@ -25,7 +25,6 @@ public class Pingball {
      */
     public static void main(String[] args) throws InterruptedException {
         
-/*
         double timeInSeconds = TIME_DELTA_MILLISECONDS * .001;
         Board board;
 
@@ -43,12 +42,11 @@ public class Pingball {
             }
         }                
 
-        for (;;) {
+        while(true) {
             Thread.sleep(TIME_DELTA_MILLISECONDS);
             board.updateBoard(timeInSeconds);
             board.printBoard();
         }
-        */
     }
     
     

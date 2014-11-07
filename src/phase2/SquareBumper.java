@@ -34,10 +34,10 @@ public class SquareBumper extends Gadget {
         physicsComponentList.add(new StaticLine(new LineSegment(this.getX(), this.getY(), this.getX(),
                 this.getY() + 1), this.reflectionCoef));
 
-        physicsComponentList.add(new StaticCircle(new Circle(this.getX(), this.getY(), 0), this.reflectionCoef));
-        physicsComponentList.add(new StaticCircle(new Circle(this.getX() + 1, this.getY(), 0), this.reflectionCoef));
-        physicsComponentList.add(new StaticCircle(new Circle(this.getX(), this.getY() + 1, 0), this.reflectionCoef));
-        physicsComponentList.add(new StaticCircle(new Circle(this.getX() + 1, this.getY() + 1, 0), this.reflectionCoef));
+        physicsComponentList.add(new StaticCircle(new Circle(this.getX(), this.getY(), 0.01), this.reflectionCoef));
+        physicsComponentList.add(new StaticCircle(new Circle(this.getX() + 1, this.getY(), 0.01), this.reflectionCoef));
+        physicsComponentList.add(new StaticCircle(new Circle(this.getX(), this.getY() + 1, 0.01), this.reflectionCoef));
+        physicsComponentList.add(new StaticCircle(new Circle(this.getX() + 1, this.getY() + 1, 0.01), this.reflectionCoef));
 
         if (!this.checkRep()) {
             throw new Util.InvalidInvariantException();

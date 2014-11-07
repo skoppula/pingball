@@ -78,17 +78,17 @@ public class Board {
                 updateCollisions(timeToMove);
                 
                 for (Ball ball : ballToCollidables.keySet()) {
-                    ball.updateBallPosition(timeToMove);
+                    ball.move(timeToMove);
                 }
                 collideBalls();
-
+                /*
                 for (Ball ball : balls) {
                     Vect velocityAfterFriction = ball.getVelocity().times(1 - mu*discreteTime
                             - mu2*discreteTime*ball.getVelocity().length());
                     ball.setVelocity(velocityAfterFriction);
                     Vect velocityAfterGravity = ball.getVelocity().plus(GRAVITY_VECTOR.times(discreteTime));
                     ball.setVelocity(velocityAfterGravity);
-                }
+                }*/
                 
                 if (timeDelta - timeToMove > Math.pow(10, -10)) {
                     updateBallPositions(timeDelta - timeToMove);
@@ -96,7 +96,7 @@ public class Board {
             }
             else {
                 for (Ball ball : ballToCollidables.keySet()) {
-                    ball.updateBallPosition(timeToMove);
+                    ball.move(timeToMove);
                 }
             }
             for (Gadget gadget : gadgets) {
@@ -120,7 +120,7 @@ public class Board {
 
         applyGravityandFriction(timeDelta - timeSteps * discreteTime);
         updateBallPositions(timeDelta - timeSteps * discreteTime);
-        
+
     }
 
     /**
@@ -133,11 +133,9 @@ public class Board {
     private void applyGravityandFriction(double timeDelta) {
         for (Ball ball : balls) {
             Vect ballVelocity = ball.getVelocity();
-            double Gforce =  gravity * timeDelta;
-            ballVelocity = ballVelocity.plus(new Vect(0, Gforce));
+            ballVelocity = ballVelocity.plus(GRAVITY_VECTOR);
             ballVelocity = ballVelocity.times(1 - mu * timeDelta - mu2
                     * ballVelocity.length() * timeDelta);
-
             ball.setVelocity(ballVelocity);
         }
     }

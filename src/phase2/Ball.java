@@ -6,6 +6,7 @@ import java.util.List;
 import physics.Circle;
 import physics.Geometry;
 import physics.Vect;
+import physics.Geometry.DoublePair;
 
 /**
  * A mutable class that represents a single ball. 
@@ -159,7 +160,7 @@ public class Ball implements Collidable{
          * @param time The time to advance the ball by- may not be long enough to make the ball move to a position outside of the board or make the velocity illegal. 
          * @throws IllegalArgumentException if the time is large enough to make the ball travel outside of the bounds of grid. 
          */
-        public void updateBallPosition(double time){
+        /*public void updateBallPosition(double time){
             //a velocity vector scaled by the amount of time that has passed 
             Vect scaledVector = this.getVelocity().times(time);  // d = (vi)*t 
             Vect newBallCenter = scaledVector.plus(this.getBallCircle().getCenter()); 
@@ -188,7 +189,35 @@ public class Ball implements Collidable{
                 }
                 this.setBallCircle(new Circle(xCoord, yCoord, this.getBallCircle().getRadius()));
             }
-        }
+        }*/
+    
+    /**
+     * moves ball at constant velocity for given time delta
+     * 
+     * @param timeDelta
+     *            time to move for, assumes no collisions during this time;
+     */
+    public void move(double timeDelta) {
+        DoublePair deltas = getDeltaPosition(timeDelta);
+
+        Vect circleVect = new Vect(this.getBallCircle().getCenter().x() + deltas.d1, this.getBallCircle().getCenter().y() + deltas.d2);
+        Circle newCircle = new Circle(circleVect, this.getBallCircle().getRadius());
+                
+        this.setBallCircle(newCircle);
+    }
+    
+    /**
+     * Returns change in position of the ball assuming it won't hit a wall
+     */
+    private DoublePair getDeltaPosition(double timeDelta) {
+        Double xmagnitude = velocity.angle().cos() * velocity.length();
+        Double ymagnitude = velocity.angle().sin() * velocity.length();
+
+        Double deltaXPosition = xmagnitude * timeDelta;
+        Double deltaYPosition = ymagnitude * timeDelta;
+
+        return new DoublePair(deltaXPosition, deltaYPosition);
+    }
     
     
     /** * @return the coefficient of reflection for this ball
