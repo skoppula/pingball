@@ -12,23 +12,15 @@ import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
 import physics.Geometry.DoublePair;
+import phase2.physicsComponents.StaticCircle;
+import phase2.physicsComponents.StaticLine;
 
 public class Absorber extends Gadget {
 
     private boolean loaded;
     private Ball loadedBall;
 
-    private final LineSegment top;
-    private final LineSegment bottom;
-    private final LineSegment left;
-    private final LineSegment right;
-    private final List<LineSegment> edges;
-    
-    private final Circle upLeftCircle;
-    private final Circle upRightCircle;
-    private final Circle downLeftCircle;
-    private final Circle downRightCircle;
-    private final List<Circle> circles;
+    List<PhysicsComponent> physicsComponentList = new ArrayList<>();
     
     /**
      * A game object that represents an absorber as described in the notes
@@ -46,17 +38,14 @@ public class Absorber extends Gadget {
         setTriggers(new ArrayList<Gadget>());
         this.loaded = false;
         
-        this.top = new LineSegment(this.getX(), this.getY(), this.getX() + this.width, this.getY());
-        this.bottom = new LineSegment(this.getX(), this.getY() + this.height, this.getX() + this.width, this.getY() + this.height);
-        this.left = new LineSegment(this.getX(), this.getY(), this.getX(), this.getY() + this.height);
-        this.right = new LineSegment(this.getX() + this.width, this.getY(), this.getX() + this.width, this.getY() + this.height);
-        this.edges = new ArrayList<LineSegment>(Arrays.asList(top, bottom, right, left));
-      
-        this.upLeftCircle = new Circle(this.getX(), this.getY(), 0.01);
-        this.upRightCircle = new Circle(this.getX() + this.width, this.getY(), 0.01);
-        this.downLeftCircle = new Circle(this.getX(), this.getY() + this.height, 0.01);
-        this.downRightCircle = new Circle(this.getX() + this.width, this.getY() + this.height, 0.01);
-        this.circles = new ArrayList<Circle>(Arrays.asList(upRightCircle, upLeftCircle, downRightCircle, downLeftCircle));
+        this.physicsComponentList.add(new StaticLine(new LineSegment(x, y, x + width, y), reflectionCoef));
+        this.physicsComponentList.add(new StaticLine(new LineSegment(x, y, x, y + height), reflectionCoef));
+        this.physicsComponentList.add(new StaticLine(new LineSegment(x + width, y, x + width, y + height), reflectionCoef));
+        this.physicsComponentList.add(new StaticLine(new LineSegment(x, y + height, x + width, y + height), reflectionCoef));
+        this.physicsComponentList.add(new StaticCircle(new Circle(x, y, 0.01), reflectionCoef));
+        this.physicsComponentList.add(new StaticCircle(new Circle(x + width, y, 0.01), reflectionCoef));
+        this.physicsComponentList.add(new StaticCircle(new Circle(x, y + height, 0.01), reflectionCoef));
+        this.physicsComponentList.add(new StaticCircle(new Circle(x + width, y + height, 0.01), reflectionCoef));
         
     }
 
@@ -83,18 +72,11 @@ public class Absorber extends Gadget {
      */
     @Override
     public double getTimeUntilCollision(Ball ball) {
-        double minCollisionTime = Double.POSITIVE_INFINITY;
+    	double minCollisionTime = Double.POSITIVE_INFINITY;
 
-        for (LineSegment edge : this.getEdges()) {
-            minCollisionTime = Math.min(minCollisionTime, Geometry
-                    .timeUntilWallCollision(edge, ball.getBallCircle(),
-                            ball.getVelocity()));
-        }
-        
-        for (Circle circle : this.getCircles()) {
-            minCollisionTime = Math.min(minCollisionTime, Geometry
-                    .timeUntilCircleCollision(circle, ball.getBallCircle(),
-                            ball.getVelocity()));
+        for (PhysicsComponent physicsComponent: physicsComponentList) {
+            double currCollisionTime = physicsComponent.timeUntilCollision(ball.getBallCircle(), ball.getVelocity());
+            minCollisionTime = Math.min(minCollisionTime, currCollisionTime);
         }
         return minCollisionTime;
     }
@@ -128,7 +110,7 @@ public class Absorber extends Gadget {
     @Override
     public void action() {
         final double BALL_RADIUS = 0.25;
-        if (this.loaded == true) {
+        if (this.loaded) {
             setLoaded(false);
             this.loadedBall.setVelocity(new Vect(0, this.loadedBall.getVelocity().y() - 50));
             loadedBall.updateCenterX(this.getX() + width - BALL_RADIUS); 
