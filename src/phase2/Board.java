@@ -18,6 +18,7 @@ public class Board {
      */
     private final int width = 20;
     private final int height = 20;
+    private final Vect GRAVITY_VECTOR = new Vect(0, 25);
     
     /*
      * Length of board (in units distance)
@@ -57,13 +58,11 @@ public class Board {
         	}
         	nameToGadgetMap.put(gadget.getName(), gadget);
         }
-        checkRep();
     }
 
     public void addBall(Ball ball) {
         balls.add(ball);
         ballToCollidables.put(ball, new ArrayList<Collidable>());
-        checkRep();
     }
     
     /**
@@ -79,12 +78,16 @@ public class Board {
                 updateCollisions(timeToMove);
                 
                 for (Ball ball : ballToCollidables.keySet()) {
-                    ball.move(timeToMove);
+                    ball.updateBallPosition(timeToMove);
                 }
                 collideBalls();
 
                 for (Ball ball : balls) {
-                    ball.updatePrevVelocity();
+                    Vect velocityAfterFriction = ball.getVelocity().times(1 - mu*discreteTime
+                            - mu2*discreteTime*ball.getVelocity().length());
+                    ball.setVelocity(velocityAfterFriction);
+                    Vect velocityAfterGravity = ball.getVelocity().plus(GRAVITY_VECTOR.times(discreteTime));
+                    ball.setVelocity(velocityAfterGravity);
                 }
                 
                 if (timeDelta - timeToMove > Math.pow(10, -10)) {
@@ -93,7 +96,7 @@ public class Board {
             }
             else {
                 for (Ball ball : ballToCollidables.keySet()) {
-                    ball.move(timeToMove);
+                    ball.updateBallPosition(timeToMove);
                 }
             }
             for (Gadget gadget : gadgets) {
@@ -239,36 +242,7 @@ public class Board {
         return height;
     }
 
-    /*
-     * Rep invariants: - all of the board's gadgets fit within the board - the
-     * board's gadgets do not overlap
-     */
-    private void checkRep() {
-        // assert gadgets fit on board (works except for flippers & absorbers)
-        for (int i=0; i<gadgetsWithoutWalls.size(); i++) {
-            Gadget gadget = gadgetsWithoutWalls.get(i);
-            assert (gadget.getBoardRepPosition().d1 <= 20);
-            assert (gadget.getBoardRepPosition().d2 <= 20);
-            assert (gadget.getBoardRepPosition().d1 >= -1);
-            assert (gadget.getBoardRepPosition().d2 >= -1);
-        }
 
-        // make sure no gadgets are in the same position
-        Map<DoublePair, Integer> gadgetPositions = new HashMap<DoublePair, Integer>();
-        for (Gadget gadget : gadgetsWithoutWalls) {
-            DoublePair position = gadget.getBoardRepPosition();
-            if (gadgetPositions.containsKey(position)) {
-                int currentCount = gadgetPositions.get(position);
-                gadgetPositions.put(position, currentCount + 1);
-            } else {
-                gadgetPositions.put(position, 1);
-            }
-        }
-        for (int gadgetsPerPosition : gadgetPositions.values()) {
-            System.out.println(gadgetsPerPosition);
-            assert (gadgetsPerPosition == 1 || gadgetsPerPosition == 2);
-        }
-    }
 
     private class boolDoubleTuple {
         public final boolean bool;
