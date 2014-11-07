@@ -494,7 +494,7 @@ public class Flipper extends Gadget {
 		double minTime = Double.POSITIVE_INFINITY;
 		for(PhysicsComponent physicsComponent: physicsComponentList){
 			double newTime = physicsComponent.timeUntilCollision(ball.getBallCircle(), ball.getVelocity());
-			if(newTime > minTime){
+			if(newTime < minTime){
 				newTime = minTime;
 			}
 		}
