@@ -122,7 +122,7 @@ public class Absorber extends Gadget {
         final double BALL_RADIUS = 0.25;
         if (this.loaded) {
             setLoaded(false);
-            this.loadedBall.setVelocity(new Vect(0, this.loadedBall.getVelocity().y() - 50));
+            this.loadedBall.setVelocity(new Vect(0, - 50));
             loadedBall.updateCenterX(this.getX() + width - BALL_RADIUS); 
             loadedBall.updateCenterY(this.getY() - BALL_RADIUS);
             
