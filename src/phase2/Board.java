@@ -1,5 +1,6 @@
 package phase2;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -75,6 +76,7 @@ public class Board {
             boolDoubleTuple collisionDoubleTuple = willCollide(timeDelta);
             if (collisionDoubleTuple.bool) {
                 timeToMove = collisionDoubleTuple.time;
+                
                 updateCollisions(timeToMove);
                 
                 for (Ball ball : ballToCollidables.keySet()) {
@@ -83,12 +85,16 @@ public class Board {
                 collideBalls();
                 
                 for (Ball ball : balls) {
+                    ball.updatePrevVelocity();
+                }
+                
+                /*for (Ball ball : balls) {
                     Vect velocityAfterFriction = ball.getVelocity().times(1 - mu*discreteTime
                             - mu2*discreteTime*ball.getVelocity().length());
                     ball.setVelocity(velocityAfterFriction);
                     Vect velocityAfterGravity = ball.getVelocity().plus(GRAVITY_VECTOR.times(discreteTime));
                     ball.setVelocity(velocityAfterGravity);
-                }
+                }*/
                 
                 if (timeDelta - timeToMove > Math.pow(10, -10)) {
                     updateBallPositions(timeDelta - timeToMove);
@@ -133,13 +139,10 @@ public class Board {
     private void applyGravityandFriction(double timeDelta) {
         for (Ball ball : balls) {
             Vect ballVelocity = ball.getVelocity();
-            // System.out.println(ballVelocity);
             double Gforce =  gravity * timeDelta;
             ballVelocity = ballVelocity.plus(new Vect(0, Gforce));
-            // System.out.println(Gforce);
             ballVelocity = ballVelocity.times(1 - mu * timeDelta - mu2
                     * ballVelocity.length() * timeDelta);
-            // System.out.println(ballVelocity);
             ball.setVelocity(ballVelocity);
             
         }
@@ -167,11 +170,12 @@ public class Board {
             }
             for (Ball ball2 : balls) {
                 double time2 = ball2.getTimeUntilCollision(ball);
-
+                if (ball2.equals(ball)) continue;
                 if (time2 < time) {
                     time = time2;
                 }
             }
+            
         }
         return new boolDoubleTuple(!time.equals(timeDelta), time);
     }
