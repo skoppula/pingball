@@ -508,7 +508,18 @@ public class Flipper extends Gadget {
 
 	@Override
 	public void collision(Ball ball) {
-		// TODO Auto-generated method stub
+		PhysicsComponent gadgetPartToCollideWith = this.physicsComponentList.get(0);
+        double minTimeUntilCollision = Double.MAX_VALUE;
+        for(PhysicsComponent gadgetPart: physicsComponentList){
+            double timeUntilCollisionPart = gadgetPart.timeUntilCollision(ball.getBallCircle(), ball.getVelocity());
+            if (timeUntilCollisionPart < minTimeUntilCollision){ 
+                minTimeUntilCollision = timeUntilCollisionPart;
+                gadgetPartToCollideWith = gadgetPart;
+            }
+        }
+        Vect newVelocity = gadgetPartToCollideWith.reflect(ball.getBallCircle(), ball.getVelocity(), ball.getCoefficentOfReflection()); 
+        ball.setVelocity(newVelocity);
+		trigger();
 		
 	}
 }
