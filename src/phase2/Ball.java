@@ -142,8 +142,11 @@ public class Ball implements Collidable{
      * @throws an IllegalArguementException if the velocity is not valid 
      */
     public void setVelocity(Vect newVelocity){
+        this.velocity =  newVelocity;
+        /*
         if (newVelocity.length() < .01*L){
             this.velocity = new Vect(0, 0); //if the velocity is less than .01, then set it to zero 
+            System.out.println("here");
         }
         else if (newVelocity.length() > 200*L){ //if the newVelocity is greater than 200*L, then set it to 200*L in the same direction
             Vect unitVect = newVelocity.unitSize(); 
@@ -152,7 +155,7 @@ public class Ball implements Collidable{
         }
         else{
             this.velocity =  newVelocity; 
-        }
+        }*/
     }
 
         /**

@@ -133,10 +133,15 @@ public class Board {
     private void applyGravityandFriction(double timeDelta) {
         for (Ball ball : balls) {
             Vect ballVelocity = ball.getVelocity();
-            ballVelocity = ballVelocity.plus(GRAVITY_VECTOR);
+            // System.out.println(ballVelocity);
+            double Gforce =  gravity * timeDelta;
+            ballVelocity = ballVelocity.plus(new Vect(0, Gforce));
+            // System.out.println(Gforce);
             ballVelocity = ballVelocity.times(1 - mu * timeDelta - mu2
                     * ballVelocity.length() * timeDelta);
+            // System.out.println(ballVelocity);
             ball.setVelocity(ballVelocity);
+            
         }
     }
     
