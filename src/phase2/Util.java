@@ -124,4 +124,9 @@ public class Util {
         private static final long serialVersionUID = 1L;
         
     }
+    
+    /**
+     * Small number representing almost zero
+     */
+    public static final double EPSILON = 0.0001;
 }

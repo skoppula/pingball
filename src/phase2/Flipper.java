@@ -1,6 +1,7 @@
 package phase2;
 
 import phase2.physicsComponents.*;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -50,6 +51,7 @@ public class Flipper extends Gadget {
     private final List<PhysicsComponent> physicsComponentList = new ArrayList<>();
     // a list representing the physical components of this flipper
     
+
     /**
      * Determines which type the bumper is.
      *
@@ -79,6 +81,7 @@ public class Flipper extends Gadget {
         this.side = side;
         this.orientation = orientation;
         this.isActive = false;
+        this.angle = Angle.ZERO; // yolo
 
         // Will our bumper start out by moving clockwise or counterclockwise?
         switch(side){
@@ -545,7 +548,13 @@ public class Flipper extends Gadget {
 				newTime = minTime;
 			}
 		}
-		return minTime;
+		
+        if (minTime < Math.pow(10, -10)) {
+            return Util.EPSILON;
+        }
+        else {
+            return minTime;
+        }  
 	}
 
 	@Override

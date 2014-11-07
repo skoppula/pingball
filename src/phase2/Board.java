@@ -81,14 +81,14 @@ public class Board {
                     ball.move(timeToMove);
                 }
                 collideBalls();
-                /*
+                
                 for (Ball ball : balls) {
                     Vect velocityAfterFriction = ball.getVelocity().times(1 - mu*discreteTime
                             - mu2*discreteTime*ball.getVelocity().length());
                     ball.setVelocity(velocityAfterFriction);
                     Vect velocityAfterGravity = ball.getVelocity().plus(GRAVITY_VECTOR.times(discreteTime));
                     ball.setVelocity(velocityAfterGravity);
-                }*/
+                }
                 
                 if (timeDelta - timeToMove > Math.pow(10, -10)) {
                     updateBallPositions(timeDelta - timeToMove);
