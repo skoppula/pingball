@@ -15,7 +15,6 @@ import physics.Geometry.DoublePair;
 
 public class Absorber extends Gadget {
 
-
     private boolean loaded;
     private Ball loadedBall;
 
@@ -138,7 +137,6 @@ public class Absorber extends Gadget {
             this.loadedBall.inAbsorber = false;
         }
     }
-
 
     /**
      * 
