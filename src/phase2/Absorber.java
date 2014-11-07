@@ -118,13 +118,8 @@ public class Absorber extends Gadget {
      * @param the time that the ball takes to collide with this absorber
      * @throws InvalidInvariantException 
      */
-    @Override
     public void updateGadgetPosition(double time) {
-        final double BALL_RADIUS = 0.25;
-
-        for(Gadget obj:this.gadgetsToTrigger) {
-            obj.action();
-        }
+        return;
     }
     
     /**
