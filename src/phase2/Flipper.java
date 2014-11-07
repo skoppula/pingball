@@ -518,6 +518,7 @@ public class Flipper extends Gadget {
                 gadgetPartToCollideWith = gadgetPart;
             }
         }
+
         Vect newVelocity = gadgetPartToCollideWith.reflect(ball.getBallCircle(), ball.getVelocity(), ball.getCoefficentOfReflection()); 
         ball.setVelocity(newVelocity);
 		trigger();

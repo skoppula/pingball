@@ -13,7 +13,6 @@ import phase2.physicsComponents.StaticLine;
 
 public class Absorber extends Gadget {
 
-
     private boolean loaded;
     private Ball loadedBall;
 
@@ -129,6 +128,21 @@ public class Absorber extends Gadget {
             
             this.loadedBall.inAbsorber = false;
         }
+    }
+
+    /**
+     * 
+     * @return a list of line segments representing the edges of the absorber
+     */
+    public List<LineSegment> getEdges() {
+        return this.edges;
+    }
+
+    /**
+     * @return a list of circles representing the corners of the bumper
+     */
+    public List<Circle> getCircles() {
+        return this.circles;
     }
 
     @Override
