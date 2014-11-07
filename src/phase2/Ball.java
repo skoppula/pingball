@@ -1,5 +1,6 @@
 package phase2;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import physics.Circle;
 import physics.Geometry;
 import physics.Vect;
 import physics.Geometry.DoublePair;
+import physics.Geometry.VectPair;
 
 /**
  * A mutable class that represents a single ball. 
@@ -22,9 +24,11 @@ public class Ball implements Collidable{
 
     private Circle ballCircle;
     private Vect velocity;
+    private Vect prevVelocity;
     final private double coefficentOfReflection;
     protected boolean inAbsorber = false;
     private static double L = 1;
+    private final double mass = 1;
     
 
     private boolean doNotUpdate = false;
@@ -39,6 +43,7 @@ public class Ball implements Collidable{
     public Ball(double x, double y, Vect newVelocity){
         this.ballCircle = new Circle( x, y, 0.25); 
         this.velocity = newVelocity; 
+        this.prevVelocity = velocity;
         this.coefficentOfReflection = 1.0; 
         this.checkRep();
     }
@@ -239,22 +244,31 @@ public class Ball implements Collidable{
     }
     
     /**
-     * Make two balls collide. Ball positions and velocities are updated until
-     * immediately after the collision.
-     * @param ballCollidedWith - the ball that this is colliding with
+     * Updates the other ball's velocity after the collision
+     * 
+     * @param that
+     *            the ball with which we collide
      */
-    public void collision(Ball ballCollidedWith){
-        Geometry.VectPair vectPair = Geometry.reflectBalls(this.ballCircle.getCenter(), 1, this.velocity,
-                ballCollidedWith.ballCircle.getCenter(), 1, ballCollidedWith.velocity);
-        this.setVelocity(vectPair.v1);
-        ballCollidedWith.setVelocity(vectPair.v2);
+    public void collision(Ball that) {
+        VectPair vectors = Geometry.reflectBalls(that.getBallCircle().getCenter(),
+                that.mass, that.prevVelocity, this.getBallCircle().getCenter(),
+                this.mass, this.prevVelocity);
+
+        that.velocity = that.velocity.plus(vectors.v1.minus(that.prevVelocity));
+    }
+    
+    /**
+     * @return time until collision between this and that
+     */
+    public double getTimeUntilCollision(Ball that) {
+        if (that.equals(this)) return Double.POSITIVE_INFINITY;
+        else return Geometry.timeUntilBallBallCollision(this.getBallCircle(), this.velocity,
+                that.getBallCircle(), that.getVelocity());
     }
 
-	@Override
-	public double getTimeUntilCollision(Ball other) {
-		double timeUntilCollision = Geometry.timeUntilBallBallCollision(this.getBallCircle(), this.getVelocity(),
-                other.getBallCircle(), other.getVelocity());
-		return timeUntilCollision;
-	}
+	
+    public void updatePrevVelocity() {
+        this.prevVelocity = this.velocity;
+    }
 
 }
