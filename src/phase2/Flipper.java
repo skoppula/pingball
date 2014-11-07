@@ -231,57 +231,6 @@ public class Flipper extends Gadget {
     }
 
 
-//    /**
-//     * Handles the rotating function for flippers with pivotCorner = BOTTOMLEFT
-//     * @param timestep the amount of time for which to rotate
-//     */
-//    public void rotateBottomLeft(double timestep){
-//        if(willMoveClockwise){
-//            if(this.angle.compareTo(Angle.DEG_90) >= 0){ //this angle is greater than 90 degrees- set it back to 90 and set the rotational velocity to 0 
-//                for(PhysicsComponent physicsComponent: physicsComponentList){
-//                    if(physicsComponent.canRotate()){
-//                        physicsComponent.rotateToAngle(Angle.DEG_90);
-//                        physicsComponent.setAngularVelocity(0);
-//                    }
-//                }
-//                this.willMoveClockwise = false;
-//                isActive = false;
-//
-//            }
-//            else{ //this physics component needs to keep rotating until it is at 90 degrees 
-//                for(PhysicsComponent physicsComponent: physicsComponentList){
-//                    if(physicsComponent.canRotate()){                               
-//                        physicsComponent.setAngularVelocity(DEFAULT_ANGULAR_VELOCITY); // rotate clockwise
-//                        physicsComponent.rotateForTime(timestep);
-//                    }
-//                }
-//            }
-//        }
-//        else{
-//            // Note that this relies on the fact that a timestep does not swing through 180 degrees,
-//            // i.e. timestep must be greater than .2 seconds TODO ensure this is true!
-//            if(this.angle.compareTo(Angle.DEG_180) > 0){
-//                for(PhysicsComponent physicsComponent: physicsComponentList){
-//                    if(physicsComponent.canRotate()){
-//                        physicsComponent.rotateToAngle(Angle.ZERO);
-//                        physicsComponent.setAngularVelocity(0);
-//                    }
-//                }
-//                this.willMoveClockwise = true;
-//                isActive = false;
-//
-//            }
-//            else{
-//                for(PhysicsComponent physicsComponent: physicsComponentList){
-//                    if(physicsComponent.canRotate()){                               
-//                        physicsComponent.setAngularVelocity(-1*DEFAULT_ANGULAR_VELOCITY); // rotate clockwise
-//                        physicsComponent.rotateForTime(timestep);
-//                    }
-//                }
-//            }
-//        }
-//    }
-
     /**
      * Steps the flipper forward in time. If the flipper has been triggered, causes it to begin swinging.
      * If the swing is continuing, keep moving it forward, until it reaches the other side, and then stop it,
@@ -304,6 +253,7 @@ public class Flipper extends Gadget {
                         isActive = false;
 
                     }
+
                     else{ //this physics component needs to keep rotating until it is at 90 degrees 
                         for(PhysicsComponent physicsComponent: physicsComponentList){
                             if(physicsComponent.canRotate()){                               
@@ -315,7 +265,6 @@ public class Flipper extends Gadget {
                 }
                 else{
                     // Note that this relies on the fact that a timestep does not swing through 180 degrees,
-                    // i.e. timestep must be greater than .2 seconds TODO ensure this is true!
                     if(this.angle.compareTo(Angle.DEG_180) > 0){
                         for(PhysicsComponent physicsComponent: physicsComponentList){
                             if(physicsComponent.canRotate()){
