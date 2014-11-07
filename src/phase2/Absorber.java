@@ -74,6 +74,10 @@ public class Absorber extends Gadget {
             double currCollisionTime = physicsComponent.timeUntilCollision(ball.getBallCircle(), ball.getVelocity());
             minCollisionTime = Math.min(minCollisionTime, currCollisionTime);
         }
+        
+        if (minCollisionTime < Math.pow(10, -10)) {
+            minCollisionTime = Math.pow(10, -10);
+        }
         return minCollisionTime;
     }
     

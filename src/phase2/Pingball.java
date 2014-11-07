@@ -71,7 +71,6 @@ public class Pingball {
 	        gadgetList.addAll(Arrays.asList(circle1, triangle, square1, square2, square3, circle2, circle3, circle4));
 
         } catch(InvalidInvariantException e){
-    		System.out.println("One of the invariants in these objects was broken!");
     		e.printStackTrace();
         }
         Board board = new Board(gadgetList);

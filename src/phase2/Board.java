@@ -76,7 +76,6 @@ public class Board {
             boolDoubleTuple collisionDoubleTuple = willCollide(timeDelta);
             if (collisionDoubleTuple.bool) {
                 timeToMove = collisionDoubleTuple.time;
-                
                 updateCollisions(timeToMove);
                 
                 for (Ball ball : ballToCollidables.keySet()) {
@@ -156,7 +155,6 @@ public class Board {
      * @return whether or not there is a collision in time delta
      */
     private boolDoubleTuple willCollide(double timeDelta) {
-
         Double time = timeDelta;
         Geometry.setForesight(timeDelta);
         for (Ball ball : balls) {

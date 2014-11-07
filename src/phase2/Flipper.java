@@ -502,7 +502,6 @@ public class Flipper extends Gadget {
         if (minTime < Math.pow(10, -10)) {
             minTime = Math.pow(10, -10);
         }
-        System.out.println(minTime);
         return minTime;
 	}
 
