@@ -18,9 +18,17 @@ public class Board {
      */
     private final int width = 20;
     private final int height = 20;
+    
+    /*
+     * Length of board (in units distance)
+     */
+    protected static int BOARD_LENGTH = 20;
+
+    public static int boardLength() {
+        return BOARD_LENGTH;
+    }
 
     // make gravity and friction fields
-
     private final double gravity = 25;
     private final double mu = .025;
     private final double mu2 = .025;

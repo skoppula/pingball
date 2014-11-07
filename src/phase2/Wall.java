@@ -8,33 +8,37 @@ import physics.Geometry.DoublePair;
 public class Wall extends Gadget {
     
     private final LineSegment wall;
-    private final DoublePair position;
-    private final DoublePair size;
+    private final GridPoint position;
     
-    public Wall(Orientation orientation) {
-        switch (orientation) {
-            case NINETY:    
-                wall = new LineSegment(0, 0, 20, 0);
-                position = new DoublePair(-1, -1);
-                size = new DoublePair(22, 1);
+    public enum WallDirection{ 
+        LEFT, RIGHT, TOP, BOTTOM
+    }
+    
+    public Wall(WallDirection direction, String name) {
+        super(new GridPoint(-1, -1), name);
+        // put the wall in the correct position
+        switch(direction) {
+            case TOP:    
+                wall = new LineSegment(0, 0, Board.boardLength(), 0);
+                position = new GridPoint(-1, -1);
                 break;
-            case ONE_HUNDRED_EIGHTY:
-                wall = new LineSegment(20, 0, 20, 20);
-                position = new DoublePair(20, -1);
-                size = new DoublePair(1, 22);
+            case RIGHT:
+                wall = new LineSegment(Board.boardLength(), 0, Board.boardLength(), Board.boardLength());
+                position = new GridPoint(20, -1);
                 break;
-            case TWO_HUNDRED_SEVENTY:
+            case BOTTOM:
                 wall = new LineSegment(0, 20, 20, 20);
-                position = new DoublePair(-1, 20);
-                size = new DoublePair(22, 1);
+                position = new GridPoint(-1, 20);
                 break;
-            default: //case ZERO
+            case LEFT:
                 wall = new LineSegment(0, 0, 0, 20);
-                position = new DoublePair(-1, -1);
-                size = new DoublePair(1, 22);
+                position = new GridPoint(-1, -1);
                 break;
+            default:
+                throw new IllegalStateException("THIS SHOULDN'T BE POSSIBLE. CHECK OuterWall!");
         }
     }
+    
     
     /**
      * Returns time until ball collides with Wall, infinity if never 
