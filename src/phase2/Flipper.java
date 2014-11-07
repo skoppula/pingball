@@ -500,11 +500,10 @@ public class Flipper extends Gadget {
 		}
 		
         if (minTime < Math.pow(10, -10)) {
-            return Util.EPSILON;
+            minTime = Math.pow(10, -10);
         }
-        else {
-            return minTime;
-        }  
+        System.out.println(minTime);
+        return minTime;
 	}
 
 	@Override
