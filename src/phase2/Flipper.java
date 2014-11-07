@@ -253,6 +253,7 @@ public class Flipper extends Gadget {
                         isActive = false;
 
                     }
+
                     else{ //this physics component needs to keep rotating until it is at 90 degrees 
                         for(PhysicsComponent physicsComponent: physicsComponentList){
                             if(physicsComponent.canRotate()){                               
