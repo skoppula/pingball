@@ -17,6 +17,7 @@ public class Board {
     /*
      * 
      */
+    private final String name;
     private final int width = 20;
     private final int height = 20;
     private final Vect GRAVITY_VECTOR = new Vect(0, 25);
@@ -48,7 +49,8 @@ public class Board {
     
     
 
-    public Board(List<Gadget> gadgets) {
+    public Board(List<Gadget> gadgets, String name) {
+        this.name = name;
         this.gadgets = gadgets;
         this.gadgetsWithoutWalls = gadgets;
         // set up walls
