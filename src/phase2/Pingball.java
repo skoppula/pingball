@@ -1,8 +1,13 @@
 package phase2;
+import phase2.BoardGrammar.*;
+import phase2.BoardGrammar.PingBoardParser.RootContext;
 
 import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -10,6 +15,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
+
+import jdk.nashorn.internal.parser.TokenStream;
+
+import org.antlr.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CommonTokenStream;
 
 import phase2.Flipper.BumperSide;
 import phase2.Gadget.Orientation;
@@ -27,6 +39,7 @@ public class Pingball {
      * Updates the board every timeDelta Prints out the board every timeDelta
      * 
      * @throws InterruptedException
+     * @throws IOException 
      */
     public static void main(String[] args) throws InterruptedException {
         
@@ -38,6 +51,12 @@ public class Pingball {
         Queue<String> arguments = new LinkedList<String>(Arrays.asList(args));
 
         if (args.length == 0) board = defaultBoard();
+
+        
+        
+        if (args.length == 0) {
+            board = defaultBoard();
+        }
         else {
             while (!arguments.isEmpty()) {
                 String flag = arguments.remove();
@@ -130,7 +149,25 @@ public class Pingball {
      * @return a board
      */
     public static Board parseBoardFile(File file) {
+        
+        // Read in board files using ANTLR
+        try {
+            // make a stream of characters to feed to the lexer
+            FileReader filereader = new FileReader("boardfile.txt");
+            CharStream stream = new ANTLRInputStream(filereader);
+            // pass the character stream to an instance of the generated lexer class
+            PingBoardLexer lexer = new PingBoardLexer(stream);
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            // feed the stream of tokens we've generated to the parser
+            PingBoardParser parser = new PingBoardParser(tokens);
+            RootContext tree = parser.root();
+            System.err.println(tree.toStringTree());
+            tree.inspect(parser);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
-
 }
