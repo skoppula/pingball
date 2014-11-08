@@ -1,9 +1,22 @@
 package phase2;
+import phase2.BoardGrammar.*;
+import phase2.BoardGrammar.PingBoardParser.RootContext;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import jdk.nashorn.internal.parser.TokenStream;
+
+import org.antlr.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CommonTokenStream;
 
 import phase2.Flipper.BumperSide;
 import phase2.Gadget.Orientation;
@@ -22,12 +35,34 @@ public class Pingball {
      * Updates the board every timeDelta Prints out the board every timeDelta
      * 
      * @throws InterruptedException
+     * @throws IOException 
      */
     public static void main(String[] args) throws InterruptedException {
         
         double timeInSeconds = TIME_DELTA_MILLISECONDS * .001;
         Board board;
+        
+        // Read in board files using ANTLR
+        try {
+            // make a stream of characters to feed to the lexer
+            FileReader filereader = new FileReader("boardfile.txt");
+            CharStream stream = new ANTLRInputStream(filereader);
+            // pass the character stream to an instance of the generated lexer class
+            PingBoardLexer lexer = new PingBoardLexer(stream);
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            // feed the stream of tokens we've generated to the parser
+            PingBoardParser parser = new PingBoardParser(tokens);
+            RootContext tree = parser.root();
+            System.err.println(tree.toStringTree());
+            tree.inspect(parser);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        
+        /*
         if (args.length == 0) {
             board = defaultBoard();
         }
@@ -46,7 +81,7 @@ public class Pingball {
             Thread.sleep(TIME_DELTA_MILLISECONDS);
             board.updateBoard(timeInSeconds);
             board.printBoard();
-        }
+        }*/
     }
     
     
@@ -55,7 +90,7 @@ public class Pingball {
     /**
      * @return benchmark board "default"
      */
-    public static Board defaultBoard() {
+    /*public static Board defaultBoard() {
         List<Gadget> gadgetList = new ArrayList<Gadget>();
         try{
 	        // make  gadgets
@@ -78,12 +113,12 @@ public class Pingball {
         board.addBall(ball);
         return board;
   
-    }
+    }*/
     
     /**
      * @return benchmark board "absorber"
      */
-    public static Board absorberBoard() {
+    /*public static Board absorberBoard() {
         
         // make gadgets
         List<Gadget> gadgetList = new ArrayList<Gadget>();
@@ -123,12 +158,12 @@ public class Pingball {
         board.addBall(ball3);
         return board;
   
-    }
+    }*/
     
     /**
      * @return benchmark board "flippers"
      */
-    public static Board flippersBoard() {
+    /*public static Board flippersBoard() {
     	
     	List<Gadget> gadgetList = new ArrayList<Gadget>();
         
@@ -187,7 +222,7 @@ public class Pingball {
         board.addBall(ball5);
         return board;
   
-    }
+    }*/
 
 
 }
