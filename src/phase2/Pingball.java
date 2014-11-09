@@ -43,7 +43,9 @@ public class Pingball {
      */
     public static void main(String[] args) throws InterruptedException {
         
-        double timeInSeconds = TIME_DELTA_MILLISECONDS * .001;
+        Board board = parseBoardFile(new File("boardfile.txt"));
+        
+        /*double timeInSeconds = TIME_DELTA_MILLISECONDS * .001;
         Board board;
         int port = DEFAULT_PORT;
         Optional<InetAddress> host = Optional.empty();
@@ -112,7 +114,7 @@ public class Pingball {
             Thread.sleep(TIME_DELTA_MILLISECONDS);
             board.updateBoard(timeInSeconds);
             board.printBoard();
-        }
+        }*/
     }
     
     /**
