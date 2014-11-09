@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Queue;
 
-import phase2.Util;
 import phase2.Messaging.Message;
 
 public class LocalOutputManager implements Runnable {
@@ -26,7 +25,7 @@ public class LocalOutputManager implements Runnable {
             out = new PrintWriter(socket.getOutputStream(), true);
 
             if(!outQ.isEmpty()) {
-                String messageJSON = Util.convertMessageToJSON(outQ.remove());
+                String messageJSON = outQ.remove().convertMessageToJSON();
                 out.println(messageJSON);
             }
 

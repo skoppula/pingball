@@ -19,6 +19,24 @@ public class LocalManager {
     protected Queue<Message> inQ;
     protected Queue<Message> outQ;
     boolean networkedGame;
+    
+    /*
+     * THE STORY OF LIM AND LOM
+     * 
+     * lim and lom were twins
+     * - they loved each other so much
+     * so so much
+     * like i love lisa nd yo
+     * 
+     * anyways they decided to go on a walk
+     * but then they saw race 
+     * they didn't know what to do
+     * and they got seperated
+     * 
+     * THEY GOT KIDNAPPED BY A SPARKLEHEAD.
+     * 
+     * CHECK FOR THREAD SAFETY KIDS
+     */
 
     public LocalManager(Board board, InetAddress address, int port) throws IOException {
         this.inQ = new LinkedList<Message>();

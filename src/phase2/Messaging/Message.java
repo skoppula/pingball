@@ -24,5 +24,15 @@ public abstract class Message{
 	public MessageType getType(){
 		return messageType;
 	}
+
+    public static Message JSONtoMessage(String line) {
+        // TODO write this
+        return null;
+    }
+
+    public String convertMessageToJSON() {
+        // TODO write this
+        return null;
+    }
 	
 }

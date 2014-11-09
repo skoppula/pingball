@@ -4,9 +4,12 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-import phase2.Board.Board;
 import phase2.Messaging.Message;
+import phase2.Server.CommunicationTunnel;
+import phase2.Server.ConsoleInputManager;
+import phase2.Server.Mailman;
 import phase2.Server.NewConnectionHandler;
+import phase2.Server.QueueProcessor;
 
 public class PingballServer {
 
@@ -16,11 +19,14 @@ public class PingballServer {
     private final ServerSocket serverSocket;
 
     //TODO make these types threadsafe
-    protected HashMap<String, CommunicationTunnel> tunnels = new HashMap<String, CommunicationTunnel>();
-    protected HashMap<String, String> wallConnections = new HashMap<String, String>();
+    protected HashMap<String, CommunicationTunnel> tunnels;
+    protected HashMap<String, String> wallConnections;
     
     Queue<Message> inQ;
     Queue<Message> outQ;
+    
+    //When they ask me how I code so quick, I say poon-lickin
+    //Don't doubt my shit, you'll have lisa and yo bitchin
     
     private NewConnectionHandler nch;
     private ConsoleInputManager cim;
@@ -28,15 +34,22 @@ public class PingballServer {
     private Mailman mm;
     
     private PingballServer(int port) throws IOException {
-        serverSocket = new ServerSocket(port);
+        this.serverSocket = new ServerSocket(port);
+        this.tunnels = new HashMap<String, CommunicationTunnel>();
+        this.wallConnections = new HashMap<String, String>();
         this.inQ = new LinkedList<Message>();
         this.outQ = new LinkedList<Message>();
     }
     
-    private void server() {
-        nch = new NewConnectionHandler(serverSocket);
+    private void serve() {
+        nch = new NewConnectionHandler(serverSocket, tunnels, inQ);
         nch.run();
-
+        cim = new ConsoleInputManager(wallConnections);
+        cim.run();
+        qp = new QueueProcessor(inQ, outQ);
+        qp.run();
+        mm = new Mailman(tunnels, outQ);
+        mm.run();
     }
 
     public static void main(String[] args) throws IOException {

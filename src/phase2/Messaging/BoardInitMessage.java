@@ -8,7 +8,8 @@ package phase2.Messaging;
  */
 public class BoardInitMessage extends Message {
 	
-	private final String boardName;
+
+	protected final String boardName;
 
 	/**
 	 * Create a message to inform the server that a new board has joined.
@@ -21,7 +22,6 @@ public class BoardInitMessage extends Message {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
