@@ -1,6 +1,15 @@
 package phase2;
+import phase2.Board.Ball;
+import phase2.Board.Board;
+import phase2.Board.CircleBumper;
+import phase2.Board.Gadget;
+import phase2.Board.SquareBumper;
+import phase2.Board.TriangleBumper;
+import phase2.Board.Gadget.Orientation;
+import phase2.Board.Util.InvalidInvariantException;
 import phase2.BoardGrammar.*;
 import phase2.BoardGrammar.PingBoardParser.RootContext;
+import phase2.Client.LocalManager;
 
 import java.io.File;
 import java.net.InetAddress;
@@ -10,28 +19,19 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
 
-import jdk.nashorn.internal.parser.TokenStream;
-
-import org.antlr.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
-import phase2.Flipper.BumperSide;
-import phase2.Gadget.Orientation;
-import phase2.Util.InvalidInvariantException;
 import physics.Vect;
-import physics.Geometry.DoublePair;
 
 public class Pingball {
     
-    private static final long TIME_DELTA_MILLISECONDS = 1000/60;
     private static final int DEFAULT_PORT = 4444;
     private static final int MAXIMUM_PORT = 65535;
 
@@ -41,11 +41,10 @@ public class Pingball {
      * @throws InterruptedException
      * @throws IOException 
      */
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
         
-        double timeInSeconds = TIME_DELTA_MILLISECONDS * .001;
         Board board;
-        int port = DEFAULT_PORT;
+        Optional<Integer> port = Optional.of(DEFAULT_PORT);
         Optional<InetAddress> host = Optional.empty();
         Optional<File> file = Optional.empty();
         Queue<String> arguments = new LinkedList<String>(Arrays.asList(args));
@@ -62,8 +61,8 @@ public class Pingball {
                 String flag = arguments.remove();
                 try {
                     if (flag.equals("--port")) {
-                        port = Integer.parseInt(arguments.remove());
-                        if (port < 0 || port > MAXIMUM_PORT)
+                        port = Optional.of(Integer.parseInt(arguments.remove()));
+                        if (port.get() < 0 || port.get() > MAXIMUM_PORT)
                             throw new IllegalArgumentException("port " + port + " out of range");
                     
                     } else if (flag.equals("--host")) {
@@ -106,13 +105,10 @@ public class Pingball {
             }
         }
 
-        new Player(board, host, port);
-
-        while(true) {
-            Thread.sleep(TIME_DELTA_MILLISECONDS);
-            board.updateBoard(timeInSeconds);
-            board.printBoard();
-        }
+        LocalManager lm = null;
+        if(host.isPresent()) lm = new LocalManager(board, host.get(), port.get());
+        else lm = new LocalManager(board);
+        lm.runGame();
     }
     
     /**
@@ -121,7 +117,6 @@ public class Pingball {
     public static Board defaultBoard() {
         List<Gadget> gadgetList = new ArrayList<Gadget>();
         try{
-	        // make  gadgets
 	        CircleBumper circle1 = new CircleBumper(1, 10, "circle1");
 	        TriangleBumper triangle = new TriangleBumper(12, 15, "triangle", Orientation.ONE_HUNDRED_EIGHTY);
 	        SquareBumper square1 = new SquareBumper(0, 17, "square1");
@@ -140,7 +135,6 @@ public class Pingball {
         Ball ball = new Ball(1.25, 1.25, Vect.ZERO);
         board.addBall(ball);
         return board;
-  
     }
     
     /**
