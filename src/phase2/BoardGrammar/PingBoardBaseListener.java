@@ -1,5 +1,4 @@
-package phase2.BoardGrammar;
-// Generated from PingBoard.g4 by ANTLR 4.4
+// Generated from BoardGrammar/PingBoard.g4 by ANTLR 4.4
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -120,6 +119,18 @@ public class PingBoardBaseListener implements PingBoardListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBall(@NotNull PingBoardParser.BallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNewline(@NotNull PingBoardParser.NewlineContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNewline(@NotNull PingBoardParser.NewlineContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

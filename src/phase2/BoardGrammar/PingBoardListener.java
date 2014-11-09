@@ -1,5 +1,4 @@
-package phase2.BoardGrammar;
-// Generated from PingBoard.g4 by ANTLR 4.4
+// Generated from BoardGrammar/PingBoard.g4 by ANTLR 4.4
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -98,6 +97,16 @@ public interface PingBoardListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBall(@NotNull PingBoardParser.BallContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PingBoardParser#newline}.
+	 * @param ctx the parse tree
+	 */
+	void enterNewline(@NotNull PingBoardParser.NewlineContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PingBoardParser#newline}.
+	 * @param ctx the parse tree
+	 */
+	void exitNewline(@NotNull PingBoardParser.NewlineContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PingBoardParser#rightFlipper}.
 	 * @param ctx the parse tree

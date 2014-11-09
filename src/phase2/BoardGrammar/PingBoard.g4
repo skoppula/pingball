@@ -4,12 +4,8 @@ grammar PingBoard;
 /*
  * These are the lexical rules. They define the tokens used by the lexer.
  */
-INTEGER : [0-9]+ ;
-FLOAT : [-]?([0-9]*[.])?[0-9]+;
-NAME : [A-Za-z_][A-Za-z_0-9]* ;
-ORIENTATIONVALUE : '0'|'90'|'180'|'270';
 COMMENT : '#' '.'* ;
-WHITESPACE : [ \t]+;
+ORIENTATIONVALUE : '0'|'90'|'180'|'270';
 EQUALS : '=';
 NAMEID : 'name';
 XID : 'x';
@@ -33,12 +29,18 @@ RIGHTFLIPPERID : 'rightFlipper';
 LEFTFLIPPERID : 'leftFlipper';
 ABSORBERID : 'absorber';
 FIREID : 'fire';
+NAME : [A-Za-z_][A-Za-z_0-9]* ;
+INTEGER : [0-9]+ ;
+FLOAT : [-]?([0-9]*[.])?[0-9]+;
+WHITESPACE : [ \t]+;
+NEWLINE : [\n]+;
 
 
 /*
  * These are the parser rules. They define the structures used by the parser. 
  */
 whitespace : WHITESPACE;
+newline: NEWLINE;
 equals : EQUALS;
 name : NAMEID equals NAME;
 gravity : GRAVITYID equals FLOAT;
