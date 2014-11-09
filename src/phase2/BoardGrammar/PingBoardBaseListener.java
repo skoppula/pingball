@@ -1,3 +1,5 @@
+package phase2.BoardGrammar;
+
 // Generated from BoardGrammar/PingBoard.g4 by ANTLR 4.4
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -100,18 +102,6 @@ public class PingBoardBaseListener implements PingBoardListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterXVelocity(@NotNull PingBoardParser.XVelocityContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitXVelocity(@NotNull PingBoardParser.XVelocityContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterBall(@NotNull PingBoardParser.BallContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -124,13 +114,13 @@ public class PingBoardBaseListener implements PingBoardListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNewline(@NotNull PingBoardParser.NewlineContext ctx) { }
+	@Override public void enterXVelocity(@NotNull PingBoardParser.XVelocityContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNewline(@NotNull PingBoardParser.NewlineContext ctx) { }
+	@Override public void exitXVelocity(@NotNull PingBoardParser.XVelocityContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -148,6 +138,18 @@ public class PingBoardBaseListener implements PingBoardListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNewline(@NotNull PingBoardParser.NewlineContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNewline(@NotNull PingBoardParser.NewlineContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterRoot(@NotNull PingBoardParser.RootContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -155,18 +157,6 @@ public class PingBoardBaseListener implements PingBoardListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitRoot(@NotNull PingBoardParser.RootContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAction(@NotNull PingBoardParser.ActionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAction(@NotNull PingBoardParser.ActionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -191,6 +181,18 @@ public class PingBoardBaseListener implements PingBoardListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitFire(@NotNull PingBoardParser.FireContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAction(@NotNull PingBoardParser.ActionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAction(@NotNull PingBoardParser.ActionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -232,18 +234,6 @@ public class PingBoardBaseListener implements PingBoardListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTrigger(@NotNull PingBoardParser.TriggerContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTrigger(@NotNull PingBoardParser.TriggerContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterBoardInit(@NotNull PingBoardParser.BoardInitContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -251,6 +241,18 @@ public class PingBoardBaseListener implements PingBoardListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBoardInit(@NotNull PingBoardParser.BoardInitContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTrigger(@NotNull PingBoardParser.TriggerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTrigger(@NotNull PingBoardParser.TriggerContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -1,3 +1,5 @@
+package phase2.BoardGrammar;
+
 // Generated from BoardGrammar/PingBoard.g4 by ANTLR 4.4
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
@@ -78,16 +80,6 @@ public interface PingBoardListener extends ParseTreeListener {
 	 */
 	void exitCircleBumper(@NotNull PingBoardParser.CircleBumperContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PingBoardParser#xVelocity}.
-	 * @param ctx the parse tree
-	 */
-	void enterXVelocity(@NotNull PingBoardParser.XVelocityContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link PingBoardParser#xVelocity}.
-	 * @param ctx the parse tree
-	 */
-	void exitXVelocity(@NotNull PingBoardParser.XVelocityContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link PingBoardParser#ball}.
 	 * @param ctx the parse tree
 	 */
@@ -98,15 +90,15 @@ public interface PingBoardListener extends ParseTreeListener {
 	 */
 	void exitBall(@NotNull PingBoardParser.BallContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PingBoardParser#newline}.
+	 * Enter a parse tree produced by {@link PingBoardParser#xVelocity}.
 	 * @param ctx the parse tree
 	 */
-	void enterNewline(@NotNull PingBoardParser.NewlineContext ctx);
+	void enterXVelocity(@NotNull PingBoardParser.XVelocityContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PingBoardParser#newline}.
+	 * Exit a parse tree produced by {@link PingBoardParser#xVelocity}.
 	 * @param ctx the parse tree
 	 */
-	void exitNewline(@NotNull PingBoardParser.NewlineContext ctx);
+	void exitXVelocity(@NotNull PingBoardParser.XVelocityContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PingBoardParser#rightFlipper}.
 	 * @param ctx the parse tree
@@ -118,6 +110,16 @@ public interface PingBoardListener extends ParseTreeListener {
 	 */
 	void exitRightFlipper(@NotNull PingBoardParser.RightFlipperContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link PingBoardParser#newline}.
+	 * @param ctx the parse tree
+	 */
+	void enterNewline(@NotNull PingBoardParser.NewlineContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PingBoardParser#newline}.
+	 * @param ctx the parse tree
+	 */
+	void exitNewline(@NotNull PingBoardParser.NewlineContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link PingBoardParser#root}.
 	 * @param ctx the parse tree
 	 */
@@ -127,16 +129,6 @@ public interface PingBoardListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitRoot(@NotNull PingBoardParser.RootContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link PingBoardParser#action}.
-	 * @param ctx the parse tree
-	 */
-	void enterAction(@NotNull PingBoardParser.ActionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link PingBoardParser#action}.
-	 * @param ctx the parse tree
-	 */
-	void exitAction(@NotNull PingBoardParser.ActionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PingBoardParser#absorber}.
 	 * @param ctx the parse tree
@@ -157,6 +149,16 @@ public interface PingBoardListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFire(@NotNull PingBoardParser.FireContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PingBoardParser#action}.
+	 * @param ctx the parse tree
+	 */
+	void enterAction(@NotNull PingBoardParser.ActionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PingBoardParser#action}.
+	 * @param ctx the parse tree
+	 */
+	void exitAction(@NotNull PingBoardParser.ActionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PingBoardParser#height}.
 	 * @param ctx the parse tree
@@ -188,16 +190,6 @@ public interface PingBoardListener extends ParseTreeListener {
 	 */
 	void exitOrientation(@NotNull PingBoardParser.OrientationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PingBoardParser#trigger}.
-	 * @param ctx the parse tree
-	 */
-	void enterTrigger(@NotNull PingBoardParser.TriggerContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link PingBoardParser#trigger}.
-	 * @param ctx the parse tree
-	 */
-	void exitTrigger(@NotNull PingBoardParser.TriggerContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link PingBoardParser#boardInit}.
 	 * @param ctx the parse tree
 	 */
@@ -207,6 +199,16 @@ public interface PingBoardListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBoardInit(@NotNull PingBoardParser.BoardInitContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PingBoardParser#trigger}.
+	 * @param ctx the parse tree
+	 */
+	void enterTrigger(@NotNull PingBoardParser.TriggerContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PingBoardParser#trigger}.
+	 * @param ctx the parse tree
+	 */
+	void exitTrigger(@NotNull PingBoardParser.TriggerContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PingBoardParser#leftFlipper}.
 	 * @param ctx the parse tree
