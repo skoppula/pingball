@@ -6,11 +6,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
-import phase2.Messaging.BoardInitMessage;
-import phase2.Messaging.Message;
+import phase2.messaging.Message;
 
 public class CommunicationTunnel implements Runnable {
     
@@ -18,18 +17,16 @@ public class CommunicationTunnel implements Runnable {
     Socket socket;
     BufferedReader in;
     PrintWriter out = null;
-    HashMap<String, CommunicationTunnel> tunnels;
-    Queue<Message> serverInQ;
-    Queue<Message> tunnelOutQ;
+    BlockingQueue<Message> serverInQ;
+    BlockingQueue<Message> tunnelOutQ;
 
     //code smashing the masses
     //getting lisa and yo addicted the fastest 
     
-    public CommunicationTunnel(Socket socket, HashMap<String, CommunicationTunnel> tunnels, Queue<Message> serverInQ) {
+    public CommunicationTunnel(Socket socket, BlockingQueue<Message> serverInQ) {
         this.socket = socket;
-        this.tunnels = tunnels;
         this.serverInQ = serverInQ;
-        this.tunnelOutQ = new LinkedList<Message>();
+        this.tunnelOutQ = new LinkedBlockingQueue<Message>();
     }
 
     // when recieve client initialize message, add to tunnels hashmap
@@ -41,10 +38,8 @@ public class CommunicationTunnel implements Runnable {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             for (String line = in.readLine(); line != null; line = in.readLine()) {
-                Message inMessage = Message.JSONtoMessage(line);
-                if(inMessage.getType().equals(Message.MessageType.BOARDINIT)) {
-                    tunnels.put(((BoardInitMessage) inMessage).getBoardName(), this);
-                } else serverInQ.add(inMessage);
+                Message inMessage = Message.decode(line);
+                serverInQ.add(inMessage);
             }
 
             in.close();
@@ -52,7 +47,7 @@ public class CommunicationTunnel implements Runnable {
             out = new PrintWriter(socket.getOutputStream(), true);
 
             if(!tunnelOutQ.isEmpty()) {
-                String messageJSON = tunnelOutQ.remove().convertMessageToJSON();
+                String messageJSON = tunnelOutQ.remove().toString();
                 out.println(messageJSON);
             }
             

@@ -5,7 +5,7 @@ import org.json.simple.JSONObject;
 /**
  * A message to inform the server that a new board
  * has joined the simulation. This should be the
- * first message sent by any board.
+ * first message sent by any board. 
  *
  */
 public class BoardInitMessage extends Message {
@@ -20,16 +20,21 @@ public class BoardInitMessage extends Message {
 	public BoardInitMessage(String boardName){
 		this.boardName = boardName;
 		this.messageType = MessageType.BOARDINIT;
+		assert(checkRep());
 	}
 
 
+	private boolean checkRep(){
+		return this.equals(BallMessage.fromJSON(this.toJSONObject()));
+	}
+	
 	public String getBoardName() {
 		return boardName;
 	}
 
 	
-	@Override
-	public JSONObject toJSONObject() {
+	@SuppressWarnings("unchecked")
+	protected JSONObject toJSONObject() {
 		JSONObject obj = new JSONObject();
 		obj.put("messageType", "BOARDINIT");
 		

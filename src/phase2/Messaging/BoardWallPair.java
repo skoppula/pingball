@@ -58,6 +58,7 @@ public class BoardWallPair {
 	 * Converts this into a representation of itself as a JSON object
 	 * @return a JSON object describing this board wall pair
 	 */
+	@SuppressWarnings("unchecked")
 	protected JSONObject toJSONObject(){
 		JSONObject obj = new JSONObject();
 		obj.put("boardName", boardName);

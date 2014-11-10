@@ -5,11 +5,14 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 /**
- * An abstract class for messages to be exchanged between different parts
+ * An abstract class for immutable messages to be exchanged between different parts
  * of the program.
  *
  */
 public abstract class Message{
+	// Abstraction Function: Message = MessageType + Objects
+	// Rep invariant: message = MessageType.fromJSONObject(message.toJSONObject()) 
+	// (these checkReps are stored in subclasses)
 	
 	MessageType messageType;
 	
@@ -51,6 +54,7 @@ public abstract class Message{
 		return messageType;
 	}
 	
+	
 	/**
 	 * Implements observational equality.
 	 */
@@ -82,7 +86,7 @@ public abstract class Message{
 		 * The JSON messages that are created and parsed by each message class are of the following form:
 		 * Each message contains two attributes: 
 		 * 1) messageType, which is the type of message being sent
-		 * 2) messageConents, the contents of the message, which depends on what type of message it is
+		 * 2) messageConents, the contents of the message which depends on what type of message it is.
 		 * 
 		 * Each message handles its own contents internally. It creates its own JSON representation
 		 * with toString, which outputs a JSON object in string form.

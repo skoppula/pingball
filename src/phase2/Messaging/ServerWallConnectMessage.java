@@ -2,8 +2,6 @@ package phase2.messaging;
 
 import org.json.simple.JSONObject;
 
-import phase2.Board.Ball;
-
 /**
  * A class used to transmit information to a server
  * about connecting two walls
@@ -35,9 +33,12 @@ public class ServerWallConnectMessage extends Message {
 		this.boardName2 = boardName2;
 		this.connectionType = connectionType;
 		this.messageType = MessageType.SERVERWALLCONNECT;
+		assert(checkRep());
 	}
 
-
+	private boolean checkRep(){
+		return this.equals(ServerWallConnectMessage.fromJSON(this.toJSONObject()));
+	}
 
 
 	public String getBoardName1() {
@@ -56,6 +57,7 @@ public class ServerWallConnectMessage extends Message {
 		return connectionType;
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected JSONObject toJSONObject() {
 		JSONObject obj = new JSONObject();
 		obj.put("messageType", "SERVERWALLCONNECT");

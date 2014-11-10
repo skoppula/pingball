@@ -18,6 +18,8 @@ public class TerminateMessage extends Message {
 	 */
 	public TerminateMessage(String boardName){
 		this.boardName = boardName;
+		this.messageType = MessageType.TERMINATE;
+		assert(checkRep());
 	}
 
 
@@ -25,6 +27,7 @@ public class TerminateMessage extends Message {
 		return boardName;
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected JSONObject toJSONObject() {
 		JSONObject obj = new JSONObject();
 		obj.put("messageType", "TERMINATE");
@@ -33,6 +36,10 @@ public class TerminateMessage extends Message {
 		contents.put("boardName", boardName);
 		obj.put("messageContents", contents);
 		return obj;
+	}
+	
+	private boolean checkRep(){
+		return this.equals(TerminateMessage.fromJSON(this.toJSONObject()));
 	}
 	
 	/**
