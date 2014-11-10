@@ -1,6 +1,9 @@
 package phase2.messaging;
 
+import org.json.simple.JSONObject;
+
 import phase2.Gadget.Orientation;
+import phase2.messaging.ServerWallConnectMessage.ConnectionType;
 
 /**
  * A message responsible
@@ -28,11 +31,6 @@ public class ClientWallChangeMessage extends Message {
 		this.messageType = MessageType.CLIENTWALLCHANGE;
 	}
 
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	/**
 	 * @return the name of the other board, and the wall orientation from
@@ -52,4 +50,26 @@ public class ClientWallChangeMessage extends Message {
 		return connectOrDisconnect;
 	}
 
+	protected JSONObject toJSONObject() {
+		JSONObject obj = new JSONObject();
+		obj.put("messageType", "CLIENTWALLCHANGE");
+		
+		JSONObject contents = new JSONObject();
+		contents.put("otherBoardWall", otherBoardWall.toJSONObject());
+		contents.put("connectOrDisconnect", connectOrDisconnect);
+		obj.put("messageContents", contents);
+		return obj;
+	}
+	
+	/**
+	 * Converts the JSONObject given into a message of this type.
+	 * @param jsonObject the object containing the relevant information for this message
+	 * @return a message of this type, with parameters as defined by the jsonObject
+	 * @throws IllegalArgumentException if the jsonObject does not have the correct parameters,
+	 * throw an exception
+	 */
+	protected static Message fromJSON(JSONObject messageContents) throws IllegalArgumentException{
+		BoardWallPair otherBoardWall = new BoardWallPair((JSONObject)messageContents.get("otherBoardWall"));
+		return new ClientWallChangeMessage(otherBoardWall, (boolean)messageContents.get("connectOrDisconnect"));
+	}
 }

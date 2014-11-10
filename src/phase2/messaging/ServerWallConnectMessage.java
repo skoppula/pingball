@@ -1,5 +1,9 @@
 package phase2.messaging;
 
+import org.json.simple.JSONObject;
+
+import phase2.Ball;
+
 /**
  * A class used to transmit information to a server
  * about connecting two walls
@@ -33,11 +37,6 @@ public class ServerWallConnectMessage extends Message {
 		this.messageType = MessageType.SERVERWALLCONNECT;
 	}
 
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 
 
@@ -55,6 +54,44 @@ public class ServerWallConnectMessage extends Message {
 
 	public ConnectionType getConnectionType() {
 		return connectionType;
+	}
+	
+	protected JSONObject toJSONObject() {
+		JSONObject obj = new JSONObject();
+		obj.put("messageType", "SERVERWALLCONNECT");
+		
+		JSONObject contents = new JSONObject();
+		contents.put("boardName1", boardName1);
+		contents.put("boardName2", boardName2);
+		String s;
+		if(connectionType == ConnectionType.HORIZONTAL){
+			s = "h";
+		}
+		else{
+			s = "v";
+		}
+		contents.put("connectionType", s);
+		obj.put("messageContents",contents);
+		return obj;
+	}
+	
+	/**
+	 * Converts the JSONObject given into a message of this type.
+	 * @param jsonObject the object containing the relevant information for this message
+	 * @return a message of this type, with parameters as defined by the jsonObject
+	 * @throws IllegalArgumentException if the jsonObject does not have the correct parameters,
+	 * throw an exception
+	 */
+	protected static Message fromJSON(JSONObject messageContents) throws IllegalArgumentException{
+		ConnectionType ct;
+		if(messageContents.get("connectionType") == "h"){
+			ct = ConnectionType.HORIZONTAL;
+		}
+		else{
+			ct = ConnectionType.VERTICAL;
+		}
+		return new ServerWallConnectMessage((String)messageContents.get("boardName1"), 
+				(String)messageContents.get("boardName2"), ct);
 	}
 
 }
