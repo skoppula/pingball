@@ -5,7 +5,7 @@ grammar PingBoard;
  * These are the lexical rules. They define the tokens used by the lexer.
  */
 BOARDINITID : 'board';
-COMMENT : '#' '.'* ;
+COMMENT : '#' [ -~]* ;
 ORIENTATIONVALUE : '0'|'90'|'180'|'270';
 EQUALS : '=';
 NAMEID : 'name';
@@ -40,8 +40,8 @@ NEWLINE : [\n]+;
  * These are the parser rules. They define the structures used by the parser. 
  */
 root : board EOF;
-board : boardInit bodyLine;
-irrelevantLine : COMMENT? ; // either the line is blank or the line has a comment
+board : boardInit bodyLine*; // may contain multiple bodyLines
+irrelevantLine : NEWLINE COMMENT?; // either the line is blank or the line has a comment
 boardInit : BOARDINITID name gravity? friction1? friction2?;
 bodyLine : (ball | squareBumper | circleBumper | triangleBumper | rightFlipper | leftFlipper | absorber | fire | irrelevantLine);
 ball : BALLID name floatX floatY xVelocity yVelocity;
