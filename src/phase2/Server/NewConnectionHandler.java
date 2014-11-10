@@ -5,17 +5,18 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 
-import phase2.Messaging.Message;
+import phase2.messaging.Message;
 
 public class NewConnectionHandler implements Runnable {
     
     ServerSocket serverSocket;
     HashMap<String, CommunicationTunnel> serverTunnels;
-    Queue<Message> serverInQ;
+    BlockingQueue<Message> serverInQ;
     
-    public NewConnectionHandler(ServerSocket socket, HashMap<String, CommunicationTunnel> tunnels, Queue<Message> inQ) {
-        this.serverSocket = socket;
+    public NewConnectionHandler(ServerSocket serverSocket, HashMap<String, CommunicationTunnel> tunnels, Queue<Message> inQ) {
+        this.serverSocket = serverSocket;
         this.serverTunnels = tunnels;
         this.serverInQ = inQ;
     }
