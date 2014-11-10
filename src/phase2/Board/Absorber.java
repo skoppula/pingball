@@ -16,7 +16,6 @@ public class Absorber extends Gadget {
     private boolean loaded;
     private Ball loadedBall;
 
-    List<PhysicsComponent> physicsComponentList = new ArrayList<>();
     
     /**
      * A game object that represents an absorber as described in the notes

@@ -75,5 +75,20 @@ public class StaticCircle implements PhysicsComponent {
         throw new UnsupportedOperationException("This element cannot rotate, and so you shouldn't be calling"
                 + "this method! If you want to find out whether it can rotate, use object.canRotate()");
     }
+    
+    public Circle getCircle() {
+        return circle;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof StaticCircle) {
+            boolean sameCircle = this.circle.equals(((StaticCircle) other).getCircle());
+            return sameCircle;
+        }
+        else {
+            return false;
+        }
+    }
 
 }

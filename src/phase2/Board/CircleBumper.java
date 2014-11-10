@@ -11,7 +11,6 @@ import physics.Vect;
 
 public class CircleBumper extends Gadget {
 	
-	List<PhysicsComponent> physicsComponentList = new ArrayList<>();
 
     /**
      * Create a square-shaped bumper with these parameters:

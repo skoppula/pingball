@@ -66,5 +66,21 @@ public class StaticLine implements PhysicsComponent {
         throw new UnsupportedOperationException("This element cannot rotate, and so you shouldn't be calling"
                 + "this method! If you want to find out whether it can rotate, use object.canRotate()");
     }
+    
+    public LineSegment getLS() {
+        return lineSegment;
+    }
+
+    
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof StaticLine) {
+            boolean sameLS = this.lineSegment.equals(((StaticLine) other).getLS());
+            return sameLS;
+        }
+        else {
+            return false;
+        }
+    }
 
 }
