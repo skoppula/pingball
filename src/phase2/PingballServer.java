@@ -17,10 +17,11 @@ public class PingballServer {
     private static final int MAXIMUM_PORT = 65535;
 
     private final ServerSocket serverSocket;
-
+    
     //TODO make these types threadsafe
     protected HashMap<String, CommunicationTunnel> tunnels;
     protected HashMap<String, String> wallConnections;
+    protected HashSet<String> waitlist;
     
     Queue<Message> inQ;
     Queue<Message> outQ;
