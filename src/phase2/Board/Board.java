@@ -314,6 +314,7 @@ public class Board {
     /**
      * Checks whether or not this Board has the same name, gravity, friction1, friction2
      * as otherBoard
+     * Checks if this Board has the same balls as the other board
      * @param otherBoard
      * @return
      */
@@ -322,7 +323,15 @@ public class Board {
         boolean friction1Equal = this.getMU()==otherBoard.getMU();
         boolean friction2Equal = this.getMU2()==otherBoard.getMU2();
         boolean nameEqual = this.getName().equals(otherBoard.getName());
-        return (gravityEqual && friction1Equal && friction2Equal && nameEqual);
+        boolean constantsEqual = gravityEqual && friction1Equal && friction2Equal && nameEqual;
+
+        boolean equalNumberBalls = this.balls.size() == otherBoard.balls.size();
+        boolean ballsEqual = equalNumberBalls && this.balls.containsAll(otherBoard.balls);
+        System.out.println("b" + ballsEqual);
+        
+        System.out.println(this.balls.size());
+        System.out.println(otherBoard.balls.size());
+        return constantsEqual && ballsEqual;
     }
     
 }

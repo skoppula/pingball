@@ -27,7 +27,7 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
     
     private static Board board;
     private static Map<String, Gadget> gadgetsMap = new HashMap<String, Gadget>(); // maps names to gadgets
-    private List<Ball> balls;
+    private static List<Ball> balls = new ArrayList<Ball>();
     
     // temporary variables
     Stack<List<String>> stack = new Stack<List<String>>();
@@ -37,7 +37,6 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
     public void exitBoardInit(PingBoardParser.BoardInitContext ctx) {
         int numParameters = ctx.getChildCount()-1; // extra child on left says 'board'
         for (int i=0; i<numParameters; i++) {
-            System.out.println(stack);
             List<String> paraTypeAndValue = stack.pop();
             String type = paraTypeAndValue.get(0);
             String value = paraTypeAndValue.get(1);
@@ -59,8 +58,8 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
     // create a ball on exiting ball node, put it in gadgetsMap
     public void exitBall(PingBoardParser.BallContext ctx) {
         System.out.println(stack);
-        int numParameters = ctx.getChildCount();
-        String ballName;
+        int numParameters = ctx.getChildCount()-1;
+        String ballName = "";
         double xVelocity = 0;
         double yVelocity = 0;
         double x = 0;
@@ -86,29 +85,29 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
             }
         }
         Vect ballVelocity = new Vect(xVelocity, yVelocity);
-        Ball ball = new Ball(x, y, ballVelocity);
+        Ball ball = new Ball(x, y, ballVelocity, ballName);
         balls.add(ball);
     }
     
     // push the token with the name String on the stack
     public void enterYVelocity(PingBoardParser.YVelocityContext ctx) {
-        System.out.println(stack);
         String valueString = ctx.getChild(3).getText();
         stack.push(Arrays.asList("yvelocity", valueString));
+        System.out.println("yv" + stack);
     }
     
     // push the token with the name String on the stack
     public void enterXVelocity(PingBoardParser.XVelocityContext ctx) {
-        System.out.println(stack);
         String valueString = ctx.getChild(3).getText();
         stack.push(Arrays.asList("xvelocity", valueString));
-        System.out.println("here");
+        System.out.println("xv" + stack);
     }
     
     // push the token with the name String on the stack
     public void enterFloatY(PingBoardParser.FloatYContext ctx) {
         String valueString = ctx.getChild(3).getText();
         stack.push(Arrays.asList("floaty", valueString));
+        System.out.println("floaty" + stack);
     }
     
     // push the token with the name String on the stack
@@ -119,14 +118,13 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
     
     // push the token with the gravity constant on the stack
     public void enterGravity(PingBoardParser.GravityContext ctx) {
-        System.out.println("g" + stack);
         String gravityValueString = ctx.getChild(3).getText();
         stack.push(Arrays.asList("gravity", gravityValueString));
+        System.out.println("g" + stack);
     }
     
     // push the token with the friction1 constant on the stack
     public void enterFriction1(PingBoardParser.Friction1Context ctx) {
-        System.out.println("f1" + stack);
         String valueString = ctx.getChild(3).getText();
         stack.push(Arrays.asList("friction1", valueString));
         System.out.println("f1" + stack);
@@ -134,16 +132,16 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
     
     // push the token with the friction2 constant on the stack
     public void enterFriction2(PingBoardParser.Friction2Context ctx) {
-        System.out.println("f2" + stack);
         String friction2ValueString = ctx.getChild(3).getText();
         stack.push(Arrays.asList("friction2", friction2ValueString));
+        System.out.println("f2" + stack);
     }
 
     // push the token with the name on the stack
     public void enterName(PingBoardParser.NameContext ctx) {
-        System.out.println("name" + stack);
         String nameString = ctx.getChild(3).getText();
         stack.push(Arrays.asList("name", nameString));
+        System.out.println("name" + stack);
     }
     
     
@@ -153,6 +151,9 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
     public static Board createBoard() {
         List<Gadget> gadgets = new ArrayList(gadgetsMap.values());
         board = new Board(gadgets, BOARD_NAME, GRAVITY, FRICTION1, FRICTION2);
+        for (Ball ball: balls) {
+            board.addBall(ball);
+        }
         return board;
     }
 }

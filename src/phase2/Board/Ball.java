@@ -302,5 +302,30 @@ public class Ball implements Collidable{
     public void updatePrevVelocity() {
         this.prevVelocity = this.velocity;
     }
+    
+    public String getName() {
+        return name;
+    }
+    
+    /**
+     * Checks whether or not this Ball has the same name, position, and 
+     * velocity as the other ball
+     * Checks if this Board has the same balls as the other board
+     * @param otherBoard
+     * @return
+     */
+    @Override
+    public boolean equals(Object otherBall) {
+        if (otherBall instanceof Ball) {
+            boolean circleEqual = this.ballCircle.equals(((Ball) otherBall).getBallCircle());
+            boolean velocityEqual = this.getVelocity().equals(((Ball) otherBall).getVelocity());
+            boolean nameEqual = this.getName().equals(((Ball) otherBall).getName());
+            return circleEqual && velocityEqual && nameEqual;
+        }
+        else {
+            return false;
+        }
+        
+    }
 
 }
