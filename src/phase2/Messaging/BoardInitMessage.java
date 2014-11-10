@@ -1,4 +1,4 @@
-package phase2.Messaging;
+package phase2.messaging;
 
 import org.json.simple.JSONObject;
 
@@ -22,13 +22,6 @@ public class BoardInitMessage extends Message {
 		this.messageType = MessageType.BOARDINIT;
 	}
 
-<<<<<<< HEAD:src/phase2/messaging/BoardInitMessage.java
-=======
-	@Override
-	public String toString() {
-		return null;
-	}
->>>>>>> 2c9fa8893eaa28e76945f7707f4d2afc78666629:src/phase2/Messaging/BoardInitMessage.java
 
 	public String getBoardName() {
 		return boardName;
