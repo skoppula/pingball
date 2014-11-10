@@ -109,4 +109,11 @@ public abstract class Gadget implements Collidable{
     protected int getY() {
         return this.location.getY();
     }
+    
+    /**
+     * Sets the gadget's identifying name
+     */
+    public void setName(String newName) {
+        this.name = newName;
+    }
 }
