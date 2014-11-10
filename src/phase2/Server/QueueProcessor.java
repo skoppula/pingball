@@ -2,7 +2,7 @@ package phase2.Server;
 
 import java.util.Queue;
 
-import phase2.Messaging.Message;
+import phase2.messaging.Message;
 
 public class QueueProcessor implements Runnable {
 

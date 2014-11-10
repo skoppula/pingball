@@ -15,7 +15,7 @@ public class NewConnectionHandler implements Runnable {
     HashMap<String, CommunicationTunnel> serverTunnels;
     BlockingQueue<Message> serverInQ;
     
-    public NewConnectionHandler(ServerSocket serverSocket, HashMap<String, CommunicationTunnel> tunnels, Queue<Message> inQ) {
+    public NewConnectionHandler(ServerSocket serverSocket, HashMap<String, CommunicationTunnel> tunnels, BlockingQueue<Message> inQ) {
         this.serverSocket = serverSocket;
         this.serverTunnels = tunnels;
         this.serverInQ = inQ;
