@@ -85,5 +85,17 @@ public class BoardWallPair {
 	public Orientation wallOrientation(){
 		return wallOrientation;
 	}
+	
+	/**
+	 * Implements observational equality.
+	 */
+	@Override
+	public boolean equals(Object other){
+		if(!this.getClass().equals(other.getClass())){
+			return false;
+		}
+		BoardWallPair otherM = (BoardWallPair)other;
+		return(this.boardName == otherM.boardName && this.wallOrientation == otherM.wallOrientation());
+	}
 
 }

@@ -23,9 +23,7 @@ public abstract class Message{
 
 	/**
 	 * Converts the message into a string, with the following property:
-	 * if a.toString() == b.toString(), a == b. In this case, we mean
-	 * observational equality. One use of this method is to transmit message
-	 * data over Sockets.
+	 * if a.toString() == b.toString(), a == b (assuming that == uses observational equality). 
 	 * @return a message obeying the above criteria
 	 */
 	@Override
@@ -35,10 +33,15 @@ public abstract class Message{
 	
 	/**
 	 * Creates a JSONObject representation of the message with the following property:
-	 * if a.toJSONObject() == b.toJSONObject(), a == b. In this case, we mean
+	 * if a.toJSONObject() == b.toJSONObject(), a == b (assuming observational equality). In this case, we mean
 	 * observational equality.
 	 */
 	abstract JSONObject toJSONObject();
+	/*
+	 * Note that occasionally, we do not use the full definition of observational
+	 * equality. For example, here, technically Ball has elements that compose its state other than the elements
+	 * necessary to initialize it. However, BallMessage only transmits the elements necessary to initialize it.
+	 */
 	
 	/**
 	 * 
@@ -46,6 +49,17 @@ public abstract class Message{
 	 */
 	public MessageType getType(){
 		return messageType;
+	}
+	
+	/**
+	 * Implements observational equality.
+	 */
+	@Override
+	public boolean equals(Object other){
+		if(!this.getClass().equals(other.getClass())){
+			return false;
+		}
+		return(this.toString().equals(other.toString()));
 	}
 	
 

@@ -20,11 +20,6 @@ public class TerminateMessage extends Message {
 		this.boardName = boardName;
 	}
 
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	public String getBoardName() {
 		return boardName;

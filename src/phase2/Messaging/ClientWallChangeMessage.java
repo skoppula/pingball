@@ -19,6 +19,7 @@ public class ClientWallChangeMessage extends Message {
 	 * @param otherBoardWall the name of the other board, and the wall orientation from
 	 * the other board. We can determine which wall to dis/connect on our board based off of
 	 * the orientation of the dis/connected wall on the other board.
+	 * Connecting --> true, disconnecting --> false
 	 * @param connectOrDisconnect whether our board should be connecting or disconnecting our wall
 	 * to the other board
 	 */
@@ -41,7 +42,7 @@ public class ClientWallChangeMessage extends Message {
 	/**
 	 * 
 	 * @return whether our board should be connecting or disconnecting our wall
-	 * to the other board
+	 * to the other board. Connecting --> true, disconnecting --> false
 	 */
 	public boolean isConnectOrDisconnect() {
 		return connectOrDisconnect;

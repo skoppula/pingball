@@ -84,7 +84,7 @@ public class ServerWallConnectMessage extends Message {
 	 */
 	protected static Message fromJSON(JSONObject messageContents) throws IllegalArgumentException{
 		ConnectionType ct;
-		if(messageContents.get("connectionType") == "h"){
+		if(messageContents.get("connectionType").equals("h")){
 			ct = ConnectionType.HORIZONTAL;
 		}
 		else{
