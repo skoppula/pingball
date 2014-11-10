@@ -22,7 +22,7 @@ public class BallMessage extends Message {
 	 * Creates a message intended to transmit a ball and
 	 * a board's wall relevant to its action.
 	 * @param ballName the name of the ball being sent
-	 * @param boardWall the 
+	 * @param boardWall the boardWall that this ball came from
 	 */
 	public BallMessage(Ball ball, BoardWallPair boardWall){
 		this.ball = ball;

@@ -126,18 +126,6 @@ public class PingBoardBaseListener implements PingBoardListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRightFlipper(@NotNull PingBoardParser.RightFlipperContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRightFlipper(@NotNull PingBoardParser.RightFlipperContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterNewline(@NotNull PingBoardParser.NewlineContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -145,6 +133,18 @@ public class PingBoardBaseListener implements PingBoardListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitNewline(@NotNull PingBoardParser.NewlineContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFlipper(@NotNull PingBoardParser.FlipperContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFlipper(@NotNull PingBoardParser.FlipperContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -253,18 +253,6 @@ public class PingBoardBaseListener implements PingBoardListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitTrigger(@NotNull PingBoardParser.TriggerContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLeftFlipper(@NotNull PingBoardParser.LeftFlipperContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLeftFlipper(@NotNull PingBoardParser.LeftFlipperContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
