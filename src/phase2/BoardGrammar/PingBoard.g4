@@ -6,7 +6,7 @@ grammar PingBoard;
  */
 BOARDINITID : 'board';
 COMMENT : '#' [ -~]* ;
-ORIENTATIONVALUE : '0'|'90'|'180'|'270';
+// ORIENTATIONVALUE : '0'|'90'|'180'|'270';
 EQUALS : '=';
 NAMEID : 'name';
 XID : 'x';
@@ -62,7 +62,7 @@ friction1 : WHITESPACE* FRICTION1ID equals FLOAT;
 friction2 : WHITESPACE* FRICTION2ID equals FLOAT;
 intX : WHITESPACE* XID equals INTEGER;
 intY : WHITESPACE* YID equals INTEGER;
-orientation : WHITESPACE* ORIENTATIONID equals ORIENTATIONVALUE;
+orientation : WHITESPACE* ORIENTATIONID equals INTEGER;
 width : WHITESPACE* WIDTHID equals INTEGER;
 height : WHITESPACE* HEIGHTID equals INTEGER;
 floatX : WHITESPACE* XID equals FLOAT;
