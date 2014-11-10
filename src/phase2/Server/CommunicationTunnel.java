@@ -9,7 +9,9 @@ import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import phase2.messaging.BoardInitMessage;
 import phase2.messaging.Message;
+import phase2.messaging.Message.MessageType;
 
 public class CommunicationTunnel implements Runnable {
     
@@ -34,28 +36,37 @@ public class CommunicationTunnel implements Runnable {
     @Override
     public void run() {
 
+    	//TODO make the input and the output parallel?
         try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-            for (String line = in.readLine(); line != null; line = in.readLine()) {
-                Message inMessage = Message.decode(line);
-                serverInQ.add(inMessage);
-            }
-
-            in.close();
-
             out = new PrintWriter(socket.getOutputStream(), true);
 
-            if(!tunnelOutQ.isEmpty()) {
-                String messageJSON = tunnelOutQ.remove().toString();
-                out.println(messageJSON);
+            String line = null; // sorry, have to use nulls because readLine is evil!
+            while(line == null){
+            	line = in.readLine();
             }
+            // THE FIRST MESSAGE SHOULD BE THE BOARD INIT MESSAGE, BECAUSE IT'S THE FIRST MESSAGE
+            Message inMessage = Message.decode(line);
+            assert(inMessage.getType() == MessageType.BOARDINIT);
+            QueueProcessor.nameToBoardTunnel.put(((BoardInitMessage)inMessage).getBoardName(), this);
             
-            out.close();
-
+            while(true){
+            	try{
+		            for (line = in.readLine(); line != null; line = in.readLine()) {
+		                inMessage = Message.decode(line);
+		                serverInQ.put(inMessage);
+		            }
+		
+		            if(!tunnelOutQ.isEmpty()) {
+		                String messageJSON = tunnelOutQ.take().toString();
+		                out.println(messageJSON);
+		            }
+            	} catch(InterruptedException e){
+            		e.printStackTrace();
+            	}
+            }
         } catch (IOException e) {
             e.printStackTrace();
-
         } 
     }
     

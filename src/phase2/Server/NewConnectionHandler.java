@@ -29,7 +29,7 @@ public class NewConnectionHandler implements Runnable {
                 //Blocks until new connection
                 Socket socket = serverSocket.accept();
 
-                CommunicationTunnel tunnel = new CommunicationTunnel(socket, serverTunnels, serverInQ);
+                CommunicationTunnel tunnel = new CommunicationTunnel(socket, serverInQ);
                 System.out.println("New client: " + socket);
                 tunnel.run();
                 //TODO decide if need to close the socket after the call to run()
