@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.antlr.v4.parse.ANTLRParser.finallyClause_return;
+import org.antlr.v4.parse.ANTLRParser.range_return;
 
 import physics.Geometry;
 import physics.Vect;
@@ -174,7 +175,7 @@ public class Board {
             Vect ballVelocity = ball.getVelocity();
             double Gforce =  gravity * timeDelta;
             ballVelocity = ballVelocity.plus(new Vect(0, Gforce));
-            ballVelocity = ballVelocity.times(1 - mu * timeDelta - mu2
+            ballVelocity = ballVelocity.times(1 - MU * timeDelta - MU2
                     * ballVelocity.length() * timeDelta);
             ball.setVelocity(ballVelocity);
             
@@ -290,6 +291,38 @@ public class Board {
             this.time = time;
         }
     }
-        
+    
+    public Vect getGRAVITY_VECTOR() {
+        return GRAVITY_VECTOR;
+    }
+
+
+    public double getMU() {
+        return MU;
+    }
+
+
+    public double getMU2() {
+        return MU2;
+    }
+    
+    public String getName() {
+        return name;
+    }
+
+    
+    /**
+     * Checks whether or not this Board has the same name, gravity, friction1, friction2
+     * as otherBoard
+     * @param otherBoard
+     * @return
+     */
+    public boolean hasEqualAttributes(Board otherBoard) {
+        boolean gravityEqual = this.getGRAVITY_VECTOR().equals(otherBoard.getGRAVITY_VECTOR());
+        boolean friction1Equal = this.getMU()==otherBoard.getMU();
+        boolean friction2Equal = this.getMU2()==otherBoard.getMU2();
+        boolean nameEqual = this.getName().equals(otherBoard.getName());
+        return (gravityEqual && friction1Equal && friction2Equal && nameEqual);
+    }
     
 }
