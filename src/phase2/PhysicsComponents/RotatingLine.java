@@ -83,5 +83,30 @@ public class RotatingLine implements PhysicsComponent {
     public boolean canRotate() {
         return true;
     }
+    
+    public LineSegment getLS() {
+        return lineSegment;
+    }
+
+    public double getAngularVelocity() {
+        return angularVelocity;
+    }
+    
+    public Vect getCenter() {
+        return center;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof RotatingLine) {
+            boolean sameLS = this.lineSegment.equals(((RotatingLine) other).getLS());
+            boolean sameAV = this.angularVelocity == ((RotatingLine) other).getAngularVelocity();
+            boolean sameCenter = this.center.equals(((RotatingLine) other).getCenter());
+            return sameCenter && sameLS && sameAV;
+        }
+        else {
+            return false;
+        }
+    }
 
 }

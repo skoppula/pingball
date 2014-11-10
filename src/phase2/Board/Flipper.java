@@ -48,9 +48,6 @@ public class Flipper extends Gadget {
     private boolean isActive;
     // whether the flipper is currently rotating
     
-    private final List<PhysicsComponent> physicsComponentList = new ArrayList<>();
-    // a list representing the physical components of this flipper
-    
 
     /**
      * Determines which type the bumper is.

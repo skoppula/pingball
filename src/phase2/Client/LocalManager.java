@@ -6,9 +6,11 @@ import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import phase2.Board.Board;
-import phase2.Messaging.*;
+import phase2.messaging.*;
 
 public class LocalManager {
 
@@ -16,8 +18,8 @@ public class LocalManager {
     private Board board;
     private LocalInputManager lim;
     private LocalOutputManager lom;
-    protected Queue<Message> inQ;
-    protected Queue<Message> outQ;
+    protected BlockingQueue<Message> inQ; //TODO changed these to blocking queues, remove this todo after you see it
+    protected BlockingQueue<Message> outQ;
     boolean networkedGame;
     
     /*
@@ -31,20 +33,25 @@ public class LocalManager {
      * anyways they decided to go on a walk
      * but then they saw race 
      * they didn't know what to do
-     * and they got seperated
+     * and they got separated
      * 
      * THEY GOT KIDNAPPED BY A SPARKLEHEAD.
      * 
      * CHECK FOR THREAD SAFETY KIDS
      */
+    
+    /*
+     * OH FUCK OH FUCK
+     */
 
     public LocalManager(Board board, InetAddress address, int port) throws IOException {
-        this.inQ = new LinkedList<Message>();
-        this.outQ = new LinkedList<Message>();
+        this.inQ = new LinkedBlockingQueue<Message>();
+        this.outQ = new LinkedBlockingQueue<Message>();
         this.board = board;
         this.networkedGame = true;
         
-        Socket socket = new Socket(address, port);
+        Socket socket = new Socket(address, port); 
+        //TODO how are we getting a socket? shouldn't we only have a port, then listen on that port for sockets?
 
         lim = new LocalInputManager(inQ, socket);
         lom = new LocalOutputManager(outQ, socket);
@@ -68,6 +75,7 @@ public class LocalManager {
                 board.syncChange(inQ.remove());
 
             //TODO change updateBoard method to return List of Messages to update Board about
+            //TODO why not just allow board to dump messages on our inQ whenever? I thought that's what we proposed
             List<Message> out = board.updateBoard(0.01);
             board.printBoard();
 

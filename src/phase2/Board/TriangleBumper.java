@@ -11,7 +11,6 @@ import phase2.PhysicsComponents.*;
 
 public class TriangleBumper extends Gadget {
 
-    private List<PhysicsComponent> physicsComponentList = new ArrayList<>();
     private Orientation orientation;
 
     /**

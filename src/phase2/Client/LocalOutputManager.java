@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Queue;
 
-import phase2.Messaging.Message;
+import phase2.messaging.Message;
 
 public class LocalOutputManager implements Runnable {
 
@@ -13,7 +13,7 @@ public class LocalOutputManager implements Runnable {
     PrintWriter out = null;
     Socket socket;
     
-    public LocalOutputManager(Queue<Message> outQ, Socket socket) throws IOException {
+    public LocalOutputManager(Queue<phase2.messaging.Message> outQ, Socket socket) throws IOException {
         this.outQ = outQ;
         this.socket = socket;
     }
@@ -25,8 +25,9 @@ public class LocalOutputManager implements Runnable {
             out = new PrintWriter(socket.getOutputStream(), true);
 
             if(!outQ.isEmpty()) {
-                String messageJSON = outQ.remove().convertMessageToJSON();
+                String messageJSON = outQ.remove().toString();
                 out.println(messageJSON);
+                //TODO how does it differentiate between lines? Do you need to pass in a newline?
             }
 
         } catch (IOException e) {

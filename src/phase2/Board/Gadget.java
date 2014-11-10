@@ -3,14 +3,15 @@ package phase2.Board;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import phase2.PhysicsComponents.PhysicsComponent;
 
 
 public abstract class Gadget implements Collidable{
     
-
+    protected List<PhysicsComponent> physicsComponentList = new ArrayList<>();
     protected String name;
     /**
      * the gadget's coefficient of reflection
@@ -108,5 +109,35 @@ public abstract class Gadget implements Collidable{
 
     protected int getY() {
         return this.location.getY();
+    }
+    
+    /**
+     * Sets the gadget's identifying name
+     */
+    public void setName(String newName) {
+        this.name = newName;
+    }
+    
+    /**
+     * Returns physics components list
+     */
+    public List<PhysicsComponent> getPhysicsComponents() {
+        return physicsComponentList;
+    }
+    
+    /**
+     * Checks whether gadgets are equal by checking whether
+     * their physics components are equal
+     * @return 
+     */
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof Gadget) {
+            boolean sameSizeList = this.physicsComponentList.size() == ((Gadget) other).getPhysicsComponents().size();
+            return sameSizeList && this.physicsComponentList.containsAll(((Gadget) other).getPhysicsComponents());
+        }
+        else {
+            return false;
+        }
     }
 }

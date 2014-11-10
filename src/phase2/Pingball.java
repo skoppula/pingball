@@ -43,72 +43,13 @@ public class Pingball {
      */
     public static void main(String[] args) throws InterruptedException, IOException {
         
-        Board board;
-        Optional<Integer> port = Optional.of(DEFAULT_PORT);
-        Optional<InetAddress> host = Optional.empty();
-        Optional<File> file = Optional.empty();
-        Queue<String> arguments = new LinkedList<String>(Arrays.asList(args));
-
-        if (args.length == 0) board = defaultBoard();
-
+        Board board = parseBoardFile(new File("boardfile.txt"));
         
-        
-        if (args.length == 0) {
-            board = defaultBoard();
-        }
-        else {
-            while (!arguments.isEmpty()) {
-                String flag = arguments.remove();
-                try {
-                    if (flag.equals("--port")) {
-                        port = Optional.of(Integer.parseInt(arguments.remove()));
-                        if (port.get() < 0 || port.get() > MAXIMUM_PORT)
-                            throw new IllegalArgumentException("port " + port + " out of range");
-                    
-                    } else if (flag.equals("--host")) {
-                        String hostStr = arguments.remove();
-                        if(hostStr.matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b")) {
-                            byte[] ip = new byte[4];
-                            String[] ipTokens = hostStr.split("\\.");
-                            for(int i = 0; i < ipTokens.length; ++i) {
-                                ip[i] = Byte.parseByte(ipTokens[i]);
-                            }
-                            try {
-                                host = Optional.of(InetAddress.getByAddress(ip));
-                            } catch (UnknownHostException|SecurityException e2) {
-                                throw new IllegalArgumentException("Unrecognized host IP");
-                            }
-                        } else {
-                            try {
-                                host = Optional.of(InetAddress.getByName(hostStr));
-                            } catch (UnknownHostException|SecurityException e2) {
-                                throw new IllegalArgumentException("Unrecognized hostname");
-                            }
-                        }
-
-                    } else {
-                        file = Optional.of(new File(arguments.remove()));
-                        if (!file.get().isFile()) 
-                            throw new IllegalArgumentException("file not found: \"" + file + "\"");
-                        if (!arguments.isEmpty()) throw new IllegalArgumentException("No arguments after file");
-                        break;
-                    } 
-
-                } catch (NumberFormatException nfe) {
-                    throw new IllegalArgumentException("unable to parse port: " + flag);
-                }
-            }
-            
-            if(!file.isPresent()) throw new IllegalArgumentException("No file provided");
-            else {
-                board = parseBoardFile(file.get());
-            }
-        }
-
+       /*
         LocalManager lm = null;
         if(host.isPresent()) lm = new LocalManager(board, host.get(), port.get());
         else lm = new LocalManager(board);
-        lm.runGame();
+        lm.runGame();*/
     }
     
     /**

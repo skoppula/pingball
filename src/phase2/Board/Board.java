@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.antlr.v4.parse.ANTLRParser.finallyClause_return;
+import org.antlr.v4.parse.ANTLRParser.range_return;
+
 import physics.Geometry;
 import physics.Vect;
 
@@ -18,7 +21,14 @@ public class Board {
     private final String name;
     private final int width = 20;
     private final int height = 20;
-    private final Vect GRAVITY_VECTOR = new Vect(0, 25);
+    private final Vect GRAVITY_VECTOR;
+    private final double MU;
+    private final double MU2;
+    
+    // default values
+    private final double DEFAULT_GRAVITY_VALUE = 25;
+    private final double DEFAULT_MU = .025;
+    private final double DEFAULT_MU2 = .025;
     
     /*
      * Length of board (in units distance)
@@ -31,8 +41,7 @@ public class Board {
 
     // make gravity and friction fields
     private final double gravity = 25;
-    private final double mu = .025;
-    private final double mu2 = .025;
+
 
     private final double discreteTime = 0.00025;
 
@@ -46,11 +55,18 @@ public class Board {
     Map<String, Gadget> nameToGadgetMap = new HashMap<>();
     
     
-
+    /**
+     * Creates a board with the default values for friction1, friction2, and gravity
+     * @param gadgets
+     * @param name
+     */
     public Board(List<Gadget> gadgets, String name) {
         this.name = name;
         this.gadgets = gadgets;
         this.gadgetsWithoutWalls = gadgets;
+        this.GRAVITY_VECTOR = new Vect(0,DEFAULT_GRAVITY_VALUE);
+        this.MU = DEFAULT_MU;
+        this.MU2 = DEFAULT_MU2;
 
         // set up walls
         gadgets.addAll(Wall.makeWalls());
@@ -61,6 +77,31 @@ public class Board {
         	nameToGadgetMap.put(gadget.getName(), gadget);
         }
     }
+    
+    
+    /**
+     * Creates a board with the specified values for friction1, friction2, and gravity
+     * @param gadgets
+     * @param name
+     */
+    public Board(List<Gadget> gadgets, String name, double gravity, double friction1, double friction2) {
+        this.name = name;
+        this.gadgets = gadgets;
+        this.gadgetsWithoutWalls = gadgets;
+        this.GRAVITY_VECTOR = new Vect(0,gravity);
+        this.MU = friction1;
+        this.MU2 = friction2;
+
+        // set up walls
+        gadgets.addAll(Wall.makeWalls());
+        for(Gadget gadget: gadgets){
+            if(nameToGadgetMap.containsKey(gadget.getName())){
+                throw new IllegalArgumentException("The provided list of gadgets has at least two gadgets with the same name:" + gadget.getName());
+            }
+            nameToGadgetMap.put(gadget.getName(), gadget);
+        }
+    }
+    
 
     public void addBall(Ball ball) {
         balls.add(ball);
@@ -134,7 +175,7 @@ public class Board {
             Vect ballVelocity = ball.getVelocity();
             double Gforce =  gravity * timeDelta;
             ballVelocity = ballVelocity.plus(new Vect(0, Gforce));
-            ballVelocity = ballVelocity.times(1 - mu * timeDelta - mu2
+            ballVelocity = ballVelocity.times(1 - MU * timeDelta - MU2
                     * ballVelocity.length() * timeDelta);
             ball.setVelocity(ballVelocity);
             
@@ -250,6 +291,47 @@ public class Board {
             this.time = time;
         }
     }
+    
+    public Vect getGRAVITY_VECTOR() {
+        return GRAVITY_VECTOR;
+    }
+
+
+    public double getMU() {
+        return MU;
+    }
+
+
+    public double getMU2() {
+        return MU2;
+    }
+    
+    public String getName() {
+        return name;
+    }
+
+    
+    /**
+     * Checks whether or not this Board has the same name, gravity, friction1, friction2
+     * as otherBoard
+     * Checks if this Board has the same balls as the other board
+     * @param otherBoard
+     * @return
+     */
+    public boolean hasEqualAttributes(Board otherBoard) {
+        boolean gravityEqual = this.getGRAVITY_VECTOR().equals(otherBoard.getGRAVITY_VECTOR());
+        boolean friction1Equal = this.getMU()==otherBoard.getMU();
+        boolean friction2Equal = this.getMU2()==otherBoard.getMU2();
+        boolean nameEqual = this.getName().equals(otherBoard.getName());
+        boolean constantsEqual = gravityEqual && friction1Equal && friction2Equal && nameEqual;
+
+        boolean equalNumberBalls = this.balls.size() == otherBoard.balls.size();
+        boolean ballsEqual = equalNumberBalls && this.balls.containsAll(otherBoard.balls);
+        System.out.println("b" + ballsEqual);
         
+        System.out.println(this.balls.size());
+        System.out.println(otherBoard.balls.size());
+        return constantsEqual && ballsEqual;
+    }
     
 }

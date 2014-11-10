@@ -1,4 +1,6 @@
-package phase2.Messaging;
+package phase2.messaging;
+
+import org.json.simple.JSONObject;
 
 import phase2.Board.Ball;
 
@@ -26,6 +28,7 @@ public class BallMessage extends Message {
 		this.ball = ball;
 		this.boardWall = boardWall;
 		this.messageType = MessageType.BALL;
+		assert(checkRep());
 	}
 	
 	/**
@@ -36,10 +39,33 @@ public class BallMessage extends Message {
 	}
 	
 	
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
+	@SuppressWarnings("unchecked")
+	protected JSONObject toJSONObject() {
+		JSONObject obj = new JSONObject();
+		obj.put("messageType", "BALL");
+		
+		JSONObject contents = new JSONObject();
+		contents.put("ball", ball.toJSONObject());
+		contents.put("boardWall", boardWall.toJSONObject());
+		obj.put("messageContents",contents);
+		return obj;
+	}
+	
+	private boolean checkRep(){
+		return this.equals(BallMessage.fromJSON(this.toJSONObject()));
+	}
+	
+	/**
+	 * Converts the JSONObject given into a message of this type.
+	 * @param jsonObject the object containing the relevant information for this message
+	 * @return a message of this type, with parameters as defined by the jsonObject
+	 * @throws IllegalArgumentException if the jsonObject does not have the correct parameters,
+	 * throw an exception
+	 */
+	protected static Message fromJSON(JSONObject messageContents) throws IllegalArgumentException{
+		Ball ball = new Ball((JSONObject)messageContents.get("ball"));
+		BoardWallPair boardWall = new BoardWallPair((JSONObject)messageContents.get("boardWall"));
+		return new BallMessage(ball, boardWall);
 	}
 
 }

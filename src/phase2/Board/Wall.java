@@ -10,8 +10,6 @@ import physics.Vect;
 
 public class Wall extends Gadget {
     
-    private List<PhysicsComponent> physicsComponentList = new ArrayList<>();
-    
     /**
      * Creates a new Wall.
      * @param x the x-location of this wall's origin, must be -1<= x <=20

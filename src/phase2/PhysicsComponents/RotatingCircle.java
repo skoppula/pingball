@@ -84,5 +84,31 @@ public class RotatingCircle implements PhysicsComponent {
     public Angle getAngle(){
         return angle;
     }
+    
+    public Circle getCircle() {
+        return circle;
+    }
+
+    public double getAngularVelocity() {
+        return angularVelocity;
+    }
+    
+    public Vect getPivotPoint() {
+        return pivotPoint;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof RotatingCircle) {
+            boolean sameCircle = this.circle.equals(((RotatingCircle) other).getCircle());
+            boolean samePivot = this.pivotPoint.equals(((RotatingCircle) other).getPivotPoint());
+            boolean sameAngularVelocity = this.angularVelocity == ((RotatingCircle) other).getAngularVelocity();
+            boolean sameAngle = this.angle.equals(((RotatingCircle) other).getAngle());
+            return sameCircle && sameAngularVelocity && samePivot && sameAngle;
+        }
+        else {
+            return false;
+        }
+    }
 
 }
