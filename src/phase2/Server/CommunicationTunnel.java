@@ -6,12 +6,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import phase2.Messaging.BoardInitMessage;
+import phase2.Messaging.Message;
 
 public class CommunicationTunnel implements Runnable {
     
@@ -26,9 +24,8 @@ public class CommunicationTunnel implements Runnable {
     //code smashing the masses
     //getting lisa and yo addicted the fastest 
     
-    public CommunicationTunnel(Socket socket, HashMap<String, CommunicationTunnel> tunnels, BlockingQueue<Message> serverInQ) {
+    public CommunicationTunnel(Socket socket, BlockingQueue<Message> serverInQ) {
         this.socket = socket;
-        this.tunnels = tunnels;
         this.serverInQ = serverInQ;
         this.tunnelOutQ = new LinkedBlockingQueue<Message>();
     }
@@ -43,9 +40,7 @@ public class CommunicationTunnel implements Runnable {
 
             for (String line = in.readLine(); line != null; line = in.readLine()) {
                 Message inMessage = Message.decode(line);
-                if(inMessage.getType().equals(Message.MessageType.BOARDINIT)) {
-                    tunnels.put(((BoardInitMessage) inMessage).getBoardName(), this);
-                } else serverInQ.add(inMessage);
+                serverInQ.add(inMessage);
             }
 
             in.close();

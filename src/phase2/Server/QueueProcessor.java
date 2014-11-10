@@ -18,6 +18,9 @@ public class QueueProcessor implements Runnable {
     @Override
     public void run() {
         // TODO convert inQ messages to outQ messages
+
+                if(inMessage.getType().equals(Message.MessageType.BOARDINIT)) {
+                    tunnels.put(((BoardInitMessage) inMessage).getBoardName(), this);
         
     }
 
