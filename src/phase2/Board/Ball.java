@@ -4,6 +4,8 @@ package phase2.Board;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.simple.JSONObject;
+
 import physics.Circle;
 import physics.Geometry;
 import physics.Vect;
@@ -29,6 +31,7 @@ public class Ball implements Collidable{
     protected boolean inAbsorber = false;
     private static double L = 1;
     private final double mass = 1;
+    private final String name;
     
 
     private boolean doNotUpdate = false;
@@ -38,14 +41,43 @@ public class Ball implements Collidable{
      * Creates a new ball
      * @param x coordinate between (.5, .5) and ( 19.5, 19.5) 
      * @param y coordinate between (.5, .5) and ( 19.5, 19.5) 
-     * @param newVelocity a Vect representing the ball's velocity 
+     * @param newVelocity a Vect representing the ball's velocity
+     * @param name the name of the ball
      */
-    public Ball(double x, double y, Vect newVelocity){
+    public Ball(double x, double y, Vect newVelocity, String name){
+    	this.name = name;
         this.ballCircle = new Circle( x, y, 0.25); 
         this.velocity = newVelocity; 
         this.prevVelocity = velocity;
         this.coefficentOfReflection = 1.0; 
         this.checkRep();
+    }
+    
+    /**
+     * Builds a ball object from a JSON map of a ball object.
+     * @param JSONObject a map containing the necessary fields to define a ball object.
+     */
+    public Ball(JSONObject jsonObject){
+    	this.ballCircle = new Circle((double)jsonObject.get("x"), (double)jsonObject.get("y"), .25);
+    	this.name = (String)jsonObject.get("name");
+    	this.velocity = new Vect((double)jsonObject.get("xVel"), (double)jsonObject.get("yVel"));
+    	this.prevVelocity = velocity;
+    	this.coefficentOfReflection = 1.0;
+    }
+    
+    /**
+     * Converts the current ball into a JSON object.
+     * @return an object which describes the ball through its location, name, and velocity.
+     */
+    public JSONObject toJSONObject(){
+    	JSONObject obj = new JSONObject();
+    	obj.put("x",ballCircle.getCenter().x());
+    	obj.put("y",ballCircle.getCenter().y());
+    	obj.put("xVel", this.velocity.x());
+    	obj.put("yVel", this.velocity.y());
+    	obj.put("name", this.name);
+    	return obj;
+    	
     }
 
     /**
