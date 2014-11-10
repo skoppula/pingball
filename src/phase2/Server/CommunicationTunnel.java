@@ -35,6 +35,7 @@ public class CommunicationTunnel implements Runnable {
     @Override
     public void run() {
 
+        //TODO create two new threads, one for managing input
         try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
