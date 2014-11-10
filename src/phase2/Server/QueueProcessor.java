@@ -82,11 +82,6 @@ public class QueueProcessor implements Runnable {
 				e.printStackTrace();
 			}
     	}
-=======
-
-                if(inMessage.getType().equals(Message.MessageType.BOARDINIT)) {
-                    tunnels.put(((BoardInitMessage) inMessage).getBoardName(), this);
->>>>>>> 9c42e1c6dfc8a0e087423874d8328d1b6f3f58c7
         
     }
     
