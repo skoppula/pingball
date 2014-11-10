@@ -270,6 +270,16 @@ public interface PingBoardListener extends ParseTreeListener {
 	 */
 	void exitWidth(@NotNull PingBoardParser.WidthContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link PingBoardParser#comment}.
+	 * @param ctx the parse tree
+	 */
+	void enterComment(@NotNull PingBoardParser.CommentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PingBoardParser#comment}.
+	 * @param ctx the parse tree
+	 */
+	void exitComment(@NotNull PingBoardParser.CommentContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link PingBoardParser#intY}.
 	 * @param ctx the parse tree
 	 */
@@ -309,14 +319,4 @@ public interface PingBoardListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSquareBumper(@NotNull PingBoardParser.SquareBumperContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link PingBoardParser#irrelevantLine}.
-	 * @param ctx the parse tree
-	 */
-	void enterIrrelevantLine(@NotNull PingBoardParser.IrrelevantLineContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link PingBoardParser#irrelevantLine}.
-	 * @param ctx the parse tree
-	 */
-	void exitIrrelevantLine(@NotNull PingBoardParser.IrrelevantLineContext ctx);
 }

@@ -330,6 +330,18 @@ public class PingBoardBaseListener implements PingBoardListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterComment(@NotNull PingBoardParser.CommentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitComment(@NotNull PingBoardParser.CommentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterIntY(@NotNull PingBoardParser.IntYContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -373,18 +385,6 @@ public class PingBoardBaseListener implements PingBoardListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSquareBumper(@NotNull PingBoardParser.SquareBumperContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterIrrelevantLine(@NotNull PingBoardParser.IrrelevantLineContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitIrrelevantLine(@NotNull PingBoardParser.IrrelevantLineContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

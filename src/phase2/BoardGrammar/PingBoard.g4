@@ -30,7 +30,7 @@ LEFTFLIPPERID : 'leftFlipper';
 ABSORBERID : 'absorber';
 FIREID : 'fire';
 NAME : [A-Za-z_][A-Za-z_0-9]* ;
-INTEGER : [0-9]+ ;
+INTEGER : ('0'..'9')+ ;
 FLOAT : [-]?([0-9]*[.])?[0-9]+;
 WHITESPACE : [ \t]+;
 NEWLINE : [\n]+;
@@ -41,9 +41,8 @@ NEWLINE : [\n]+;
  */
 root : board EOF;
 board : boardInit bodyLine*; // may contain multiple bodyLines
-irrelevantLine : NEWLINE COMMENT?; // either the line is blank or the line has a comment
 boardInit : BOARDINITID name gravity? friction1? friction2?;
-bodyLine : (ball | squareBumper | circleBumper | triangleBumper | rightFlipper | leftFlipper | absorber | fire | irrelevantLine);
+bodyLine : WHITESPACE* (ball | squareBumper | circleBumper | triangleBumper | rightFlipper | leftFlipper | absorber | fire | comment | newline);
 ball : BALLID name floatX floatY xVelocity yVelocity;
 squareBumper : SQUAREBUMPERID name intX intY;
 circleBumper : CIRCLEBUMPERID name intX intY;
@@ -55,6 +54,7 @@ fire : FIREID trigger action;
 
 whitespace : WHITESPACE;
 newline: NEWLINE;
+comment : COMMENT; // either the line is blank or the line has a comment
 equals : EQUALS;
 name : WHITESPACE* NAMEID equals NAME;
 gravity : WHITESPACE* GRAVITYID equals FLOAT;
