@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import phase2.Messaging.Message;
+import phase2.messaging.Message;
 
 public class CommunicationTunnel implements Runnable {
     
@@ -17,7 +17,6 @@ public class CommunicationTunnel implements Runnable {
     Socket socket;
     BufferedReader in;
     PrintWriter out = null;
-    HashMap<String, CommunicationTunnel> tunnels;
     BlockingQueue<Message> serverInQ;
     BlockingQueue<Message> tunnelOutQ;
 

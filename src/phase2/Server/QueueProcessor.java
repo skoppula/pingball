@@ -16,6 +16,7 @@ import phase2.messaging.*;
  * should ever be running at the same time.
  */
 public class QueueProcessor implements Runnable {
+	//rep invariants: wallConnectionMap.get(a) == b iff wallConnectionMap.get(b) == a
 
 	/**
 	 * The input queue to our server.
@@ -32,7 +33,7 @@ public class QueueProcessor implements Runnable {
 	/**
 	 * A map that maps walls on boards to the name of the board they are connected to
 	 */
-	private final Map<BoardWallPair, String> wallConnectionMap;
+	private final Map<BoardWallPair, BoardWallPair> wallConnectionMap;
 	
     public QueueProcessor(BlockingQueue<Message> inQ, BlockingQueue<Message> outQ) {
         //TODO finish initializing fields
@@ -48,8 +49,6 @@ public class QueueProcessor implements Runnable {
     @Override
     public void run() {
         // TODO convert inQ messages to outQ messages
-    	
-    	
     	// let's say I get a Message message
     	while(true){
 	    	Message message;
