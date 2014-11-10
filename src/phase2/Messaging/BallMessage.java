@@ -28,6 +28,7 @@ public class BallMessage extends Message {
 		this.ball = ball;
 		this.boardWall = boardWall;
 		this.messageType = MessageType.BALL;
+		assert(checkRep());
 	}
 	
 	/**
@@ -38,6 +39,7 @@ public class BallMessage extends Message {
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	protected JSONObject toJSONObject() {
 		JSONObject obj = new JSONObject();
 		obj.put("messageType", "BALL");
@@ -47,6 +49,10 @@ public class BallMessage extends Message {
 		contents.put("boardWall", boardWall.toJSONObject());
 		obj.put("messageContents",contents);
 		return obj;
+	}
+	
+	private boolean checkRep(){
+		return this.equals(BallMessage.fromJSON(this.toJSONObject()));
 	}
 	
 	/**

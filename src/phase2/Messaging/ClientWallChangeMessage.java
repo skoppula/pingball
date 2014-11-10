@@ -27,9 +27,14 @@ public class ClientWallChangeMessage extends Message {
 		this.otherBoardWall = otherBoardWall;
 		this.connectOrDisconnect = connectOrDisconnect;
 		this.messageType = MessageType.CLIENTWALLCHANGE;
+		assert(checkRep());
 	}
 
 
+	private boolean checkRep(){
+		return this.equals(ClientWallChangeMessage.fromJSON(this.toJSONObject()));
+	}
+	
 	/**
 	 * @return the name of the other board, and the wall orientation from
 	 * the other board. We can determine which wall to dis/connect on our board based off of
@@ -48,6 +53,7 @@ public class ClientWallChangeMessage extends Message {
 		return connectOrDisconnect;
 	}
 
+	@SuppressWarnings("unchecked")
 	protected JSONObject toJSONObject() {
 		JSONObject obj = new JSONObject();
 		obj.put("messageType", "CLIENTWALLCHANGE");

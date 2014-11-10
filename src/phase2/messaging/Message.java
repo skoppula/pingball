@@ -5,11 +5,14 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 /**
- * An abstract class for messages to be exchanged between different parts
+ * An abstract class for immutable messages to be exchanged between different parts
  * of the program.
  *
  */
 public abstract class Message{
+	// Abstraction Function: Message = MessageType + Objects
+	// Rep invariant: message = MessageType.fromJSONObject(message.toJSONObject()) 
+	// (these checkReps are stored in subclasses)
 	
 	MessageType messageType;
 	
