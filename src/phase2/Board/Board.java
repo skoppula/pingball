@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.antlr.v4.parse.ANTLRParser.finallyClause_return;
+
 import physics.Geometry;
 import physics.Vect;
 
@@ -18,7 +20,14 @@ public class Board {
     private final String name;
     private final int width = 20;
     private final int height = 20;
-    private final Vect GRAVITY_VECTOR = new Vect(0, 25);
+    private final Vect GRAVITY_VECTOR;
+    private final double MU;
+    private final double MU2;
+    
+    // default values
+    private final double DEFAULT_GRAVITY_VALUE = 25;
+    private final double DEFAULT_MU = .025;
+    private final double DEFAULT_MU2 = .025;
     
     /*
      * Length of board (in units distance)
@@ -31,8 +40,7 @@ public class Board {
 
     // make gravity and friction fields
     private final double gravity = 25;
-    private final double mu = .025;
-    private final double mu2 = .025;
+
 
     private final double discreteTime = 0.00025;
 
@@ -46,11 +54,18 @@ public class Board {
     Map<String, Gadget> nameToGadgetMap = new HashMap<>();
     
     
-
+    /**
+     * Creates a board with the default values for friction1, friction2, and gravity
+     * @param gadgets
+     * @param name
+     */
     public Board(List<Gadget> gadgets, String name) {
         this.name = name;
         this.gadgets = gadgets;
         this.gadgetsWithoutWalls = gadgets;
+        this.GRAVITY_VECTOR = new Vect(0,DEFAULT_GRAVITY_VALUE);
+        this.MU = DEFAULT_MU;
+        this.MU2 = DEFAULT_MU2;
 
         // set up walls
         gadgets.addAll(Wall.makeWalls());
@@ -61,6 +76,31 @@ public class Board {
         	nameToGadgetMap.put(gadget.getName(), gadget);
         }
     }
+    
+    
+    /**
+     * Creates a board with the specified values for friction1, friction2, and gravity
+     * @param gadgets
+     * @param name
+     */
+    public Board(List<Gadget> gadgets, String name, double gravity, double friction1, double friction2) {
+        this.name = name;
+        this.gadgets = gadgets;
+        this.gadgetsWithoutWalls = gadgets;
+        this.GRAVITY_VECTOR = new Vect(0,gravity);
+        this.MU = friction1;
+        this.MU2 = friction2;
+
+        // set up walls
+        gadgets.addAll(Wall.makeWalls());
+        for(Gadget gadget: gadgets){
+            if(nameToGadgetMap.containsKey(gadget.getName())){
+                throw new IllegalArgumentException("The provided list of gadgets has at least two gadgets with the same name:" + gadget.getName());
+            }
+            nameToGadgetMap.put(gadget.getName(), gadget);
+        }
+    }
+    
 
     public void addBall(Ball ball) {
         balls.add(ball);
