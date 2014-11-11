@@ -1,4 +1,4 @@
-package phase2.messaging;
+package phase2.Messaging;
 
 import org.json.simple.JSONObject;
 
@@ -97,6 +97,11 @@ public class BoardWallPair {
 		}
 		BoardWallPair otherM = (BoardWallPair)other;
 		return(this.boardName == otherM.boardName && this.wallOrientation == otherM.wallOrientation());
+	}
+	
+	@Override
+	public int hashCode(){
+		return this.board().hashCode();
 	}
 
 }

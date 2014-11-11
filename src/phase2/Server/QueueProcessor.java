@@ -3,9 +3,11 @@ package phase2.Server;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
-import phase2.messaging.BoardWallPair;
-import phase2.messaging.*;
+import phase2.Board.Gadget.Orientation;
+import phase2.Messaging.*;
 
 /**
  * A class which does the meat of the server's tasks.
@@ -23,26 +25,21 @@ public class QueueProcessor implements Runnable {
 	 */
 	private final BlockingQueue<Message> inQ;
 	/**
-	 * The output queue for our server, to the clients.
-	 */
-	private final BlockingQueue<Message> outQ;
-	/**
 	 * A map that maps names of boards to their communication tunnels.
 	 */
-	private final Map<String, CommunicationTunnel> nameToBoardTunnel;
+	static final ConcurrentMap<String, CommunicationTunnel> nameToBoardTunnelMap = new ConcurrentHashMap<>();
+	
 	/**
 	 * A map that maps walls on boards to the name of the board they are connected to
 	 */
 	private final Map<BoardWallPair, BoardWallPair> wallConnectionMap;
 	
-    public QueueProcessor(BlockingQueue<Message> inQ, BlockingQueue<Message> outQ) {
+    public QueueProcessor(BlockingQueue<Message> inQ) {
         //TODO finish initializing fields
         // My shit is hard! I'm the greatest
         // Look around, that's why everybody's congregated
     	
     	this.inQ = inQ;
-    	this.outQ = outQ;
-    	nameToBoardTunnel = new HashMap<>();
     	wallConnectionMap = new HashMap<>();
     }
 
@@ -56,20 +53,17 @@ public class QueueProcessor implements Runnable {
 				message = inQ.take();
 		    	switch(message.getType()){
 		    	case BALL:
-		    		handleBallMessage(message);
+		    		handleBallMessage((BallMessage)message);
 		    		break;
-				case BOARDINIT:
-					handleBoardInitMessage(message);
-					break;
 				case SERVERWALLCONNECT:
-					handleServerWallConnectMessage(message);
+					handleServerWallConnectMessage((ServerWallConnectMessage)message);
 					break;
 				case TERMINATE:
-					handleTerminateMessage(message);
+					handleTerminateMessage((TerminateMessage)message);
 					break;
 				default:
 					throw new IllegalStateException("Should never be able to get here. Server can only get"
-							+ "BALL, BOARDINIT, SERVERWALLCONNECT, and TERMINATE messages.");
+							+ "BALL, SERVERWALLCONNECT, and TERMINATE messages.");
 		    	}
 			}catch(InterruptedException e){
 				e.printStackTrace();
@@ -78,18 +72,73 @@ public class QueueProcessor implements Runnable {
         
     }
     
-    private void handleBallMessage(Message message){
+    /**
+     * Handles incoming ball messages, and sends the appropriate notifications
+     * to other boards.
+     * @param message
+     */
+    private void handleBallMessage(BallMessage message){
     	// TODO implement
     }
     
-    private void handleBoardInitMessage(Message message){
-    	// TODO implement
-    }
-    
-    private void handleServerWallConnectMessage(Message message){
+    /**
+     * Handles the connection of two walls according to a server
+     * @param message
+     */
+    private void handleServerWallConnectMessage(ServerWallConnectMessage message){
     	//TODO implement
+    	BoardWallPair boardWall1;
+    	BoardWallPair boardWall2;
+    	switch(message.getConnectionType()){
+		case HORIZONTAL:
+			boardWall1 = new BoardWallPair(message.getBoardName1(), Orientation.ONE_HUNDRED_EIGHTY);
+			boardWall2 = new BoardWallPair(message.getBoardName2(), Orientation.ZERO);
+			break;
+		case VERTICAL:
+			boardWall1 = new BoardWallPair(message.getBoardName1(), Orientation.TWO_HUNDRED_SEVENTY);
+			boardWall2 = new BoardWallPair(message.getBoardName2(), Orientation.NINETY);
+			break;
+		default:
+			throw new IllegalStateException("DIS IS IMPOSIRBR");
+    	}
+    	
+    	CommunicationTunnel tunnel1 = nameToBoardTunnelMap.get(boardWall1);
+    	CommunicationTunnel tunnel2 = nameToBoardTunnelMap.get(boardWall2);
+    	// If the map already contains a mapping for boardWall1, make sure to remove it, and its reverse mapping
+    	if(wallConnectionMap.containsKey(boardWall1)){
+    		// break the connection with boardWall1's old wall connection
+    		BoardWallPair oldPair1 = wallConnectionMap.get(boardWall1);
+    		CommunicationTunnel oldPairTunnel1 = nameToBoardTunnelMap.get(oldPair1);
+    		oldPairTunnel1.addToOutQ(new ClientWallChangeMessage(boardWall1, false));
+    		wallConnectionMap.remove(oldPair1);
+    		
+    		//tunnel1.addToOutQ(new ClientWallChangeMessage(oldPair1, false));
+    		// The above line is not necessary, because if we are changing boardWall1's connection later anyway
+    		wallConnectionMap.remove(boardWall1);
+    	}
+    	// same with boardWall2
+    	if(wallConnectionMap.containsKey(boardWall2)){
+    		BoardWallPair oldPair2 = wallConnectionMap.get(boardWall2);
+    		CommunicationTunnel oldPairTunnel2 = nameToBoardTunnelMap.get(oldPair2);
+    		oldPairTunnel2.addToOutQ(new ClientWallChangeMessage(boardWall2, false));
+    		wallConnectionMap.remove(oldPair2);
+    		
+    		// tunnel1.addToOutQ(new ClientWallChangeMessage(oldPair2, false));
+    		// The above line is not necessary, because if we are changing boardWall1's connection later anyway
+    		wallConnectionMap.remove(boardWall1);
+    	}
+    	
+    	wallConnectionMap.put(boardWall1, boardWall2);
+    	wallConnectionMap.put(boardWall1, boardWall2);
+    	tunnel1.addToOutQ(new ClientWallChangeMessage(boardWall2, true));
+    	tunnel2.addToOutQ(new ClientWallChangeMessage(boardWall1, true));
     }
-    private void handleTerminateMessage(Message message){
+    
+    /**
+     * Handles the removal of a board from all components of the server
+     * @param message
+     */
+    private void handleTerminateMessage(TerminateMessage message){
     	//TODO implement
     }
 

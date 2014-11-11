@@ -5,11 +5,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import phase2.messaging.Message;
+import phase2.Messaging.BoardInitMessage;
+import phase2.Messaging.Message;
+
+import phase2.Messaging.TerminateMessage;
+import phase2.Messaging.Message.MessageType;
+
 
 public class CommunicationTunnel implements Runnable {
     
@@ -20,9 +24,9 @@ public class CommunicationTunnel implements Runnable {
     BlockingQueue<Message> serverInQ;
     BlockingQueue<Message> tunnelOutQ;
 
-    //code smashing the masses
-    //getting lisa and yo addicted the fastest 
-    
+    /*
+     * Maintains a connection with a client
+     */
     public CommunicationTunnel(Socket socket, BlockingQueue<Message> serverInQ) {
         this.socket = socket;
         this.serverInQ = serverInQ;
@@ -35,32 +39,86 @@ public class CommunicationTunnel implements Runnable {
     public void run() {
 
         try {
+
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-            for (String line = in.readLine(); line != null; line = in.readLine()) {
-                Message inMessage = Message.decode(line);
-                serverInQ.add(inMessage);
-            }
-
-            in.close();
-
             out = new PrintWriter(socket.getOutputStream(), true);
 
-            if(!tunnelOutQ.isEmpty()) {
-                String messageJSON = tunnelOutQ.remove().toString();
-                out.println(messageJSON);
+            String line = null; // sorry, have to use nulls because readLine is evil!
+            while(line == null){
+            	line = in.readLine();
             }
+            // THE FIRST MESSAGE SHOULD BE THE BOARD INIT MESSAGE, BECAUSE IT'S THE FIRST MESSAGE
+            Message inMessage = Message.decode(line);
+            assert(inMessage.getType() == MessageType.BOARDINIT);
+
+            // handle the board init messages
+            this.name = ((BoardInitMessage)inMessage).getBoardName();
+            QueueProcessor.nameToBoardTunnelMap.put(this.name, this);
             
-            out.close();
-
+            InputHandler ih = new InputHandler(in, serverInQ);
+            ih.run();
+            
+            OutputHandler oh = new OutputHandler(out, tunnelOutQ);
+            oh.run();
+            
         } catch (IOException e) {
-            e.printStackTrace();
-
+            try {
+				serverInQ.put(new TerminateMessage(this.name));
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			} 
         } 
     }
     
-    public void addToTunnelOutQ(Message message) {
+    public void addToOutQ(Message message) {
         tunnelOutQ.add(message);
     }
+    
+    private class InputHandler implements Runnable {
 
+        private BufferedReader in;
+        private BlockingQueue<Message> serverInQ;
+
+        public InputHandler(BufferedReader in, BlockingQueue<Message> serverInQ) {
+            this.serverInQ = serverInQ;
+            this.in = in;
+        }
+        
+        public void run() {
+            try{
+                String line = in.readLine();
+                while(line != null){
+		            Message inMessage = Message.decode(line);
+		            serverInQ.put(inMessage);
+		            line = in.readLine();
+                }
+            } catch(InterruptedException | IOException e){
+                e.printStackTrace();
+            } 
+        }
+        
+    }
+
+    private class OutputHandler implements Runnable {
+
+        private PrintWriter out;
+        private BlockingQueue<Message> tunnelOutQ;
+
+        public OutputHandler(PrintWriter out, BlockingQueue<Message> tunnelOutQ) {
+            this.out = out;
+            this.tunnelOutQ = tunnelOutQ;
+        }
+
+        public void run() {
+            try{
+                if(!tunnelOutQ.isEmpty()) {
+                    String messageJSON = tunnelOutQ.take().toString();
+                    out.println(messageJSON);
+		        }
+            } catch(InterruptedException e){
+                e.printStackTrace();
+            } 
+        }
+        
+    }
 }

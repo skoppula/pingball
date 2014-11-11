@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Queue;
 
-import phase2.messaging.Message;
+import phase2.Messaging.Message;
 
 public class LocalOutputManager implements Runnable {
 
@@ -13,7 +13,13 @@ public class LocalOutputManager implements Runnable {
     PrintWriter out = null;
     Socket socket;
     
-    public LocalOutputManager(Queue<phase2.messaging.Message> outQ, Socket socket) throws IOException {
+    /**
+     * Manages output for the local instance manager
+     * @param outQ
+     * @param socket
+     * @throws IOException
+     */
+    public LocalOutputManager(Queue<Message> outQ, Socket socket) throws IOException {
         this.outQ = outQ;
         this.socket = socket;
     }

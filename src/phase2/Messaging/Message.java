@@ -1,4 +1,4 @@
-package phase2.messaging;
+package phase2.Messaging;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -64,6 +64,11 @@ public abstract class Message{
 			return false;
 		}
 		return(this.toString().equals(other.toString()));
+	}
+	
+	@Override
+	public int hashCode(){
+		return this.toString().hashCode();
 	}
 	
 
