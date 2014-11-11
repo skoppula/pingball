@@ -16,18 +16,19 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.stringtemplate.v4.compiler.STParser.ifstat_return;
 
 import phase2.Board.*;
+import phase2.Board.Flipper.BumperSide;
 import phase2.Board.Gadget.Orientation;
 import phase2.Board.Util.InvalidInvariantException;
 import physics.Vect;
 
 public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
     
-    private static String BOARD_NAME;
-    private static double GRAVITY = 25;
-    private static double FRICTION1 = 0.025;
-    private static double FRICTION2 = 0.025;
+    private String BOARD_NAME;
+    private double GRAVITY = 25;
+    private double FRICTION1 = 0.025;
+    private double FRICTION2 = 0.025;
     
-    private static Board board;
+    private Board board;
     private Map<String, Gadget> gadgetsMap = new HashMap<String, Gadget>(); // maps names to gadgets
     private Map<String, Ball> ballsMap = new HashMap<String, Ball>(); // maps names to ball
     // private static List<Gadget> gadgets = new ArrayList<Gadget>();
@@ -60,6 +61,7 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
                 GRAVITY = Double.parseDouble(value);
             }
             else if (type.equals("friction1")) {
+                System.out.println("friction1" + FRICTION1);
                 FRICTION1 = Double.parseDouble(value);
             }
             else if (type.equalsIgnoreCase("friction2")) {
@@ -134,41 +136,16 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
     
     // construct a flipper when leaving flipper node
     public void exitFlipper(PingBoardParser.FlipperContext ctx) {
+        // left or right flipper?
+        BumperSide flipperType;
+        String flipperTypeStr = ctx.getChild(0).getText();
+        if (flipperTypeStr.equals("leftFlipper")) {
+            flipperType = BumperSide.LEFT;
+        }
+        else {
+            flipperType = BumperSide.RIGHT;
+        }
         
-    }
-    
-    // construct a circleBumper when leaving circleBumper node
-    public void exitCircleBumper(PingBoardParser.CircleBumperContext ctx) {
-        int numParameters = ctx.getChildCount()-1;
-        String name = "";
-        int x = 0;
-        int y = 0;
-        for (int i=0; i<numParameters; i++) {
-            List<String> paraTypeAndValue = stack.pop();
-            String type = paraTypeAndValue.get(0);
-            String value = paraTypeAndValue.get(1);
-            if (type.equals("name")) {
-                name =  value;
-            }
-            else if (type.equals("x")) {
-                x = Integer.parseInt(value);
-            }
-            else if (type.equals("y")) {
-                y = Integer.parseInt(value);
-            }
-        }
-        CircleBumper circleBumper;
-        try {
-            circleBumper = new CircleBumper(x, y, name);
-            gadgetsMap.put(name, circleBumper);
-        } catch (InvalidInvariantException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-    
-    // construct a triangleBumper when leaving triangleBumper node
-    public void exitTriangleBumper(PingBoardParser.TriangleBumperContext ctx) {
         int numParameters = ctx.getChildCount()-1;
         String name = "";
         int x = 0;
@@ -203,18 +180,80 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
                 }
             }
         }
-        TriangleBumper triangleBumper;
+        Flipper flipper = new Flipper(x, y, name, flipperType, orientation);
+        gadgetsMap.put(name, flipper);
+    }
+    
+    // construct an absorber when leaving absorber node
+    public void exitAbsorber(PingBoardParser.AbsorberContext ctx) {
+        int numParameters = ctx.getChildCount()-1;
+        String name = "";
+        int x = 0;
+        int y = 0;
+        int width = 0;
+        int height = 0;
+        for (int i=0; i<numParameters; i++) {
+            List<String> paraTypeAndValue = stack.pop();
+            String type = paraTypeAndValue.get(0);
+            String value = paraTypeAndValue.get(1);
+            if (type.equals("name")) {
+                name =  value;
+            }
+            else if (type.equals("x")) {
+                x = Integer.parseInt(value);
+            }
+            else if (type.equals("y")) {
+                y = Integer.parseInt(value);
+            }
+            else if (type.equals("width")) {
+                width = Integer.parseInt(value);
+            }
+            else if (type.equals("height")) {
+                height = Integer.parseInt(value);
+            }
+        }
+        Absorber absorber;
         try {
-            triangleBumper = new TriangleBumper(x, y, name, orientation);
-            gadgetsMap.put(name, triangleBumper);
+            absorber = new Absorber(x, y, name, width, height);
+            gadgetsMap.put(name, absorber);
         } catch (InvalidInvariantException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
     
-    // construct a flipper when leaving flipper node
-    public void exitFlipper(PingBoardParser.FlipperContext ctx) {
+    // construct a circleBumper when leaving circleBumper node
+    public void exitCircleBumper(PingBoardParser.CircleBumperContext ctx) {
+        int numParameters = ctx.getChildCount()-1;
+        String name = "";
+        int x = 0;
+        int y = 0;
+        for (int i=0; i<numParameters; i++) {
+            List<String> paraTypeAndValue = stack.pop();
+            String type = paraTypeAndValue.get(0);
+            String value = paraTypeAndValue.get(1);
+            if (type.equals("name")) {
+                name =  value;
+            }
+            else if (type.equals("x")) {
+                x = Integer.parseInt(value);
+            }
+            else if (type.equals("y")) {
+                y = Integer.parseInt(value);
+            }
+        }
+        CircleBumper circleBumper;
+        try {
+            circleBumper = new CircleBumper(x, y, name);
+            gadgetsMap.put(name, circleBumper);
+        } catch (InvalidInvariantException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    
+    // construct a triangleBumper when leaving triangleBumper node
+    public void exitTriangleBumper(PingBoardParser.TriangleBumperContext ctx) {
         int numParameters = ctx.getChildCount()-1;
         String name = "";
         int x = 0;
@@ -323,6 +362,18 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
     public void enterIntY(PingBoardParser.IntYContext ctx) {
         String yString = ctx.getChild(3).getText();
         stack.push(Arrays.asList("y", yString));
+    }
+    
+    // push gadget width onto the stack
+    public void enterWidth(PingBoardParser.WidthContext ctx) {
+        String valueString = ctx.getChild(3).getText();
+        stack.push(Arrays.asList("width", valueString));
+    }
+    
+    // push gadget height onto the stack
+    public void enterHeight(PingBoardParser.HeightContext ctx) {
+        String valueString = ctx.getChild(3).getText();
+        stack.push(Arrays.asList("height", valueString));
     }
 
     

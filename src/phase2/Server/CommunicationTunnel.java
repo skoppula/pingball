@@ -38,9 +38,8 @@ public class CommunicationTunnel implements Runnable {
     @Override
     public void run() {
 
-        //TODO create two new threads, one for managing input
-        //TODO user disconnect 
         try {
+
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
 
@@ -51,37 +50,75 @@ public class CommunicationTunnel implements Runnable {
             // THE FIRST MESSAGE SHOULD BE THE BOARD INIT MESSAGE, BECAUSE IT'S THE FIRST MESSAGE
             Message inMessage = Message.decode(line);
             assert(inMessage.getType() == MessageType.BOARDINIT);
+
             // handle the board init messages
             this.name = ((BoardInitMessage)inMessage).getBoardName();
             QueueProcessor.nameToBoardTunnelMap.put(this.name, this);
             
+            InputHandler ih = new InputHandler(in, serverInQ);
+            ih.run();
             
-            while(true){
-            	try{
-		            for (line = in.readLine(); line != null; line = in.readLine()) {
-		                inMessage = Message.decode(line);
-		                serverInQ.put(inMessage);
-		            }
-		
-		            if(!tunnelOutQ.isEmpty()) {
-		                String messageJSON = tunnelOutQ.take().toString();
-		                out.println(messageJSON);
-		            }
-            	} catch(InterruptedException e){
-            		e.printStackTrace();
-            	}
-            }
+            OutputHandler oh = new OutputHandler(out, tunnelOutQ);
+            oh.run();
+            
         } catch (IOException e) {
             try {
 				serverInQ.put(new TerminateMessage(this.name));
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
-			} // Make sure the server knows that this client has disconnected
+			} 
         } 
     }
     
     public void addToOutQ(Message message) {
         tunnelOutQ.add(message);
     }
+    
+    private class InputHandler implements Runnable {
 
+        private BufferedReader in;
+        private BlockingQueue<Message> serverInQ;
+
+        public InputHandler(BufferedReader in, BlockingQueue<Message> serverInQ) {
+            this.serverInQ = serverInQ;
+            this.in = in;
+        }
+        
+        public void run() {
+            try{
+                String line = in.readLine();
+                while(line != null){
+		            Message inMessage = Message.decode(line);
+		            serverInQ.put(inMessage);
+		            line = in.readLine();
+                }
+            } catch(InterruptedException | IOException e){
+                e.printStackTrace();
+            } 
+        }
+        
+    }
+
+    private class OutputHandler implements Runnable {
+
+        private PrintWriter out;
+        private BlockingQueue<Message> tunnelOutQ;
+
+        public OutputHandler(PrintWriter out, BlockingQueue<Message> tunnelOutQ) {
+            this.out = out;
+            this.tunnelOutQ = tunnelOutQ;
+        }
+
+        public void run() {
+            try{
+                if(!tunnelOutQ.isEmpty()) {
+                    String messageJSON = tunnelOutQ.take().toString();
+                    out.println(messageJSON);
+		        }
+            } catch(InterruptedException e){
+                e.printStackTrace();
+            } 
+        }
+        
+    }
 }
