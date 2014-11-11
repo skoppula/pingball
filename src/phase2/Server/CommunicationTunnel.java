@@ -12,6 +12,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import phase2.messaging.BoardInitMessage;
 import phase2.messaging.Message;
 import phase2.messaging.Message.MessageType;
+import phase2.messaging.TerminateMessage;
 
 public class CommunicationTunnel implements Runnable {
     
@@ -48,7 +49,10 @@ public class CommunicationTunnel implements Runnable {
             // THE FIRST MESSAGE SHOULD BE THE BOARD INIT MESSAGE, BECAUSE IT'S THE FIRST MESSAGE
             Message inMessage = Message.decode(line);
             assert(inMessage.getType() == MessageType.BOARDINIT);
-            QueueProcessor.nameToBoardTunnel.put(((BoardInitMessage)inMessage).getBoardName(), this);
+            // handle the board init messages
+            this.name = ((BoardInitMessage)inMessage).getBoardName();
+            QueueProcessor.nameToBoardTunnel.put(this.name, this);
+            
             
             while(true){
             	try{
@@ -66,7 +70,11 @@ public class CommunicationTunnel implements Runnable {
             	}
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            try {
+				serverInQ.put(new TerminateMessage(this.name));
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			} // Make sure the server knows that this client has disconnected
         } 
     }
     
