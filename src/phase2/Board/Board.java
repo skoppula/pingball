@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.antlr.v4.codegen.model.chunk.ThisRulePropertyRef_ctx;
 import org.antlr.v4.parse.ANTLRParser.finallyClause_return;
 import org.antlr.v4.parse.ANTLRParser.range_return;
 
@@ -315,23 +316,35 @@ public class Board {
      * Checks whether or not this Board has the same name, gravity, friction1, friction2
      * as otherBoard
      * Checks if this Board has the same balls as the other board
+     * Checks if this Board has the same gadgets as the other board
      * @param otherBoard
      * @return
      */
     public boolean hasEqualAttributes(Board otherBoard) {
+        // check that constants are equal
         boolean gravityEqual = this.getGRAVITY_VECTOR().equals(otherBoard.getGRAVITY_VECTOR());
         boolean friction1Equal = this.getMU()==otherBoard.getMU();
         boolean friction2Equal = this.getMU2()==otherBoard.getMU2();
         boolean nameEqual = this.getName().equals(otherBoard.getName());
         boolean constantsEqual = gravityEqual && friction1Equal && friction2Equal && nameEqual;
-
+        
+        // check that balls are equal
         boolean equalNumberBalls = this.balls.size() == otherBoard.balls.size();
         boolean ballsEqual = equalNumberBalls && this.balls.containsAll(otherBoard.balls);
+         
+        // check that gadgets are equal
+        boolean sameNumGadgets = this.gadgets.size() == otherBoard.gadgets.size();
+        boolean gadgetsEqual = sameNumGadgets && this.gadgets.containsAll(otherBoard.gadgets);
+
         System.out.println("b" + ballsEqual);
+        System.out.println(this.balls);
+        System.out.println(otherBoard.balls);
         
-        System.out.println(this.balls.size());
-        System.out.println(otherBoard.balls.size());
-        return constantsEqual && ballsEqual;
+        System.out.println("g" + gadgetsEqual);
+        System.out.println(this.gadgets);
+        System.out.println(otherBoard.gadgets);
+        
+        return constantsEqual && ballsEqual && gadgetsEqual;
     }
     
 }

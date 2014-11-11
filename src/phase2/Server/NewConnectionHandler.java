@@ -4,10 +4,9 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
-import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 
-import phase2.messaging.Message;
+import phase2.Messaging.Message;
 
 public class NewConnectionHandler implements Runnable {
     
@@ -32,7 +31,8 @@ public class NewConnectionHandler implements Runnable {
                 CommunicationTunnel tunnel = new CommunicationTunnel(socket, serverInQ);
                 System.out.println("New client: " + socket);
                 tunnel.run();
-                //TODO decide if need to close the socket after the call to run()
+                
+                socket.close();
 
             } catch (IOException e) {
                 e.printStackTrace();

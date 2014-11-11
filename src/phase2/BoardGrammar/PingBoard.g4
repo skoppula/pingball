@@ -42,13 +42,12 @@ NEWLINE : [\n]+;
 root : board EOF;
 board : boardInit bodyLine*; // may contain multiple bodyLines
 boardInit : BOARDINITID name gravity? friction1? friction2?;
-bodyLine : WHITESPACE* (ball | squareBumper | circleBumper | triangleBumper | rightFlipper | leftFlipper | absorber | fire | comment | newline);
+bodyLine : WHITESPACE* (ball | squareBumper | circleBumper | triangleBumper | flipper | absorber | fire | comment | newline);
 ball : BALLID name floatX floatY xVelocity yVelocity;
 squareBumper : SQUAREBUMPERID name intX intY;
 circleBumper : CIRCLEBUMPERID name intX intY;
 triangleBumper : TRIANGLEBUMPERID name intX intY orientation;
-rightFlipper : RIGHTFLIPPERID name intX intY orientation;
-leftFlipper : LEFTFLIPPERID name intX intY orientation;
+flipper : (RIGHTFLIPPERID | LEFTFLIPPERID) name intX intY orientation;
 absorber : ABSORBERID name intX intY width height;
 fire : FIREID trigger action;
 

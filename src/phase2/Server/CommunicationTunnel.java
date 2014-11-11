@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -13,6 +12,7 @@ import phase2.messaging.BoardInitMessage;
 import phase2.messaging.Message;
 import phase2.messaging.Message.MessageType;
 import phase2.messaging.TerminateMessage;
+
 
 public class CommunicationTunnel implements Runnable {
     
