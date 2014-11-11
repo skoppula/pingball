@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import phase2.Board.Ball;
 import phase2.Board.Gadget.Orientation;
-import phase2.messaging.ServerWallConnectMessage.ConnectionType;
 import physics.Circle;
 import physics.Vect;
 
@@ -27,7 +26,6 @@ public class MessageTest {
 	Vect velocity;
 	BoardWallPair bwp;
 	
-	
 	@Before
 	public void setUp() throws Exception {
 		circle = new Circle(4, 3, .25);
@@ -40,7 +38,7 @@ public class MessageTest {
 		messageList.add(cwcMessage);
 		boardInitMessage = new BoardInitMessage("mahBoard");
 		messageList.add(boardInitMessage);
-		swcMessage = new ServerWallConnectMessage("board1", "board2", ConnectionType.HORIZONTAL);
+		swcMessage = new ServerWallConnectMessage("board1", "board2", ServerWallConnectMessage.ConnectionType.HORIZONTAL);
 		messageList.add(swcMessage);
 		terminateMessage = new TerminateMessage("targetBoard");
 		messageList.add(terminateMessage);
@@ -53,8 +51,5 @@ public class MessageTest {
 			assertEquals(message, Message.decode(message.toString()));
 		}
 	}
-	
-
-	
 
 }

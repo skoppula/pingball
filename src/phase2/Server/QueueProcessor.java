@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 
-import phase2.messaging.BoardWallPair;
-import phase2.messaging.*;
+import phase2.Messaging.BoardWallPair;
+import phase2.Messaging.*;
 
 /**
  * A class which does the meat of the server's tasks.
@@ -78,17 +78,34 @@ public class QueueProcessor implements Runnable {
         
     }
     
+    /**
+     * Processed ball message
+     * @param message
+     */
     private void handleBallMessage(Message message){
     	// TODO implement
     }
     
+    /**
+     * Processed board init message
+     * @param message
+     */
     private void handleBoardInitMessage(Message message){
     	// TODO implement
     }
     
+    /**
+     * Processed server wall connect message
+     * @param message
+     */
     private void handleServerWallConnectMessage(Message message){
     	//TODO implement
     }
+
+    /**
+     * terminate connect message
+     * @param message
+     */
     private void handleTerminateMessage(Message message){
     	//TODO implement
     }
