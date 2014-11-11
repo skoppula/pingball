@@ -10,14 +10,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import phase2.Messaging.BoardInitMessage;
 import phase2.Messaging.Message;
-<<<<<<< HEAD
-import phase2.Messaging.TerminateMessage;
-import phase2.Messaging.Message.MessageType;
 
-=======
 import phase2.Messaging.Message.MessageType;
 import phase2.Messaging.TerminateMessage;
->>>>>>> afb249d0805072681af3d70b67b5511ff61340d2
 
 public class CommunicationTunnel implements Runnable {
     
@@ -84,7 +79,7 @@ public class CommunicationTunnel implements Runnable {
         } 
     }
     
-    public void addToTunnelOutQ(Message message) {
+    public void addToOutQ(Message message) {
         tunnelOutQ.add(message);
     }
 
