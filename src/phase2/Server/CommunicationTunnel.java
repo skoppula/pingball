@@ -11,8 +11,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import phase2.Messaging.BoardInitMessage;
 import phase2.Messaging.Message;
 
-import phase2.Messaging.Message.MessageType;
 import phase2.Messaging.TerminateMessage;
+import phase2.Messaging.Message.MessageType;
+
 
 public class CommunicationTunnel implements Runnable {
     
