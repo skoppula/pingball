@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.Test;
 
 import phase2.Pingball;
+import phase2.Board.Absorber;
 import phase2.Board.Ball;
 import phase2.Board.Board;
 import phase2.Board.CircleBumper;
@@ -32,8 +33,41 @@ public class BoardGrammarTest {
      *          *triangle bumpers
      *          *flippers
      *          *absorbers
+     *      - comments: start file, in middle of file, end file
      */
 
+    // equals test - testing gadget equality
+    @Test
+    public void equalsTest1() throws InvalidInvariantException {
+        List<Gadget> gadgets1 = new ArrayList<Gadget>();
+        gadgets1.add(new CircleBumper(1, 1, "circle"));
+        
+        List<Gadget> gadgets2 = new ArrayList<Gadget>();
+        gadgets2.add(new CircleBumper(1, 2, "circle"));
+        
+        Board board1 = new Board(gadgets1, "board");
+        Board board2 = new Board(gadgets2, "board");
+        
+        assertFalse(board1.hasEqualAttributes(board2));
+    }
+    
+    // equals test - testing gadget equality when one gadgets list is a
+    // subset of the other
+    @Test
+    public void equalsTest2() throws InvalidInvariantException {
+        List<Gadget> gadgets1 = new ArrayList<Gadget>();
+        gadgets1.add(new CircleBumper(1, 1, "circle"));
+        
+        List<Gadget> gadgets2 = new ArrayList<Gadget>();
+        gadgets2.add(new CircleBumper(1, 1, "circle"));
+        gadgets2.add(new CircleBumper(1, 2, "circle1"));
+        
+        Board board1 = new Board(gadgets1, "board");
+        Board board2 = new Board(gadgets2, "board");
+        
+        assertFalse(board1.hasEqualAttributes(board2));
+    }
+    
     // make a board with friction1, friction2, and gravity defined
     @Test
     public void makeBoardTest1() {
@@ -116,6 +150,29 @@ public class BoardGrammarTest {
         Vect ballVelocity = new Vect(2.5, 2.5);
         Ball ball = new Ball(0.5, 0.5, ballVelocity, "Ball");
         correctBoard.addBall(ball);
+        assertTrue(correctBoard.hasEqualAttributes(board));
+    }
+    
+    // make a board with bumpers, flippers, and absorbers.
+    // tests file ending with a comment
+    // tests not having all 3board constants specified
+    @Test
+    public void makeBoardTest6() throws InvalidInvariantException {
+        Board board = Pingball.parseBoardFile(new File("src/phase2/BoardGrammar/boardFiles/absorber.pb"));
+        
+        // add bumpers to correct board
+        List<Gadget> gadgets = new ArrayList<Gadget>();
+        gadgets.add(new CircleBumper(1, 10, "CircleA"));
+        gadgets.add(new CircleBumper(2, 10, "CircleB"));
+        gadgets.add(new TriangleBumper(19, 0, "Tri", Orientation.ONE_HUNDRED_EIGHTY));
+        gadgets.add(new Absorber(0, 18, "Abs", 20, 2));
+        
+        Board correctBoard = new Board(gadgets, "Absorber", 25.0, 0.025, 0.025);
+        Vect ballVelocity = new Vect(0.1, 0.1);
+        Ball ballB = new Ball(19.25, 3.25, ballVelocity, "BallB");
+        Ball ballC = new Ball(1.25, 5.25, ballVelocity, "BallC");
+        correctBoard.addBall(ballB);
+        correctBoard.addBall(ballC);
         assertTrue(correctBoard.hasEqualAttributes(board));
     }
     
