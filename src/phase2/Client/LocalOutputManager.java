@@ -13,7 +13,13 @@ public class LocalOutputManager implements Runnable {
     PrintWriter out = null;
     Socket socket;
     
-    public LocalOutputManager(Queue<phase2.messaging.Message> outQ, Socket socket) throws IOException {
+    /**
+     * Manages output for the local instance manager
+     * @param outQ
+     * @param socket
+     * @throws IOException
+     */
+    public LocalOutputManager(Queue<Message> outQ, Socket socket) throws IOException {
         this.outQ = outQ;
         this.socket = socket;
     }

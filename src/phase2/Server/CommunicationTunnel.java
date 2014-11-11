@@ -10,9 +10,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import phase2.Messaging.BoardInitMessage;
 import phase2.Messaging.Message;
+<<<<<<< HEAD
 import phase2.Messaging.TerminateMessage;
 import phase2.Messaging.Message.MessageType;
 
+=======
+import phase2.Messaging.Message.MessageType;
+import phase2.Messaging.TerminateMessage;
+>>>>>>> afb249d0805072681af3d70b67b5511ff61340d2
 
 public class CommunicationTunnel implements Runnable {
     
@@ -23,9 +28,9 @@ public class CommunicationTunnel implements Runnable {
     BlockingQueue<Message> serverInQ;
     BlockingQueue<Message> tunnelOutQ;
 
-    //code smashing the masses
-    //getting lisa and yo addicted the fastest 
-    
+    /*
+     * Maintains a connection with a client
+     */
     public CommunicationTunnel(Socket socket, BlockingQueue<Message> serverInQ) {
         this.socket = socket;
         this.serverInQ = serverInQ;
@@ -37,7 +42,8 @@ public class CommunicationTunnel implements Runnable {
     @Override
     public void run() {
 
-    	//TODO make the input and the output parallel?
+        //TODO create two new threads, one for managing input
+        //TODO user disconnect 
         try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);

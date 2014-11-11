@@ -3,14 +3,16 @@ package phase2.Client;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import phase2.Board.Board;
+<<<<<<< HEAD
 import phase2.Messaging.*;
+=======
+import phase2.Messaging.Message;
+>>>>>>> afb249d0805072681af3d70b67b5511ff61340d2
 
 public class LocalManager {
 
@@ -18,7 +20,7 @@ public class LocalManager {
     private Board board;
     private LocalInputManager lim;
     private LocalOutputManager lom;
-    protected BlockingQueue<Message> inQ; //TODO changed these to blocking queues, remove this todo after you see it
+    protected BlockingQueue<Message> inQ; 
     protected BlockingQueue<Message> outQ;
     boolean networkedGame;
     
@@ -44,6 +46,13 @@ public class LocalManager {
      * OH FUCK OH FUCK
      */
 
+    /**
+     * Manages the game of the local manager
+     * @param board
+     * @param address
+     * @param port
+     * @throws IOException
+     */
     public LocalManager(Board board, InetAddress address, int port) throws IOException {
         this.inQ = new LinkedBlockingQueue<Message>();
         this.outQ = new LinkedBlockingQueue<Message>();
@@ -68,6 +77,9 @@ public class LocalManager {
         System.out.println("Starting local game..");
     }
     
+    /**
+     * Runs the game on the local machine
+     */
     public void runGame() {
         while(true) {
             while(!inQ.isEmpty())
