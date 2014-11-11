@@ -12,6 +12,8 @@ import phase2.Pingball;
 import phase2.Board.Ball;
 import phase2.Board.Board;
 import phase2.Board.CircleBumper;
+import phase2.Board.Flipper;
+import phase2.Board.Flipper.BumperSide;
 import phase2.Board.Gadget;
 import phase2.Board.SquareBumper;
 import phase2.Board.Gadget.Orientation;
@@ -71,8 +73,9 @@ public class BoardGrammarTest {
         assertTrue(correctBoard.hasEqualAttributes(board3));
     }
     
+    // make a board with triangle bumpers
     @Test
-    public void tempTest() throws InvalidInvariantException {
+    public void makeBoardTest4() throws InvalidInvariantException {
         Board boardtemp = Pingball.parseBoardFile(new File("src/phase2/BoardGrammar/boardFiles/bumpers.bp"));
         
         // add bumpers to correct board
@@ -90,5 +93,32 @@ public class BoardGrammarTest {
         correctBoard.addBall(ball);
         assertTrue(correctBoard.hasEqualAttributes(boardtemp));
     }
+    
+    // make a board with bumpers and flippers
+    @Test
+    public void makeBoardTest5() throws InvalidInvariantException {
+        Board board = Pingball.parseBoardFile(new File("src/phase2/BoardGrammar/boardFiles/flippers.pb"));
+        
+        // add bumpers to correct board
+        List<Gadget> gadgets = new ArrayList<Gadget>();
+        gadgets.add(new SquareBumper(0, 2, "Square0"));
+        gadgets.add(new SquareBumper(1, 2, "Square1"));
+        gadgets.add(new CircleBumper(4, 3, "Circle4"));
+        gadgets.add(new CircleBumper(5, 4, "Circle5"));
+        gadgets.add(new TriangleBumper(8, 9, "Tri1", Orientation.TWO_HUNDRED_SEVENTY));
+        gadgets.add(new TriangleBumper(11, 9, "Tri2", Orientation.ONE_HUNDRED_EIGHTY));
+        gadgets.add(new Flipper(8, 2, "FlipL1", BumperSide.LEFT, Orientation.ZERO));
+        gadgets.add(new Flipper(10, 2, "FlipR1", BumperSide.RIGHT, Orientation.ZERO));
+        gadgets.add(new Flipper(8, 7, "FlipL2", BumperSide.LEFT, Orientation.ZERO));
+        gadgets.add(new Flipper(10, 7, "FlipR2", BumperSide.RIGHT, Orientation.ZERO));
+        
+        Board correctBoard = new Board(gadgets, "sampleBoard1", 20.0, 0.020, 0.020);
+        Vect ballVelocity = new Vect(2.5, 2.5);
+        Ball ball = new Ball(0.5, 0.5, ballVelocity, "Ball");
+        correctBoard.addBall(ball);
+        assertTrue(correctBoard.hasEqualAttributes(board));
+    }
+    
+
     
 }
