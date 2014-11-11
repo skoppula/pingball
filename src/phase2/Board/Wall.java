@@ -115,7 +115,6 @@ public class Wall extends Gadget {
     	}
     }
 
-
     /**
      * Does nothing as walls have no action
      */
