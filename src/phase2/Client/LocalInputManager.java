@@ -5,10 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.Queue;
-<<<<<<< HEAD
-
-=======
->>>>>>> afb249d0805072681af3d70b67b5511ff61340d2
 import phase2.Messaging.Message;
 
 public class LocalInputManager implements Runnable {
