@@ -1,6 +1,8 @@
 package phase2.Server;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -35,9 +37,6 @@ public class QueueProcessor implements Runnable {
 	private final Map<BoardWallPair, BoardWallPair> wallConnectionMap;
 	
     public QueueProcessor(BlockingQueue<Message> inQ) {
-        //TODO finish initializing fields
-        // My shit is hard! I'm the greatest
-        // Look around, that's why everybody's congregated
     	
     	this.inQ = inQ;
     	wallConnectionMap = new HashMap<>();
@@ -45,8 +44,6 @@ public class QueueProcessor implements Runnable {
 
     @Override
     public void run() {
-        // TODO convert inQ messages to outQ messages
-    	// let's say I get a Message message
     	while(true){
 	    	Message message;
 			try {
@@ -78,7 +75,15 @@ public class QueueProcessor implements Runnable {
      * @param message
      */
     private void handleBallMessage(BallMessage message){
-    	// TODO implement
+    	if(wallConnectionMap.containsKey(message.getBoardWall())){
+    		BoardWallPair destination = wallConnectionMap.get(message.getBoardWall());
+    		CommunicationTunnel destTunnel = nameToBoardTunnelMap.get(destination);
+    		destTunnel.addToOutQ(message); // reroute the message to the correct board, and leave the message untouched
+    	}
+    	else{
+    		System.out.println("This is odd. The ball we got doesn't know where to go. Oh well.");
+    	}
+    	
     }
     
     /**
@@ -86,7 +91,6 @@ public class QueueProcessor implements Runnable {
      * @param message
      */
     private void handleServerWallConnectMessage(ServerWallConnectMessage message){
-    	//TODO implement
     	BoardWallPair boardWall1;
     	BoardWallPair boardWall2;
     	switch(message.getConnectionType()){
@@ -110,7 +114,10 @@ public class QueueProcessor implements Runnable {
     		BoardWallPair oldPair1 = wallConnectionMap.get(boardWall1);
     		CommunicationTunnel oldPairTunnel1 = nameToBoardTunnelMap.get(oldPair1);
     		oldPairTunnel1.addToOutQ(new ClientWallChangeMessage(boardWall1, false));
-    		wallConnectionMap.remove(oldPair1);
+    		
+    		//wallConnectionMap.remove(oldPair1);
+    		// The above line is not necessary because balls which manage to sneak through before the wall becomes
+    		// impermeable should be allowed to leave through the old connection
     		
     		//tunnel1.addToOutQ(new ClientWallChangeMessage(oldPair1, false));
     		// The above line is not necessary, because if we are changing boardWall1's connection later anyway
@@ -121,7 +128,9 @@ public class QueueProcessor implements Runnable {
     		BoardWallPair oldPair2 = wallConnectionMap.get(boardWall2);
     		CommunicationTunnel oldPairTunnel2 = nameToBoardTunnelMap.get(oldPair2);
     		oldPairTunnel2.addToOutQ(new ClientWallChangeMessage(boardWall2, false));
-    		wallConnectionMap.remove(oldPair2);
+    		//wallConnectionMap.remove(oldPair2);
+    		// The above line is not necessary because balls which manage to sneak through before the wall becomes
+    		// impermeable should be allowed to leave through the old connection
     		
     		// tunnel1.addToOutQ(new ClientWallChangeMessage(oldPair2, false));
     		// The above line is not necessary, because if we are changing boardWall1's connection later anyway
@@ -139,7 +148,23 @@ public class QueueProcessor implements Runnable {
      * @param message
      */
     private void handleTerminateMessage(TerminateMessage message){
-    	//TODO implement
+
+    	String boardName = message.getBoardName();
+    	List<Orientation> oriList = new ArrayList<>();
+    	oriList.add(Orientation.NINETY);
+    	oriList.add(Orientation.ONE_HUNDRED_EIGHTY);
+    	oriList.add(Orientation.ZERO);
+    	oriList.add(Orientation.TWO_HUNDRED_SEVENTY);
+    	// remove every wall connection this board may have had from the map
+    	for(Orientation ori: oriList){
+    		BoardWallPair bwp = new BoardWallPair(boardName, ori);
+    		if(wallConnectionMap.containsKey(bwp)){
+    			wallConnectionMap.remove(bwp);
+    		}
+    	}
+    	// remove the board from the nameToBoardTunnelMap
+    	nameToBoardTunnelMap.remove(boardName);
+
     }
 
 }
