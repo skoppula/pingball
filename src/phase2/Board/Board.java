@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.BlockingQueue;
 
 import org.antlr.v4.codegen.model.chunk.ThisRulePropertyRef_ctx;
 import org.antlr.v4.parse.ANTLRParser.finallyClause_return;
@@ -45,6 +46,7 @@ public class Board {
     private final double gravity = 25;
 
 
+    final BlockingQueue<Message> outQ;
     private final double discreteTime = 0.00025;
 
     private List<Ball> balls = new ArrayList<Ball>();
@@ -61,8 +63,10 @@ public class Board {
      * Creates a board with the default values for friction1, friction2, and gravity
      * @param gadgets
      * @param name
+     * @param outQ the output queue from the board to the server
      */
-    public Board(List<Gadget> gadgets, String name) {
+    public Board(List<Gadget> gadgets, String name, BlockingQueue<Message> outQ) {
+    	this.outQ = outQ;
         this.name = name;
         this.gadgets = gadgets;
         this.gadgetsWithoutWalls = gadgets;
@@ -71,7 +75,7 @@ public class Board {
         this.MU2 = DEFAULT_MU2;
 
         // set up walls
-        gadgets.addAll(Wall.makeWalls());
+        gadgets.addAll(Wall.makeWalls(this));
         for(Gadget gadget: gadgets){
         	if(nameToGadgetMap.containsKey(gadget.getName())){
         		throw new IllegalArgumentException("The provided list of gadgets has at least two gadgets with the same name:" + gadget.getName());
@@ -86,7 +90,9 @@ public class Board {
      * @param gadgets
      * @param name
      */
-    public Board(List<Gadget> gadgets, String name, double gravity, double friction1, double friction2) {
+    public Board(List<Gadget> gadgets, String name, double gravity, double friction1, double friction2,
+    		BlockingQueue<Message> outQ) {
+    	this.outQ = outQ;
         this.name = name;
         this.gadgets = gadgets;
         this.gadgetsWithoutWalls = gadgets;
@@ -95,7 +101,7 @@ public class Board {
         this.MU2 = friction2;
 
         // set up walls
-        gadgets.addAll(Wall.makeWalls());
+        gadgets.addAll(Wall.makeWalls(this));
         for(Gadget gadget: gadgets){
             if(nameToGadgetMap.containsKey(gadget.getName())){
                 throw new IllegalArgumentException("The provided list of gadgets has at least two gadgets with the same name:" + gadget.getName());

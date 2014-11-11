@@ -3,15 +3,19 @@ package phase2.Board;
 import java.util.ArrayList;
 import java.util.List;
 
+import phase2.Messaging.BallMessage;
+import phase2.Messaging.BoardWallPair;
 import phase2.PhysicsComponents.PhysicsComponent;
 import phase2.PhysicsComponents.StaticLine;
 import physics.LineSegment;
 import physics.Vect;
 
 public class Wall extends Gadget {
+	//Rep Invariant: isTeleporter can be true only if board.isOnline == true
     
 	private final Board board;
 	private boolean isTeleporter = false;
+	private final Orientation orientation;
     /**
      * Creates a new Wall.
      * @param x the x-location of this wall's origin, must be -1<= x <=20
@@ -29,6 +33,7 @@ public class Wall extends Gadget {
     private Wall(int x, int y, String name, int width, int height, Orientation orientation, Board board) {
     	super(new GridPoint(x,y), name, width, height, 1);
     	this.board = board;
+    	this.orientation = orientation;
         switch (orientation) {
             case NINETY:    
                 physicsComponentList.add(new StaticLine(new LineSegment(0, 0, 20, 0), this.reflectionCoef));
@@ -99,8 +104,13 @@ public class Wall extends Gadget {
 	        trigger();
     	}
     	else{
-    		//TODO implement teleporting of ball
     		board.removeBall(ball);
+    		//TODO Does this give a concurrentmodificationexception?
+    		try {
+				board.outQ.put(new BallMessage(ball, new BoardWallPair(this.name, this.orientation)));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
     		
     	}
     }

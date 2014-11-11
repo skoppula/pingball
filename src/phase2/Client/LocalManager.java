@@ -50,6 +50,7 @@ public class LocalManager {
      * @param port
      * @throws IOException
      */
+    //TODO change this to take in a grammar file, and then generate the board within LocalManager
     public LocalManager(Board board, InetAddress address, int port) throws IOException {
         this.inQ = new LinkedBlockingQueue<Message>();
         this.outQ = new LinkedBlockingQueue<Message>();
