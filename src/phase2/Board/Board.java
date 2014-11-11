@@ -110,6 +110,11 @@ public class Board {
         ballToCollidables.put(ball, new ArrayList<Collidable>());
     }
     
+    public void removeBall(Ball ball){
+    	balls.remove(ball);
+    	ballToCollidables.remove(ball);
+    }
+    
     /**
      * Mutates board to represent the board after timeDelta seconds based on
      * ball changing position
@@ -150,9 +155,8 @@ public class Board {
 
     /**
      * Mutates board to represent changes in gadgets after timeDelta seconds
-     * @return 
      */
-    public List<Message> updateBoard(double timeDelta) {
+    public void updateBoard(double timeDelta) {
 
         int timeSteps = (int) (timeDelta / discreteTime);
         for (int i = 0; i < timeSteps; i++) {
