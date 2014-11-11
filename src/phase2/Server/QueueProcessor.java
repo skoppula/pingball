@@ -3,9 +3,10 @@ package phase2.Server;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
-import phase2.Messaging.BoardWallPair;
-import phase2.Messaging.*;
+import phase2.messaging.*;
 
 /**
  * A class which does the meat of the server's tasks.
@@ -23,26 +24,21 @@ public class QueueProcessor implements Runnable {
 	 */
 	private final BlockingQueue<Message> inQ;
 	/**
-	 * The output queue for our server, to the clients.
-	 */
-	private final BlockingQueue<Message> outQ;
-	/**
 	 * A map that maps names of boards to their communication tunnels.
 	 */
-	private final Map<String, CommunicationTunnel> nameToBoardTunnel;
+	static final ConcurrentMap<String, CommunicationTunnel> nameToBoardTunnel = new ConcurrentHashMap<>();
+	
 	/**
 	 * A map that maps walls on boards to the name of the board they are connected to
 	 */
 	private final Map<BoardWallPair, BoardWallPair> wallConnectionMap;
 	
-    public QueueProcessor(BlockingQueue<Message> inQ, BlockingQueue<Message> outQ) {
+    public QueueProcessor(BlockingQueue<Message> inQ) {
         //TODO finish initializing fields
         // My shit is hard! I'm the greatest
         // Look around, that's why everybody's congregated
     	
     	this.inQ = inQ;
-    	this.outQ = outQ;
-    	nameToBoardTunnel = new HashMap<>();
     	wallConnectionMap = new HashMap<>();
     }
 
@@ -79,7 +75,8 @@ public class QueueProcessor implements Runnable {
     }
     
     /**
-     * Processed ball message
+     * Handles incoming ball messages, and sends the appropriate notifications
+     * to other boards.
      * @param message
      */
     private void handleBallMessage(Message message){
@@ -87,23 +84,23 @@ public class QueueProcessor implements Runnable {
     }
     
     /**
-     * Processed board init message
+     * Handles the initialization of new boards
      * @param message
      */
     private void handleBoardInitMessage(Message message){
-    	// TODO implement
+    	//TODO implement
     }
     
     /**
-     * Processed server wall connect message
+     * Handles the connection of two walls according to a server
      * @param message
      */
     private void handleServerWallConnectMessage(Message message){
     	//TODO implement
     }
-
+    
     /**
-     * terminate connect message
+     * Handles the removal of a board from all components of the server
      * @param message
      */
     private void handleTerminateMessage(Message message){
