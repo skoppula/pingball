@@ -10,7 +10,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import phase2.Board.Board;
-import phase2.messaging.*;
+import phase2.Messaging.*;
 
 public class LocalManager {
 

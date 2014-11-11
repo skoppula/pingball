@@ -6,7 +6,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import phase2.messaging.*;
+import phase2.Messaging.*;
 
 /**
  * A class which does the meat of the server's tasks.

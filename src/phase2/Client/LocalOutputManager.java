@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Queue;
 
-import phase2.messaging.Message;
+import phase2.Messaging.Message;
 
 public class LocalOutputManager implements Runnable {
 
