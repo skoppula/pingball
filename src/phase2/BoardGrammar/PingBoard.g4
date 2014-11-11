@@ -54,7 +54,7 @@ fire : FIREID trigger action;
 whitespace : WHITESPACE;
 newline: NEWLINE;
 comment : COMMENT; // either the line is blank or the line has a comment
-equals : EQUALS;
+equals : WHITESPACE* EQUALS WHITESPACE*;
 name : WHITESPACE* NAMEID equals NAME;
 gravity : WHITESPACE* GRAVITYID equals FLOAT;
 friction1 : WHITESPACE* FRICTION1ID equals FLOAT;
