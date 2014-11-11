@@ -66,6 +66,11 @@ public abstract class Message{
 		return(this.toString().equals(other.toString()));
 	}
 	
+	@Override
+	public int hashCode(){
+		return this.toString().hashCode();
+	}
+	
 
 	
 	/**

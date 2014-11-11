@@ -6,6 +6,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import phase2.Board.Gadget.Orientation;
 import phase2.Messaging.*;
 
 /**
@@ -26,7 +27,7 @@ public class QueueProcessor implements Runnable {
 	/**
 	 * A map that maps names of boards to their communication tunnels.
 	 */
-	static final ConcurrentMap<String, CommunicationTunnel> nameToBoardTunnel = new ConcurrentHashMap<>();
+	static final ConcurrentMap<String, CommunicationTunnel> nameToBoardTunnelMap = new ConcurrentHashMap<>();
 	
 	/**
 	 * A map that maps walls on boards to the name of the board they are connected to
@@ -52,20 +53,17 @@ public class QueueProcessor implements Runnable {
 				message = inQ.take();
 		    	switch(message.getType()){
 		    	case BALL:
-		    		handleBallMessage(message);
+		    		handleBallMessage((BallMessage)message);
 		    		break;
-				case BOARDINIT:
-					handleBoardInitMessage(message);
-					break;
 				case SERVERWALLCONNECT:
-					handleServerWallConnectMessage(message);
+					handleServerWallConnectMessage((ServerWallConnectMessage)message);
 					break;
 				case TERMINATE:
-					handleTerminateMessage(message);
+					handleTerminateMessage((TerminateMessage)message);
 					break;
 				default:
 					throw new IllegalStateException("Should never be able to get here. Server can only get"
-							+ "BALL, BOARDINIT, SERVERWALLCONNECT, and TERMINATE messages.");
+							+ "BALL, SERVERWALLCONNECT, and TERMINATE messages.");
 		    	}
 			}catch(InterruptedException e){
 				e.printStackTrace();
@@ -79,31 +77,50 @@ public class QueueProcessor implements Runnable {
      * to other boards.
      * @param message
      */
-    private void handleBallMessage(Message message){
+    private void handleBallMessage(BallMessage message){
     	// TODO implement
-    }
-    
-    /**
-     * Handles the initialization of new boards
-     * @param message
-     */
-    private void handleBoardInitMessage(Message message){
-    	//TODO implement
     }
     
     /**
      * Handles the connection of two walls according to a server
      * @param message
      */
-    private void handleServerWallConnectMessage(Message message){
+    private void handleServerWallConnectMessage(ServerWallConnectMessage message){
     	//TODO implement
+    	BoardWallPair boardWall1;
+    	BoardWallPair boardWall2;
+    	switch(message.getConnectionType()){
+		case HORIZONTAL:
+			boardWall1 = new BoardWallPair(message.getBoardName1(), Orientation.ONE_HUNDRED_EIGHTY);
+			boardWall2 = new BoardWallPair(message.getBoardName2(), Orientation.ZERO);
+			break;
+		case VERTICAL:
+			boardWall1 = new BoardWallPair(message.getBoardName1(), Orientation.TWO_HUNDRED_SEVENTY);
+			boardWall2 = new BoardWallPair(message.getBoardName2(), Orientation.NINETY);
+			break;
+		default:
+			throw new IllegalStateException("DIS IS IMPOSIRBR");
+    	}
+    	// If the map already contains a mapping for boardWall1, make sure to remove it, and its reverse mapping
+    	if(wallConnectionMap.containsKey(boardWall1)){
+    		wallConnectionMap.remove(wallConnectionMap.get(boardWall1));
+    		wallConnectionMap.remove(boardWall1);
+    		//TODO send connection break message to the correct boards
+    	}
+    	// same with boardWall2
+    	if(wallConnectionMap.containsKey(boardWall2)){
+    		wallConnectionMap.remove(wallConnectionMap.get(boardWall2));
+    		wallConnectionMap.remove(boardWall2);
+    		//TODO send connection break message to the correct boards
+    	}
+    	wallConnectionMap.
     }
     
     /**
      * Handles the removal of a board from all components of the server
      * @param message
      */
-    private void handleTerminateMessage(Message message){
+    private void handleTerminateMessage(TerminateMessage message){
     	//TODO implement
     }
 
