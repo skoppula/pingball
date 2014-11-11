@@ -10,6 +10,7 @@ import org.antlr.v4.codegen.model.chunk.ThisRulePropertyRef_ctx;
 import org.antlr.v4.parse.ANTLRParser.finallyClause_return;
 import org.antlr.v4.parse.ANTLRParser.range_return;
 
+import phase2.Messaging.Message;
 import physics.Geometry;
 import physics.Vect;
 
@@ -149,8 +150,9 @@ public class Board {
 
     /**
      * Mutates board to represent changes in gadgets after timeDelta seconds
+     * @return 
      */
-    public void updateBoard(double timeDelta) {
+    public List<Message> updateBoard(double timeDelta) {
 
         int timeSteps = (int) (timeDelta / discreteTime);
         for (int i = 0; i < timeSteps; i++) {
@@ -345,6 +347,12 @@ public class Board {
         System.out.println(otherBoard.gadgets);
         
         return constantsEqual && ballsEqual && gadgetsEqual;
+    }
+
+
+    public void syncChange(Message remove) {
+        // TODO Auto-generated method stub
+        
     }
     
 }

@@ -19,9 +19,9 @@ public class CommunicationTunnel implements Runnable {
     BlockingQueue<Message> serverInQ;
     BlockingQueue<Message> tunnelOutQ;
 
-    //code smashing the masses
-    //getting lisa and yo addicted the fastest 
-    
+    /*
+     * Maintains a connection with a client
+     */
     public CommunicationTunnel(Socket socket, BlockingQueue<Message> serverInQ) {
         this.socket = socket;
         this.serverInQ = serverInQ;
@@ -34,6 +34,7 @@ public class CommunicationTunnel implements Runnable {
     public void run() {
 
         //TODO create two new threads, one for managing input
+        //TODO user disconnect 
         try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 

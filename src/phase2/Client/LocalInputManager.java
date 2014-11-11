@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.Queue;
-import phase2.messaging.Message;
+import phase2.Messaging.Message;
 
 public class LocalInputManager implements Runnable {
 
@@ -13,11 +13,18 @@ public class LocalInputManager implements Runnable {
     BufferedReader in;
     Queue<Message> inQ;
     
+    /**
+     * Manages the inputs of the local client
+     * @param inQ
+     * @param socket
+     * @throws IOException
+     */
     protected LocalInputManager(Queue<Message> inQ, Socket socket) throws IOException {
         this.socket = socket;
         this.inQ = inQ;
     }
     
+    @Override
     public void run() {
 
         try {
