@@ -18,6 +18,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.stringtemplate.v4.compiler.STParser.ifstat_return;
 
 import phase2.Board.Gadget.Orientation;
 import phase2.BoardGrammar.PingBoardLexer;
@@ -454,18 +455,20 @@ public class Board {
      * @param message
      */
     public void syncChange(Message message) {
+        // find which wall will either
+        // a) receive a new ball or
+        // b) connect/disconnect
+        Orientation inOrientation = ((BallMessage) message).getBoardWall().wallOrientation();
+        Orientation outOrientation;
+        switch (inOrientation) {
+            case ZERO: outOrientation = Orientation.NINETY; break;
+            case NINETY: outOrientation = Orientation.ZERO; break;
+            case ONE_HUNDRED_EIGHTY: outOrientation = Orientation.TWO_HUNDRED_SEVENTY; break;
+            default: outOrientation = Orientation.ONE_HUNDRED_EIGHTY; break; // 270 case
+        }
+        Wall newWall = wallMap.get(outOrientation);
+        
         if (message.getType().equals(MessageType.BALL)) {
-            // find which wall orientation the ball should come out of
-            Orientation inOrientation = ((BallMessage) message).getBoardWall().wallOrientation();
-            Orientation outOrientation;
-            switch (inOrientation) {
-                case ZERO: outOrientation = Orientation.NINETY; break;
-                case NINETY: outOrientation = Orientation.ZERO; break;
-                case ONE_HUNDRED_EIGHTY: outOrientation = Orientation.TWO_HUNDRED_SEVENTY; break;
-                default: outOrientation = Orientation.ONE_HUNDRED_EIGHTY; break; // 270 case
-            }
-            Wall newWall = wallMap.get(outOrientation);
-            
             // calculate what the ball should look like when it comes out of the wall
             Ball newBall;
             double newX;
@@ -490,7 +493,13 @@ public class Board {
             balls.add(newBall);
         }
         else if (message.getType().equals(MessageType.CLIENTWALLCHANGE)) {
-            
+            if (((ClientWallChangeMessage) message).isConnectOrDisconnect()) { // connecting
+                String otherBoardName = ((ClientWallChangeMessage) message).getOtherBoardWall().board();
+                newWall.connect(otherBoardName);
+            }
+            else { // disconnecting
+                newWall.disconnect();
+            }
         }
         else {
             throw new RuntimeException("Wrong message type for Board");
