@@ -53,16 +53,72 @@ public class Pingball {
 
         outQ = new LinkedBlockingDeque<Message>();
         
+        Board board;
+        Optional<Integer> port = Optional.of(DEFAULT_PORT);
+        Optional<InetAddress> host = Optional.empty();
+        Optional<File> file = Optional.empty();
+        Queue<String> arguments = new LinkedList<String>(Arrays.asList(args));
+
+        if (args.length == 0) board = defaultBoard(outQ);
+        else {
+            while (!arguments.isEmpty()) {
+                String flag = arguments.remove();
+                try {
+                    if (flag.equals("--port")) {
+                        port = Optional.of(Integer.parseInt(arguments.remove()));
+                        if (port.get() < 0 || port.get() > MAXIMUM_PORT)
+                            throw new IllegalArgumentException("port " + port + " out of range");
+
+                    } else if (flag.equals("--host")) {
+                        String hostStr = arguments.remove();
+                        if(hostStr.matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b")) {
+                            byte[] ip = new byte[4];
+                            String[] ipTokens = hostStr.split("\\.");
+                            for(int i = 0; i < ipTokens.length; ++i) {
+                                ip[i] = Byte.parseByte(ipTokens[i]);
+                            }
+                            try {
+                                host = Optional.of(InetAddress.getByAddress(ip));
+                            } catch (UnknownHostException|SecurityException e2) {
+                                throw new IllegalArgumentException("Unrecognized host IP");
+                            }
+                        } else {
+                            try {
+                                host = Optional.of(InetAddress.getByName(hostStr));
+                            } catch (UnknownHostException|SecurityException e2) {
+                                throw new IllegalArgumentException("Unrecognized hostname");
+                            }
+                        }
+
+                    } else {
+                        file = Optional.of(new File(arguments.remove()));
+                        if (!file.get().isFile())
+                            throw new IllegalArgumentException("file not found: \"" + file + "\"");
+                        if (!arguments.isEmpty()) throw new IllegalArgumentException("No arguments after file");
+                        break;
+                    }
+
+                } catch (NumberFormatException nfe) {
+                    throw new IllegalArgumentException("unable to parse port: " + flag);
+                }
+            }
+
+            if(!file.isPresent()) throw new IllegalArgumentException("No file provided");
+        }
+
+        
         LocalManager lm = null;
-        if(host.isPresent()) lm = new LocalManager(new File("boardfile.txt"), host.get(), port.get());
-        else lm = new LocalManager(board);
+        if(host.isPresent()) lm = new LocalManager(file.get(), host.get(), port.get());
+        else if (file.isPresent()) lm = new LocalManager(file.get());
+        else lm = new LocalManager(defaultBoard(outQ));
         lm.runGame();
     }
     
     /**
+     * @param outQ2 
      * @return benchmark board "default"
      */
-    public static Board defaultBoard() {
+    public static Board defaultBoard(BlockingQueue<Message> outQ2) {
         List<Gadget> gadgetList = new ArrayList<Gadget>();
         try{
 	        CircleBumper circle1 = new CircleBumper(1, 10, "circle1");
@@ -79,46 +135,9 @@ public class Pingball {
         } catch(InvalidInvariantException e){
     		e.printStackTrace();
         }
-        Board board = new Board(gadgetList, "default");
-        Ball ball = new Ball(1.25, 1.25, Vect.ZERO);
+        Ball ball = new Ball(1.25, 1.25, Vect.ZERO, "defaultball");
+        Board board = new Board(gadgetList, "default", outQ2);
         board.addBall(ball);
         return board;
-    }
-    
-    /**
-     * Return board from file
-     * @param file 
-     * @return a board
-     */
-    public static Board parseBoardFile(File file) {
-        
-        // Read in board files using ANTLR
-        try {
-            // make a stream of characters to feed to the lexer
-            FileReader filereader = new FileReader(file);
-            CharStream stream = new ANTLRInputStream(filereader);
-            // pass the character stream to an instance of the generated lexer class
-            PingBoardLexer lexer = new PingBoardLexer(stream);
-            CommonTokenStream tokens = new CommonTokenStream(lexer);
-            // feed the stream of tokens we've generated to the parser
-            PingBoardParser parser = new PingBoardParser(tokens);
-            RootContext tree = parser.root();
-            System.err.println(tree.toStringTree());
-            tree.inspect(parser);
-            
-            // Visit each node in the parse tree in order,
-            // top-to-bottom, left-to-right, calling methods that we want
-            ParseTreeWalker walker = new ParseTreeWalker();
-            PingBoardListener listener = new PingBoardListenerBoardCreator();
-            walker.walk(listener,tree);
-            Board board = PingBoardListenerBoardCreator.getBoard();
-            return board;
-            
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }

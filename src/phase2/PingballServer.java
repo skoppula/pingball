@@ -15,11 +15,12 @@ package phase2;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 
 import phase2.Messaging.Message;
 import phase2.Server.CommunicationTunnel;
 import phase2.Server.ConsoleInputManager;
-import phase2.Server.Mailman;
 import phase2.Server.NewConnectionHandler;
 import phase2.Server.QueueProcessor;
 
@@ -35,8 +36,8 @@ public class PingballServer {
     protected HashMap<String, String> wallConnections;
     protected HashSet<String> waitlist;
     
-    Queue<Message> inQ;
-    Queue<Message> outQ;
+    BlockingQueue<Message> inQ;
+    BlockingQueue<Message> outQ;
     
     //When they ask me how I code so quick, I say poon-lickin
     //Don't doubt my shit, you'll have lisa and yo bitchin
@@ -44,25 +45,22 @@ public class PingballServer {
     private NewConnectionHandler nch;
     private ConsoleInputManager cim;
     private QueueProcessor qp;
-    private Mailman mm;
     
     private PingballServer(int port) throws IOException {
         this.serverSocket = new ServerSocket(port);
         this.tunnels = new HashMap<String, CommunicationTunnel>();
         this.wallConnections = new HashMap<String, String>();
-        this.inQ = new LinkedList<Message>();
-        this.outQ = new LinkedList<Message>();
+        this.inQ = new LinkedBlockingDeque<Message>();
+        this.outQ = new LinkedBlockingDeque<Message>();
     }
     
     private void serve() {
         nch = new NewConnectionHandler(serverSocket, tunnels, inQ);
         nch.run();
-        cim = new ConsoleInputManager(wallConnections);
+        cim = new ConsoleInputManager(inQ);
         cim.run();
-        qp = new QueueProcessor(inQ, outQ);
+        qp = new QueueProcessor(outQ);
         qp.run();
-        mm = new Mailman(tunnels, outQ);
-        mm.run();
     }
 
     public static void main(String[] args) throws IOException {
