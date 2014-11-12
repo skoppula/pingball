@@ -130,6 +130,10 @@ public class Wall extends Gadget {
         return '.';
     }
     
+    /**
+     * @return a list of gridsymbols detailing the visualization of the wall.
+     * Note that this contains the wall's text
+     */
     @Override
     public List<GridSymbol> getSymbolRep(){
     	List<GridSymbol> symbolList = new ArrayList<>();
