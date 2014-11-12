@@ -450,8 +450,8 @@ public class Board {
     }
 
 
+    public void syncChange(Message message) {
        
-    public void syncChange(Message remove) {
         // TODO Auto-generated method stub
         
     }
