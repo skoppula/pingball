@@ -19,13 +19,14 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import phase2.Board.Gadget.Orientation;
 import phase2.BoardGrammar.PingBoardLexer;
 import phase2.BoardGrammar.PingBoardListener;
 import phase2.BoardGrammar.PingBoardListenerBoardCreator;
 import phase2.BoardGrammar.PingBoardParser;
 import phase2.BoardGrammar.PingBoardParser.RootContext;
-import phase2.Messaging.BoardInitMessage;
-import phase2.Messaging.Message;
+import phase2.Messaging.Message.MessageType;
+import phase2.Messaging.*;
 import physics.Geometry;
 import physics.Vect;
 
@@ -247,7 +248,6 @@ public class Board {
 
         applyGravityandFriction(timeDelta - timeSteps * discreteTime);
         updateBallPositions(timeDelta - timeSteps * discreteTime);
-
     }
 
     /**
@@ -442,10 +442,25 @@ public class Board {
         return constantsEqual && ballsEqual && gadgetsEqual;
     }
 
-
-       
-    public void syncChange(Message remove) {
-        // TODO Auto-generated method stub
+    /**
+     * Processes the message Board receives
+     * @param message
+     */
+    public void syncChange(Message message) {
+        if (message.getType().equals(MessageType.BALL)) {
+            Orientation inOrientation = ((BallMessage) message).getBoardWall().wallOrientation();
+            Orientation outOrientation;
+            switch (inOrientation) {
+                case Orientation.LEFT: outOrientation = Orientation.RIGHT;
+                
+            }
+        }
+        else if (message.getType().equals(MessageType.CLIENTWALLCHANGE)) {
+            
+        }
+        else {
+            throw new RuntimeException("Wrong message type for Board");
+        }
         
     }
     
