@@ -58,7 +58,7 @@ public class Pingball {
         Optional<InetAddress> host = Optional.empty();
         Optional<File> file = Optional.empty();
         Queue<String> arguments = new LinkedList<String>(Arrays.asList(args));
-
+        
         if (args.length == 0) board = defaultBoard(outQ);
         else {
             while (!arguments.isEmpty()) {
