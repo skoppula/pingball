@@ -30,6 +30,7 @@ import physics.Vect;
 
 public class Board {
 	//Rep Invariant: triggerMap: if triggerMap[key] = value, then must have triggerMap[value] = key
+	// outQ should only ever be accessed if the board is online
 
     /*
      * 
@@ -71,7 +72,15 @@ public class Board {
     /** A map from names of gadgets to the gadgets themselves */
     Map<String, Gadget> nameToGadgetMap = new HashMap<>();
     
-    public Board(File file) throws IOException {
+    /**
+     * Generates an online Board from a .pb file, and sends a greeting to the server.
+     * @param file must be a valid .pb pingball board file (see file format in specs)
+     * @param outQ the queue that outputs from the board to the server
+     * @throws IOException if the connection is disturbed
+     */
+    public Board(File file, BlockingQueue<Message> outQ) throws IOException {
+    	this.outQ = outQ;
+    	
         // Read in board files using ANTLR
         // make a stream of characters to feed to the lexer
         FileReader filereader = new FileReader(file);
@@ -100,7 +109,8 @@ public class Board {
     }
     
     /**
-     * Creates a board with the default values for friction1, friction2, and gravity
+     * Creates a board with the default values for friction1, friction2, and gravity,
+     * and sends a greeting to the server.
      * @param gadgets
      * @param name
      * @param outQ the output queue from the board to the server
@@ -126,9 +136,11 @@ public class Board {
     
     
     /**
-     * Creates a board with the specified values for friction1, friction2, and gravity
+     * Creates a board with the specified values for friction1, friction2, and gravity,
+     * and sends a greeting to the server
      * @param gadgets
      * @param name
+     * @param outQ the output queue from the board to the server
      */
     public Board(List<Gadget> gadgets, String name, double gravity, double friction1, double friction2,
     		BlockingQueue<Message> outQ) {
