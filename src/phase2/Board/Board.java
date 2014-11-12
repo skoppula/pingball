@@ -1,21 +1,36 @@
 package phase2.Board;
 
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.BlockingQueue;
 
 import org.antlr.v4.codegen.model.chunk.ThisRulePropertyRef_ctx;
 import org.antlr.v4.parse.ANTLRParser.finallyClause_return;
 import org.antlr.v4.parse.ANTLRParser.range_return;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import phase2.BoardGrammar.PingBoardLexer;
+import phase2.BoardGrammar.PingBoardListener;
+import phase2.BoardGrammar.PingBoardListenerBoardCreator;
+import phase2.BoardGrammar.PingBoardParser;
+import phase2.BoardGrammar.PingBoardParser.RootContext;
 import phase2.Messaging.Message;
 import physics.Geometry;
 import physics.Vect;
 
 public class Board {
 	//Rep Invariant: triggerMap: if triggerMap[key] = value, then must have triggerMap[value] = key
+	// outQ should only ever be accessed if the board is online
 
     /*
      * 
@@ -45,6 +60,7 @@ public class Board {
     private final double gravity = 25;
 
 
+    final BlockingQueue<Message> outQ;
     private final double discreteTime = 0.00025;
 
     private List<Ball> balls = new ArrayList<Ball>();
@@ -56,13 +72,51 @@ public class Board {
     /** A map from names of gadgets to the gadgets themselves */
     Map<String, Gadget> nameToGadgetMap = new HashMap<>();
     
+    /**
+     * Generates an online Board from a .pb file, and sends a greeting to the server.
+     * @param file must be a valid .pb pingball board file (see file format in specs)
+     * @param outQ the queue that outputs from the board to the server
+     * @throws IOException if the connection is disturbed
+     */
+    public Board(File file, BlockingQueue<Message> outQ) throws IOException {
+    	this.outQ = outQ;
+    	
+        // Read in board files using ANTLR
+        // make a stream of characters to feed to the lexer
+        FileReader filereader = new FileReader(file);
+        CharStream stream = new ANTLRInputStream(filereader);
+        // pass the character stream to an instance of the generated lexer class
+        PingBoardLexer lexer = new PingBoardLexer(stream);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        // feed the stream of tokens we've generated to the parser
+        PingBoardParser parser = new PingBoardParser(tokens);
+        RootContext tree = parser.root();
+        System.err.println(tree.toStringTree());
+        tree.inspect(parser);
+        
+        // Visit each node in the parse tree in order,
+        // top-to-bottom, left-to-right, calling methods that we want
+        ParseTreeWalker walker = new ParseTreeWalker();
+        PingBoardListener listener = new PingBoardListenerBoardCreator();
+        walker.walk(listener,tree);
+        Board board = PingBoardListenerBoardCreator.getBoard();
+        this.name = board.getName();
+        this.gadgets = board.gadgets;
+        this.gadgetsWithoutWalls = board.gadgets;
+        this.GRAVITY_VECTOR = board.getGRAVITY_VECTOR();
+        this.MU = board.getMU();
+        this.MU2 = board.getMU2();
+    }
     
     /**
-     * Creates a board with the default values for friction1, friction2, and gravity
+     * Creates a board with the default values for friction1, friction2, and gravity,
+     * and sends a greeting to the server.
      * @param gadgets
      * @param name
+     * @param outQ the output queue from the board to the server
      */
-    public Board(List<Gadget> gadgets, String name) {
+    public Board(List<Gadget> gadgets, String name, BlockingQueue<Message> outQ) {
+    	this.outQ = outQ;
         this.name = name;
         this.gadgets = gadgets;
         this.gadgetsWithoutWalls = gadgets;
@@ -71,7 +125,7 @@ public class Board {
         this.MU2 = DEFAULT_MU2;
 
         // set up walls
-        gadgets.addAll(Wall.makeWalls());
+        gadgets.addAll(Wall.makeWalls(this));
         for(Gadget gadget: gadgets){
         	if(nameToGadgetMap.containsKey(gadget.getName())){
         		throw new IllegalArgumentException("The provided list of gadgets has at least two gadgets with the same name:" + gadget.getName());
@@ -82,11 +136,15 @@ public class Board {
     
     
     /**
-     * Creates a board with the specified values for friction1, friction2, and gravity
+     * Creates a board with the specified values for friction1, friction2, and gravity,
+     * and sends a greeting to the server
      * @param gadgets
      * @param name
+     * @param outQ the output queue from the board to the server
      */
-    public Board(List<Gadget> gadgets, String name, double gravity, double friction1, double friction2) {
+    public Board(List<Gadget> gadgets, String name, double gravity, double friction1, double friction2,
+    		BlockingQueue<Message> outQ) {
+    	this.outQ = outQ;
         this.name = name;
         this.gadgets = gadgets;
         this.gadgetsWithoutWalls = gadgets;
@@ -95,7 +153,7 @@ public class Board {
         this.MU2 = friction2;
 
         // set up walls
-        gadgets.addAll(Wall.makeWalls());
+        gadgets.addAll(Wall.makeWalls(this));
         for(Gadget gadget: gadgets){
             if(nameToGadgetMap.containsKey(gadget.getName())){
                 throw new IllegalArgumentException("The provided list of gadgets has at least two gadgets with the same name:" + gadget.getName());
@@ -108,6 +166,11 @@ public class Board {
     public void addBall(Ball ball) {
         balls.add(ball);
         ballToCollidables.put(ball, new ArrayList<Collidable>());
+    }
+    
+    public void removeBall(Ball ball){
+    	balls.remove(ball);
+    	ballToCollidables.remove(ball);
     }
     
     /**
@@ -150,9 +213,8 @@ public class Board {
 
     /**
      * Mutates board to represent changes in gadgets after timeDelta seconds
-     * @return 
      */
-    public List<Message> updateBoard(double timeDelta) {
+    public void updateBoard(double timeDelta) {
 
         int timeSteps = (int) (timeDelta / discreteTime);
         for (int i = 0; i < timeSteps; i++) {

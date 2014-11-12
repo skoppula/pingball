@@ -1,5 +1,6 @@
 package phase2.Client;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -49,10 +50,11 @@ public class LocalManager {
      * @param port
      * @throws IOException
      */
-    public LocalManager(Board board, InetAddress address, int port) throws IOException {
+    //TODO change this to take in a grammar file, and then generate the board within LocalManager
+    public LocalManager(File file, InetAddress address, int port) throws IOException {
         this.inQ = new LinkedBlockingQueue<Message>();
         this.outQ = new LinkedBlockingQueue<Message>();
-        this.board = board;
+        this.board = new Board(file, outQ);
         this.networkedGame = true;
         
         Socket socket = new Socket(address, port); 
@@ -66,7 +68,14 @@ public class LocalManager {
         System.out.println("Adding you to server " + address + " " + port);
     }
     
-    public LocalManager(Board board) {
+    public LocalManager(File file) {
+    	this.outQ = new LinkedBlockingQueue<>(); // note that we have to give the board some sort of queue
+    	// however this queue should never have any items other than the startup message
+    	try {
+			this.board = new Board(file, outQ);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
         this.networkedGame = false;
         System.out.println("Starting local game..");
     }
