@@ -71,7 +71,7 @@ public class BallMessage extends Message {
 	 * throw an exception
 	 */
 	protected static Message fromJSON(JSONObject messageContents) throws IllegalArgumentException{
-	    System.out.println(messageContents.get("ball"));
+	    System.out.println(messageContents);
 		Ball ball = new Ball((JSONObject)messageContents.get("ball"));
 		BoardWallPair boardWall = new BoardWallPair((JSONObject)messageContents.get("boardWall"));
 		return new BallMessage(ball, boardWall);
