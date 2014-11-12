@@ -83,6 +83,7 @@ public class LocalManager {
     
     public LocalManager(Board board) {
     	this.outQ = new LinkedBlockingQueue<>(); // note that we have to give the board some sort of queue
+    	this.inQ = new LinkedBlockingQueue<>(); // this queue should also never be given anything
     	this.board = board;
     	// however this queue should never have any items other than the startup message
         this.networkedGame = false;
