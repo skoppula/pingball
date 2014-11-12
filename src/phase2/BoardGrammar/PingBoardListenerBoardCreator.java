@@ -20,6 +20,7 @@ import phase2.Board.Flipper.BumperSide;
 import phase2.Board.Gadget.Orientation;
 import phase2.Board.Util.InvalidInvariantException;
 import physics.Vect;
+import sun.misc.Queue;
 
 public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
     
@@ -31,7 +32,7 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
     private Board board;
     private Map<String, Gadget> gadgetsMap = new HashMap<String, Gadget>(); // maps names to gadgets
     private Map<String, Ball> ballsMap = new HashMap<String, Ball>(); // maps names to ball
-    // private static List<Gadget> gadgets = new ArrayList<Gadget>();
+    private Map<String, ArrayList<String>> triggerToAction = new HashMap<String, ArrayList<String>>(); // key = name of gadget whose trigger it is, value = name of gadget whose action performed
     
     // temporary variables
     Stack<List<String>> stack = new Stack<List<String>>();
@@ -40,6 +41,16 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
     // create the board
     public void exitBoard(PingBoardParser.BoardContext ctx) {
         List<Gadget> gadgets = new ArrayList(gadgetsMap.values());
+        for (Gadget gadget: gadgets) {
+            if (triggerToAction.containsKey(gadget.getName())) {
+                ArrayList<Gadget> gadgetsToTrigger = new ArrayList<Gadget>();
+                for (String nameOfActionGadget : triggerToAction.get(gadget.getName())) {
+                    Gadget nextActionGadget = gadgetsMap.get(nameOfActionGadget);
+                    gadgetsToTrigger.add(nextActionGadget);
+                }
+                gadget.setGadgetsToTrigger(gadgetsToTrigger);
+            }
+        }
         board = new Board(gadgets, BOARD_NAME, GRAVITY, FRICTION1, FRICTION2);
         for (Ball ball: ballsMap.values()) {
             board.addBall(ball);
@@ -101,6 +112,32 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
         Vect ballVelocity = new Vect(xVelocity, yVelocity);
         Ball ball = new Ball(x, y, ballVelocity, ballName);
         ballsMap.put(ballName, ball);
+    }
+    
+    // link gadgets that trigger each other
+    public void exitFire(PingBoardParser.FireContext ctx) {
+        int numParameters = ctx.getChildCount()-1;
+        String triggerName = "";
+        String actionName = "";
+        for (int i=0; i<numParameters; i++) {
+            List<String> paraTypeAndValue = stack.pop();
+            String type = paraTypeAndValue.get(0);
+            String value = paraTypeAndValue.get(1);
+            if (type.equals("trigger")) {
+                triggerName = value;
+            }
+            else if (type.equals("action")) {
+                actionName = value;
+            }
+        }
+        if (triggerToAction.containsKey(triggerName)) {
+            triggerToAction.get(triggerName).add(actionName);
+        }
+        else {
+            ArrayList<String> namesToTrigger = new ArrayList<String>();
+            namesToTrigger.add(triggerName);
+            triggerToAction.put(triggerName, namesToTrigger);
+        }
     }
     
     
@@ -296,6 +333,18 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    // push trigger gadget name onto stack
+    public void enterTrigger(PingBoardParser.TriggerContext ctx) {
+        String trigger = ctx.getChild(3).getText();
+        stack.push(Arrays.asList("trigger", trigger));
+    }
+    
+    // push action gadget name onto stack
+    public void enterAction(PingBoardParser.ActionContext ctx) {
+        String action = ctx.getChild(3).getText();
+        stack.push(Arrays.asList("action", action));
     }
     
     // push orientation onto stack

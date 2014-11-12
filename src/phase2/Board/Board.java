@@ -1,6 +1,10 @@
 package phase2.Board;
 
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +13,16 @@ import java.util.Map;
 import org.antlr.v4.codegen.model.chunk.ThisRulePropertyRef_ctx;
 import org.antlr.v4.parse.ANTLRParser.finallyClause_return;
 import org.antlr.v4.parse.ANTLRParser.range_return;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import phase2.BoardGrammar.PingBoardLexer;
+import phase2.BoardGrammar.PingBoardListener;
+import phase2.BoardGrammar.PingBoardListenerBoardCreator;
+import phase2.BoardGrammar.PingBoardParser;
+import phase2.BoardGrammar.PingBoardParser.RootContext;
 import phase2.Messaging.Message;
 import physics.Geometry;
 import physics.Vect;
@@ -56,6 +69,33 @@ public class Board {
     /** A map from names of gadgets to the gadgets themselves */
     Map<String, Gadget> nameToGadgetMap = new HashMap<>();
     
+    public Board(File file) throws IOException {
+        // Read in board files using ANTLR
+        // make a stream of characters to feed to the lexer
+        FileReader filereader = new FileReader(file);
+        CharStream stream = new ANTLRInputStream(filereader);
+        // pass the character stream to an instance of the generated lexer class
+        PingBoardLexer lexer = new PingBoardLexer(stream);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        // feed the stream of tokens we've generated to the parser
+        PingBoardParser parser = new PingBoardParser(tokens);
+        RootContext tree = parser.root();
+        System.err.println(tree.toStringTree());
+        tree.inspect(parser);
+        
+        // Visit each node in the parse tree in order,
+        // top-to-bottom, left-to-right, calling methods that we want
+        ParseTreeWalker walker = new ParseTreeWalker();
+        PingBoardListener listener = new PingBoardListenerBoardCreator();
+        walker.walk(listener,tree);
+        Board board = PingBoardListenerBoardCreator.getBoard();
+        this.name = board.getName();
+        this.gadgets = board.gadgets;
+        this.gadgetsWithoutWalls = board.gadgets;
+        this.GRAVITY_VECTOR = board.getGRAVITY_VECTOR();
+        this.MU = board.getMU();
+        this.MU2 = board.getMU2();
+    }
     
     /**
      * Creates a board with the default values for friction1, friction2, and gravity

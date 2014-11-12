@@ -27,6 +27,7 @@ import java.util.Queue;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import physics.Vect;
 
@@ -34,6 +35,9 @@ public class Pingball {
     
     private static final int DEFAULT_PORT = 4444;
     private static final int MAXIMUM_PORT = 65535;
+    
+    private static final long TIME_DELTA_MILLISECONDS = 1000/60;
+    static double timeInSeconds = TIME_DELTA_MILLISECONDS * .001;
 
     /**
      * Updates the board every timeDelta Prints out the board every timeDelta
@@ -42,8 +46,13 @@ public class Pingball {
      * @throws IOException 
      */
     public static void main(String[] args) throws InterruptedException, IOException {
-        
-        Board board = parseBoardFile(new File("boardfile.txt"));
+        Board board = new Board("boardfile.txt");
+        /*
+        for (;;) {
+            Thread.sleep(TIME_DELTA_MILLISECONDS);
+            board.updateBoard(timeInSeconds);
+            board.printBoard();
+        }*/
         
        /*
         LocalManager lm = null;
@@ -88,7 +97,7 @@ public class Pingball {
         // Read in board files using ANTLR
         try {
             // make a stream of characters to feed to the lexer
-            FileReader filereader = new FileReader("boardfile.txt");
+            FileReader filereader = new FileReader(file);
             CharStream stream = new ANTLRInputStream(filereader);
             // pass the character stream to an instance of the generated lexer class
             PingBoardLexer lexer = new PingBoardLexer(stream);
@@ -98,6 +107,15 @@ public class Pingball {
             RootContext tree = parser.root();
             System.err.println(tree.toStringTree());
             tree.inspect(parser);
+            
+            // Visit each node in the parse tree in order,
+            // top-to-bottom, left-to-right, calling methods that we want
+            ParseTreeWalker walker = new ParseTreeWalker();
+            PingBoardListener listener = new PingBoardListenerBoardCreator();
+            walker.walk(listener,tree);
+            Board board = PingBoardListenerBoardCreator.getBoard();
+            return board;
+            
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
