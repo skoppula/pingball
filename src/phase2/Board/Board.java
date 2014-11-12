@@ -455,7 +455,7 @@ public class Board {
      */
     public void syncChange(Message message) {
         if (message.getType().equals(MessageType.BALL)) {
-            // find which wall the ball should come out of
+            // find which wall orientation the ball should come out of
             Orientation inOrientation = ((BallMessage) message).getBoardWall().wallOrientation();
             Orientation outOrientation;
             switch (inOrientation) {
@@ -464,10 +464,30 @@ public class Board {
                 case ONE_HUNDRED_EIGHTY: outOrientation = Orientation.TWO_HUNDRED_SEVENTY; break;
                 default: outOrientation = Orientation.ONE_HUNDRED_EIGHTY; break; // 270 case
             }
-            Wall outWall = wallMap.get(outOrientation);
+            Wall newWall = wallMap.get(outOrientation);
             
             // calculate what the ball should look like when it comes out of the wall
-            Ball ball
+            Ball newBall;
+            double newX;
+            double newY;
+            Ball oldBall = ((BallMessage) message).getBall();
+            switch(outOrientation) {
+                case ZERO:
+                    newX = newWall.getX()+1;
+                    newY = oldBall.getBallCircle().getCenter().y();
+                case NINETY:
+                    newX = oldBall.getBallCircle().getCenter().x();
+                    newY = newWall.getY()-1;
+                case ONE_HUNDRED_EIGHTY:
+                    newX = newWall.getX()-1;
+                    newY = oldBall.getBallCircle().getCenter().y();
+                default: // case TWO HUNDRED SEVETY
+                    newX = oldBall.getBallCircle().getCenter().x();
+                    newY = newWall.getY()+1;
+            }
+            // ball's position changes, but velocity stays the same
+            newBall = new Ball(newX, newY, oldBall.getVelocity(), oldBall.getName());
+            balls.add(newBall);
         }
         else if (message.getType().equals(MessageType.CLIENTWALLCHANGE)) {
             
