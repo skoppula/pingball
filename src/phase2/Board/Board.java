@@ -25,8 +25,8 @@ import phase2.BoardGrammar.PingBoardListener;
 import phase2.BoardGrammar.PingBoardListenerBoardCreator;
 import phase2.BoardGrammar.PingBoardParser;
 import phase2.BoardGrammar.PingBoardParser.RootContext;
-import phase2.Messaging.BoardInitMessage;
-import phase2.Messaging.Message;
+import phase2.Messaging.Message.MessageType;
+import phase2.Messaging.*;
 import physics.Geometry;
 import physics.Vect;
 
@@ -254,7 +254,6 @@ public class Board {
 
         applyGravityandFriction(timeDelta - timeSteps * discreteTime);
         updateBallPositions(timeDelta - timeSteps * discreteTime);
-
     }
 
     /**
@@ -450,10 +449,32 @@ public class Board {
     }
 
 
+    /**
+     * Processes the message Board receives
+     * @param message
+     */
     public void syncChange(Message message) {
-       
-        // TODO Auto-generated method stub
-        
+        if (message.getType().equals(MessageType.BALL)) {
+            // find which wall the ball should come out of
+            Orientation inOrientation = ((BallMessage) message).getBoardWall().wallOrientation();
+            Orientation outOrientation;
+            switch (inOrientation) {
+                case ZERO: outOrientation = Orientation.NINETY; break;
+                case NINETY: outOrientation = Orientation.ZERO; break;
+                case ONE_HUNDRED_EIGHTY: outOrientation = Orientation.TWO_HUNDRED_SEVENTY; break;
+                default: outOrientation = Orientation.ONE_HUNDRED_EIGHTY; break; // 270 case
+            }
+            Wall outWall = wallMap.get(outOrientation);
+            
+            // calculate what the ball should look like when it comes out of the wall
+            Ball ball
+        }
+        else if (message.getType().equals(MessageType.CLIENTWALLCHANGE)) {
+            
+        }
+        else {
+            throw new RuntimeException("Wrong message type for Board");
+        }
     }
-    
 }
+    
