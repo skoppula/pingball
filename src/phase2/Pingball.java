@@ -91,9 +91,9 @@ public class Pingball {
                         }
 
                     } else {
-                        file = Optional.of(new File(arguments.remove()));
+                        file = Optional.of(new File(flag));
                         if (!file.get().isFile())
-                            throw new IllegalArgumentException("file not found: \"" + file + "\"");
+                            throw new IllegalArgumentException("file not found: \"" + file.get() + "\"");
                         if (!arguments.isEmpty()) throw new IllegalArgumentException("No arguments after file");
                         break;
                     }

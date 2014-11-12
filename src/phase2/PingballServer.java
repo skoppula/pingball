@@ -66,7 +66,7 @@ public class PingballServer {
     public static void main(String[] args) throws IOException {
 
         int port = DEFAULT_PORT;
-        if (args[0].equals("--port") && args.length==2) {
+        if (args.length==2 && args[0].equals("--port")) {
             try {
                 port = Integer.parseInt(args[1]);
             } catch (NumberFormatException nfe) {
