@@ -46,7 +46,7 @@ public class Pingball {
      * @throws IOException 
      */
     public static void main(String[] args) throws InterruptedException, IOException {
-        Board board = new Board("boardfile.txt");
+        // Board board = new Board("boardfile.txt");
         /*
         for (;;) {
             Thread.sleep(TIME_DELTA_MILLISECONDS);
@@ -54,11 +54,10 @@ public class Pingball {
             board.printBoard();
         }*/
         
-       /*
         LocalManager lm = null;
         if(host.isPresent()) lm = new LocalManager(board, host.get(), port.get());
         else lm = new LocalManager(board);
-        lm.runGame();*/
+        lm.runGame();
     }
     
     /**
