@@ -19,6 +19,7 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import phase2.Board.Gadget.Orientation;
 import phase2.BoardGrammar.PingBoardLexer;
 import phase2.BoardGrammar.PingBoardListener;
 import phase2.BoardGrammar.PingBoardListenerBoardCreator;
@@ -66,7 +67,7 @@ public class Board {
 
     private List<Ball> balls = new ArrayList<Ball>();
     private List<Gadget> gadgets = new ArrayList<Gadget>();
-    private List<Gadget> gadgetsWithoutWalls = new ArrayList<Gadget>();
+    private final Map<Orientation, Wall> wallMap;
 
     private Map<Ball, List<Collidable>> ballToCollidables = new HashMap<Ball, List<Collidable>>();
     
@@ -106,9 +107,10 @@ public class Board {
         PingBoardListener listener = new PingBoardListenerBoardCreator();
         walker.walk(listener,tree);
         Board board = PingBoardListenerBoardCreator.getBoard();
+        // we never give anyone a reference to this board, so we can use its fields directly w/o rep exposure
         this.name = board.getName();
         this.gadgets = board.gadgets;
-        this.gadgetsWithoutWalls = board.gadgets;
+        this.wallMap = board.wallMap;
         this.GRAVITY_VECTOR = board.getGRAVITY_VECTOR();
         this.MU = board.getMU();
         this.MU2 = board.getMU2();
@@ -133,13 +135,15 @@ public class Board {
 		}
         
         this.gadgets = gadgets;
-        this.gadgetsWithoutWalls = gadgets;
+        // set up walls
+        this.wallMap = Wall.makeWalls(this);
+        for(Orientation key: wallMap.keySet()){
+        	gadgets.add(wallMap.get(key));
+        }
         this.GRAVITY_VECTOR = new Vect(0,DEFAULT_GRAVITY_VALUE);
         this.MU = DEFAULT_MU;
         this.MU2 = DEFAULT_MU2;
 
-        // set up walls
-        gadgets.addAll(Wall.makeWalls(this));
         for(Gadget gadget: gadgets){
         	if(nameToGadgetMap.containsKey(gadget.getName())){
         		throw new IllegalArgumentException("The provided list of gadgets has at least two gadgets with the same name:" + gadget.getName());
@@ -168,13 +172,16 @@ public class Board {
 		}
         
         this.gadgets = gadgets;
-        this.gadgetsWithoutWalls = gadgets;
         this.GRAVITY_VECTOR = new Vect(0,gravity);
         this.MU = friction1;
         this.MU2 = friction2;
 
         // set up walls
-        gadgets.addAll(Wall.makeWalls(this));
+        this.wallMap = Wall.makeWalls(this);
+        for(Orientation key: wallMap.keySet()){
+        	gadgets.add(wallMap.get(key));
+        }
+        
         for(Gadget gadget: gadgets){
             if(nameToGadgetMap.containsKey(gadget.getName())){
                 throw new IllegalArgumentException("The provided list of gadgets has at least two gadgets with the same name:" + gadget.getName());

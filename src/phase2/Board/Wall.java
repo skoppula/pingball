@@ -1,7 +1,9 @@
 package phase2.Board;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import phase2.Messaging.BallMessage;
 import phase2.Messaging.BoardWallPair;
@@ -16,6 +18,7 @@ public class Wall extends Gadget {
 	private final Board board;
 	private boolean isTeleporter = false;
 	private final Orientation orientation;
+	private String text;
     /**
      * Creates a new Wall.
      * @param x the x-location of this wall's origin, must be -1<= x <=20
@@ -33,6 +36,7 @@ public class Wall extends Gadget {
     private Wall(int x, int y, String name, int width, int height, Orientation orientation, Board board) {
     	super(new GridPoint(x,y), name, width, height, 1);
     	this.board = board;
+    	this.text = "";
     	this.orientation = orientation;
         switch (orientation) {
             case NINETY:    
@@ -54,18 +58,18 @@ public class Wall extends Gadget {
     
     
     /**
-     * Create the walls necessary for a board, in the form of a list.
+     * Create the walls necessary for a board, in the form of a map from orientations to walls.
      * @param the board that these walls are being created for
-     * @return four walls, each of length 22, covering each of the sides.
+     * @return a dictionary mapping the four orientations to four walls, each of length 22, covering each of the sides.
      * They are named "leftWall", "topWall", "rightWall", and "bottomWall"
      */
-    public static List<Wall> makeWalls(Board board){
-    	List<Wall> wallList = new ArrayList<>();
-    	wallList.add(new Wall(-1, -1, "leftWall", 1, 22, Orientation.ZERO, board)); // add left wall
-    	wallList.add(new Wall(-1, -1, "topWall", 22, 1, Orientation.NINETY, board)); // add top wall
-    	wallList.add(new Wall(20, -1, "rightWall", 1, 22, Orientation.ONE_HUNDRED_EIGHTY, board)); // add right wall
-    	wallList.add(new Wall(-1, 20, "bottomWall", 22, 1, Orientation.TWO_HUNDRED_SEVENTY, board)); // add left wall
-    	return wallList;
+    public static Map<Orientation, Wall> makeWalls(Board board){
+    	Map<Orientation, Wall> wallMap = new HashMap<>();
+    	wallMap.put(Orientation.ZERO, new Wall(-1, -1, "leftWall", 1, 22, Orientation.ZERO, board)); // add left wall
+    	wallMap.put(Orientation.NINETY, new Wall(-1, -1, "topWall", 22, 1, Orientation.NINETY, board)); // add top wall
+    	wallMap.put(Orientation.ONE_HUNDRED_EIGHTY, new Wall(20, -1, "rightWall", 1, 22, Orientation.ONE_HUNDRED_EIGHTY, board)); // add right wall
+    	wallMap.put(Orientation.TWO_HUNDRED_SEVENTY, new Wall(-1, 20, "bottomWall", 22, 1, Orientation.TWO_HUNDRED_SEVENTY, board)); // add left wall
+    	return wallMap;
     }
     
     /**
@@ -125,6 +129,17 @@ public class Wall extends Gadget {
     public char charRep() {
         return '.';
     }
+    
+    /**
+     * Sets the wall to be permeable (teleports balls that collide with it)
+     * also sets the wall to display a given text
+     * @param text must be less than or equal to 20 characters in length, all ASCII (non-newline)
+     */
+    public void connect(String text) {
+    	this.text = text;
+    	this.isTeleporter = true;
+    }
+    
     
     public void updateGadgetPosition(double timeDelta) {
     	return;
