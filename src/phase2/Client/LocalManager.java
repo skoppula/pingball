@@ -67,6 +67,7 @@ public class LocalManager {
         System.out.println("Adding you to server " + address + " " + port);
     }
     
+
     public LocalManager(File file) {
     	this.outQ = new LinkedBlockingQueue<>(); // note that we have to give the board some sort of queue
     	// however this queue should never have any items other than the startup message
@@ -79,6 +80,14 @@ public class LocalManager {
         System.out.println("Starting local game..");
     }
     
+    public LocalManager(Board board) {
+    	this.outQ = new LinkedBlockingQueue<>(); // note that we have to give the board some sort of queue
+    	this.board = board;
+    	// however this queue should never have any items other than the startup message
+        this.networkedGame = false;
+        System.out.println("Starting local game..");
+    }
+
     /**
      * Runs the game on the local machine
      */
