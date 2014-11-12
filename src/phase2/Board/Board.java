@@ -358,8 +358,7 @@ public class Board {
     }
 
 
-    public void syncChange(Message remove) {
-        // TODO Auto-generated method stub
+    public void syncChange(Message message) {
         
     }
     
