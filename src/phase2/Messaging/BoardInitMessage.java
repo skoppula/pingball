@@ -20,13 +20,14 @@ public class BoardInitMessage extends Message {
 	public BoardInitMessage(String boardName){
 		this.boardName = boardName;
 		this.messageType = MessageType.BOARDINIT;
-		assert(checkRep());
+		//assert(checkRep());
 	}
 
-
+/*
 	private boolean checkRep(){
-		return this.equals(BallMessage.fromJSON(this.toJSONObject()));
+		return this.equals(BoardInitMessage.fromJSON(this.toJSONObject()));
 	}
+*/
 	
 	public String getBoardName() {
 		return boardName;
