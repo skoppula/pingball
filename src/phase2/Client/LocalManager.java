@@ -85,10 +85,11 @@ public class LocalManager {
     public void runGame() {
         while(true) {
             while(!inQ.isEmpty())
-                //TODO update the state of the board according to an incoming message
-                board.syncChange(inQ.remove());
-
-            //TODO change updateBoard method to return List of Messages to update Board about
+				try {
+					board.syncChange(inQ.take());
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
             board.updateBoard(0.01);
             board.printBoard();
         }
