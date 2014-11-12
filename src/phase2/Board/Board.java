@@ -106,8 +106,8 @@ public class Board {
         Board board = PingBoardListenerBoardCreator.getBoard();
         // we never give anyone a reference to this board, so we can use its fields directly w/o rep exposure
         this.name = board.getName();
-        this.gadgets = board.gadgets;
-        this.wallMap = board.wallMap;
+        this.gadgets = new ArrayList<>(board.gadgets);
+        this.wallMap = new HashMap<>(board.wallMap);
         this.GRAVITY_VECTOR = board.getGRAVITY_VECTOR();
         this.MU = board.getMU();
         this.MU2 = board.getMU2();
@@ -135,7 +135,7 @@ public class Board {
         // set up walls
         this.wallMap = Wall.makeWalls(this);
         for(Orientation key: wallMap.keySet()){
-        	gadgets.add(wallMap.get(key));
+        	this.gadgets.add(wallMap.get(key));
         }
         this.GRAVITY_VECTOR = new Vect(0,DEFAULT_GRAVITY_VALUE);
         this.MU = DEFAULT_MU;

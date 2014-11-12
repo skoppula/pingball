@@ -137,6 +137,7 @@ public class Wall extends Gadget {
     @Override
     public List<GridSymbol> getSymbolRep(){
     	List<GridSymbol> symbolList = new ArrayList<>();
+    	
     	char[] textChars = this.text.toCharArray();
     	int counter = 0;
     	switch(this.orientation){
@@ -179,7 +180,7 @@ public class Wall extends Gadget {
 				symbolList.add(new GridSymbol(-1, counter, textChars[counter]));
 				counter++;
 			}
-			while(counter<=height - 1){
+			while(counter<height - 1){
 				symbolList.add(new GridSymbol(-1, counter, '.'));
 				counter++;
 			}
