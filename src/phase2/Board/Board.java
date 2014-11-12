@@ -455,6 +455,7 @@ public class Board {
      */
     public void syncChange(Message message) {
         if (message.getType().equals(MessageType.BALL)) {
+            // find which wall the ball should come out of
             Orientation inOrientation = ((BallMessage) message).getBoardWall().wallOrientation();
             Orientation outOrientation;
             switch (inOrientation) {
@@ -463,7 +464,10 @@ public class Board {
                 case ONE_HUNDRED_EIGHTY: outOrientation = Orientation.TWO_HUNDRED_SEVENTY; break;
                 default: outOrientation = Orientation.ONE_HUNDRED_EIGHTY; break; // 270 case
             }
+            Wall outWall = wallMap.get(outOrientation);
             
+            // calculate what the ball should look like when it comes out of the wall
+            Ball ball
         }
         else if (message.getType().equals(MessageType.CLIENTWALLCHANGE)) {
             
