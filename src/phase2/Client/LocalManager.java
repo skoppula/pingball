@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -51,7 +50,6 @@ public class LocalManager {
      * @param port
      * @throws IOException
      */
-    //TODO change this to take in a grammar file, and then generate the board within LocalManager
     public LocalManager(File file, InetAddress address, int port) throws IOException {
         this.inQ = new LinkedBlockingQueue<Message>();
         this.outQ = new LinkedBlockingQueue<Message>();
@@ -87,10 +85,11 @@ public class LocalManager {
     public void runGame() {
         while(true) {
             while(!inQ.isEmpty())
-                //TODO update the state of the board according to an incoming message
-                board.syncChange(inQ.remove());
-
-            //TODO change updateBoard method to return List of Messages to update Board about
+				try {
+					board.syncChange(inQ.take());
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
             board.updateBoard(0.01);
             board.printBoard();
         }

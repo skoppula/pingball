@@ -67,7 +67,7 @@ public class Board {
 
     private List<Ball> balls = new ArrayList<Ball>();
     private List<Gadget> gadgets = new ArrayList<Gadget>();
-    private List<Gadget> gadgetsWithoutWalls = new ArrayList<Gadget>();
+    private final Map<Orientation, Wall> wallMap;
 
     private Map<Ball, List<Collidable>> ballToCollidables = new HashMap<Ball, List<Collidable>>();
     
@@ -107,9 +107,10 @@ public class Board {
         PingBoardListener listener = new PingBoardListenerBoardCreator();
         walker.walk(listener,tree);
         Board board = PingBoardListenerBoardCreator.getBoard();
+        // we never give anyone a reference to this board, so we can use its fields directly w/o rep exposure
         this.name = board.getName();
         this.gadgets = board.gadgets;
-        this.gadgetsWithoutWalls = board.gadgets;
+        this.wallMap = board.wallMap;
         this.GRAVITY_VECTOR = board.getGRAVITY_VECTOR();
         this.MU = board.getMU();
         this.MU2 = board.getMU2();
@@ -134,13 +135,15 @@ public class Board {
 		}
         
         this.gadgets = gadgets;
-        this.gadgetsWithoutWalls = gadgets;
+        // set up walls
+        this.wallMap = Wall.makeWalls(this);
+        for(Orientation key: wallMap.keySet()){
+        	gadgets.add(wallMap.get(key));
+        }
         this.GRAVITY_VECTOR = new Vect(0,DEFAULT_GRAVITY_VALUE);
         this.MU = DEFAULT_MU;
         this.MU2 = DEFAULT_MU2;
 
-        // set up walls
-        gadgets.addAll(Wall.makeWalls(this));
         for(Gadget gadget: gadgets){
         	if(nameToGadgetMap.containsKey(gadget.getName())){
         		throw new IllegalArgumentException("The provided list of gadgets has at least two gadgets with the same name:" + gadget.getName());
@@ -169,13 +172,16 @@ public class Board {
 		}
         
         this.gadgets = gadgets;
-        this.gadgetsWithoutWalls = gadgets;
         this.GRAVITY_VECTOR = new Vect(0,gravity);
         this.MU = friction1;
         this.MU2 = friction2;
 
         // set up walls
-        gadgets.addAll(Wall.makeWalls(this));
+        this.wallMap = Wall.makeWalls(this);
+        for(Orientation key: wallMap.keySet()){
+        	gadgets.add(wallMap.get(key));
+        }
+        
         for(Gadget gadget: gadgets){
             if(nameToGadgetMap.containsKey(gadget.getName())){
                 throw new IllegalArgumentException("The provided list of gadgets has at least two gadgets with the same name:" + gadget.getName());
@@ -442,6 +448,7 @@ public class Board {
         return constantsEqual && ballsEqual && gadgetsEqual;
     }
 
+
     /**
      * Processes the message Board receives
      * @param message
@@ -451,9 +458,12 @@ public class Board {
             Orientation inOrientation = ((BallMessage) message).getBoardWall().wallOrientation();
             Orientation outOrientation;
             switch (inOrientation) {
-                case Orientation.LEFT: outOrientation = Orientation.RIGHT;
-                
+                case ZERO: outOrientation = Orientation.NINETY; break;
+                case NINETY: outOrientation = Orientation.ZERO; break;
+                case ONE_HUNDRED_EIGHTY: outOrientation = Orientation.TWO_HUNDRED_SEVENTY; break;
+                default: outOrientation = Orientation.ONE_HUNDRED_EIGHTY; break; // 270 case
             }
+            
         }
         else if (message.getType().equals(MessageType.CLIENTWALLCHANGE)) {
             
@@ -461,7 +471,6 @@ public class Board {
         else {
             throw new RuntimeException("Wrong message type for Board");
         }
-        
     }
-    
 }
+    
