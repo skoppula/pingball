@@ -71,6 +71,7 @@ public class LocalManager {
     public LocalManager(File file) {
     	this.outQ = new LinkedBlockingQueue<>(); // note that we have to give the board some sort of queue
     	// however this queue should never have any items other than the startup message
+    	this.inQ = new LinkedBlockingQueue<>(); // this queue should also never be given anything
     	try {
 			this.board = new Board(file, outQ);
 		} catch (IOException e) {
