@@ -130,6 +130,62 @@ public class Wall extends Gadget {
         return '.';
     }
     
+    @Override
+    public List<GridSymbol> getSymbolRep(){
+    	List<GridSymbol> symbolList = new ArrayList<>();
+    	char[] textChars = this.text.toCharArray();
+    	int counter = 0;
+    	switch(this.orientation){
+		case NINETY:
+			symbolList.add(new GridSymbol(-1, -1, '.'));
+			while(counter<textChars.length){
+				symbolList.add(new GridSymbol(counter, -1, textChars[counter]));
+				counter++;
+			}
+			while(counter<width - 1){ // we want the maximum to be 20
+				symbolList.add(new GridSymbol(counter, -1, '.'));
+				counter++;
+			}
+			break;
+		case ONE_HUNDRED_EIGHTY:
+			symbolList.add(new GridSymbol(20, -1, '.'));
+			while(counter<textChars.length){
+				symbolList.add(new GridSymbol(20, counter, textChars[counter]));
+				counter++;
+			}
+			while(counter<height - 1){
+				symbolList.add(new GridSymbol(20, counter, '.'));
+				counter++;
+			}
+			break;
+		case TWO_HUNDRED_SEVENTY:
+			symbolList.add(new GridSymbol(-1, 20, '.'));
+			while(counter<textChars.length){
+				symbolList.add(new GridSymbol(counter, 20, textChars[counter]));
+				counter++;
+			}
+			while(counter<width - 1){
+				symbolList.add(new GridSymbol(counter, 20, '.'));
+				counter++;
+			}
+			break;
+		case ZERO:
+			symbolList.add(new GridSymbol(-1, -1, '.'));
+			while(counter<textChars.length){
+				symbolList.add(new GridSymbol(-1, counter, textChars[counter]));
+				counter++;
+			}
+			while(counter<=height - 1){
+				symbolList.add(new GridSymbol(-1, counter, '.'));
+				counter++;
+			}
+			break;
+		default:
+			throw new IllegalStateException("Should never be able to get here.");
+    	}
+    	return symbolList;
+    }
+    
     /**
      * Sets the wall to be permeable (teleports balls that collide with it)
      * also sets the wall to display a given text
@@ -140,7 +196,20 @@ public class Wall extends Gadget {
     	this.isTeleporter = true;
     }
     
+    /**
+     * Makes the wall impermeable (no longer teleports balls)
+     * and removes all text from the wall.
+     */
+    public void disconnect(){
+    	this.text = "";
+    	this.isTeleporter = false;
+    }
     
+    
+    
+    /**
+     * Wall's position is not updated.
+     */
     public void updateGadgetPosition(double timeDelta) {
     	return;
     }
