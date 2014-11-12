@@ -3,13 +3,19 @@ package phase2.Board;
 import java.util.ArrayList;
 import java.util.List;
 
+import phase2.Messaging.BallMessage;
+import phase2.Messaging.BoardWallPair;
 import phase2.PhysicsComponents.PhysicsComponent;
 import phase2.PhysicsComponents.StaticLine;
 import physics.LineSegment;
 import physics.Vect;
 
 public class Wall extends Gadget {
+	//Rep Invariant: isTeleporter can be true only if board.isOnline == true
     
+	private final Board board;
+	private boolean isTeleporter = false;
+	private final Orientation orientation;
     /**
      * Creates a new Wall.
      * @param x the x-location of this wall's origin, must be -1<= x <=20
@@ -22,9 +28,12 @@ public class Wall extends Gadget {
      * if orientation = TWO_HUNDRED_SEVENTY: width = 22, height = 1
      * @param height the height of the wall. Must correspond to the wall's orientation, as detailed for width
      * @param orientation the orientation of the wall. 0 degrees is the left wall, 90 is the top wall, 180 is the left wall, 270 is the bottom wall
+     * @param board the board that this wall is placed in
      */
-    private Wall(int x, int y, String name, int width, int height, Orientation orientation) {
+    private Wall(int x, int y, String name, int width, int height, Orientation orientation, Board board) {
     	super(new GridPoint(x,y), name, width, height, 1);
+    	this.board = board;
+    	this.orientation = orientation;
         switch (orientation) {
             case NINETY:    
                 physicsComponentList.add(new StaticLine(new LineSegment(0, 0, 20, 0), this.reflectionCoef));
@@ -46,15 +55,16 @@ public class Wall extends Gadget {
     
     /**
      * Create the walls necessary for a board, in the form of a list.
+     * @param the board that these walls are being created for
      * @return four walls, each of length 22, covering each of the sides.
      * They are named "leftWall", "topWall", "rightWall", and "bottomWall"
      */
-    public static List<Wall> makeWalls(){
+    public static List<Wall> makeWalls(Board board){
     	List<Wall> wallList = new ArrayList<>();
-    	wallList.add(new Wall(-1, -1, "leftWall", 1, 22, Orientation.ZERO)); // add left wall
-    	wallList.add(new Wall(-1, -1, "topWall", 22, 1, Orientation.NINETY)); // add top wall
-    	wallList.add(new Wall(20, -1, "rightWall", 1, 22, Orientation.ONE_HUNDRED_EIGHTY)); // add right wall
-    	wallList.add(new Wall(-1, 20, "bottomWall", 22, 1, Orientation.TWO_HUNDRED_SEVENTY)); // add left wall
+    	wallList.add(new Wall(-1, -1, "leftWall", 1, 22, Orientation.ZERO, board)); // add left wall
+    	wallList.add(new Wall(-1, -1, "topWall", 22, 1, Orientation.NINETY, board)); // add top wall
+    	wallList.add(new Wall(20, -1, "rightWall", 1, 22, Orientation.ONE_HUNDRED_EIGHTY, board)); // add right wall
+    	wallList.add(new Wall(-1, 20, "bottomWall", 22, 1, Orientation.TWO_HUNDRED_SEVENTY, board)); // add left wall
     	return wallList;
     }
     
@@ -78,21 +88,32 @@ public class Wall extends Gadget {
      * @param ball that the collision will happen with
      */
     @Override
-    public void collision(Ball ball) {        
-    	PhysicsComponent gadgetPartToCollideWith = this.physicsComponentList.get(0);
-        double minTimeUntilCollision = Double.MAX_VALUE;
-        for(PhysicsComponent gadgetPart: physicsComponentList){
-            double timeUntilCollisionPart = gadgetPart.timeUntilCollision(ball.getBallCircle(), ball.getVelocity());
-            if (timeUntilCollisionPart < minTimeUntilCollision){ 
-                minTimeUntilCollision = timeUntilCollisionPart;
-                gadgetPartToCollideWith = gadgetPart;
-            }
-        }
-        Vect newVelocity = gadgetPartToCollideWith.reflect(ball.getBallCircle(), ball.getVelocity(), ball.getCoefficentOfReflection()); 
-        ball.setVelocity(newVelocity);
-        trigger();   
+    public void collision(Ball ball) {
+    	if(!isTeleporter){
+	    	PhysicsComponent gadgetPartToCollideWith = this.physicsComponentList.get(0);
+	        double minTimeUntilCollision = Double.MAX_VALUE;
+	        for(PhysicsComponent gadgetPart: physicsComponentList){
+	            double timeUntilCollisionPart = gadgetPart.timeUntilCollision(ball.getBallCircle(), ball.getVelocity());
+	            if (timeUntilCollisionPart < minTimeUntilCollision){ 
+	                minTimeUntilCollision = timeUntilCollisionPart;
+	                gadgetPartToCollideWith = gadgetPart;
+	            }
+	        }
+	        Vect newVelocity = gadgetPartToCollideWith.reflect(ball.getBallCircle(), ball.getVelocity(), ball.getCoefficentOfReflection()); 
+	        ball.setVelocity(newVelocity);
+	        trigger();
+    	}
+    	else{
+    		board.removeBall(ball);
+    		//TODO Does this give a concurrentmodificationexception?
+    		try {
+				board.outQ.put(new BallMessage(ball, new BoardWallPair(this.name, this.orientation)));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+    		
+    	}
     }
-
 
     /**
      * Does nothing as walls have no action

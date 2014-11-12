@@ -8,11 +8,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import phase2.Board.Board;
-<<<<<<< HEAD
-import phase2.Messaging.*;
-=======
+import phase2.Messaging.BoardInitMessage;
 import phase2.Messaging.Message;
->>>>>>> afb249d0805072681af3d70b67b5511ff61340d2
 
 public class LocalManager {
 
@@ -53,6 +50,7 @@ public class LocalManager {
      * @param port
      * @throws IOException
      */
+    //TODO change this to take in a grammar file, and then generate the board within LocalManager
     public LocalManager(Board board, InetAddress address, int port) throws IOException {
         this.inQ = new LinkedBlockingQueue<Message>();
         this.outQ = new LinkedBlockingQueue<Message>();
@@ -60,15 +58,13 @@ public class LocalManager {
         this.networkedGame = true;
         
         Socket socket = new Socket(address, port); 
-        //TODO how are we getting a socket? shouldn't we only have a port, then listen on that port for sockets?
 
+        outQ.add(new BoardInitMessage(board.getName()));
         lim = new LocalInputManager(inQ, socket);
         lom = new LocalOutputManager(outQ, socket);
         lim.run();
         lom.run();
-        //TODO send board initialization message
 
-        socket = new Socket(address, port);
         System.out.println("Adding you to server " + address + " " + port);
     }
     
@@ -87,12 +83,8 @@ public class LocalManager {
                 board.syncChange(inQ.remove());
 
             //TODO change updateBoard method to return List of Messages to update Board about
-            //TODO why not just allow board to dump messages on our inQ whenever? I thought that's what we proposed
-            List<Message> out = board.updateBoard(0.01);
+            board.updateBoard(0.01);
             board.printBoard();
-
-            for(Message message:out)
-                outQ.add(message);
         }
     }
 }

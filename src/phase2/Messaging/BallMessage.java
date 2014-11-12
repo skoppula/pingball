@@ -38,6 +38,14 @@ public class BallMessage extends Message {
 		return ball;
 	}
 	
+	/**
+	 * 
+	 * @return the boardWallPair that the ball came from
+	 */
+	public BoardWallPair getBoardWall(){
+		return boardWall;
+	}
+	
 	
 	@SuppressWarnings("unchecked")
 	protected JSONObject toJSONObject() {
