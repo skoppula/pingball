@@ -10,6 +10,7 @@ import phase2.Board.Util.InvalidInvariantException;
 import phase2.BoardGrammar.*;
 import phase2.BoardGrammar.PingBoardParser.RootContext;
 import phase2.Client.LocalManager;
+import phase2.Messaging.Message;
 
 import java.io.File;
 import java.net.InetAddress;
@@ -23,6 +24,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
@@ -38,6 +41,7 @@ public class Pingball {
     
     private static final long TIME_DELTA_MILLISECONDS = 1000/60;
     static double timeInSeconds = TIME_DELTA_MILLISECONDS * .001;
+    static BlockingQueue<Message> outQ;
 
     /**
      * Updates the board every timeDelta Prints out the board every timeDelta
@@ -46,19 +50,13 @@ public class Pingball {
      * @throws IOException 
      */
     public static void main(String[] args) throws InterruptedException, IOException {
-        Board board = new Board("boardfile.txt");
-        /*
-        for (;;) {
-            Thread.sleep(TIME_DELTA_MILLISECONDS);
-            board.updateBoard(timeInSeconds);
-            board.printBoard();
-        }*/
+
+        outQ = new LinkedBlockingDeque<Message>();
         
-       /*
         LocalManager lm = null;
-        if(host.isPresent()) lm = new LocalManager(board, host.get(), port.get());
+        if(host.isPresent()) lm = new LocalManager(new File("boardfile.txt"), host.get(), port.get());
         else lm = new LocalManager(board);
-        lm.runGame();*/
+        lm.runGame();
     }
     
     /**
