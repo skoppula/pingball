@@ -18,6 +18,8 @@ import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
+import org.stringtemplate.v4.compiler.STParser.ifstat_return;
+
 import phase2.Messaging.Message;
 import phase2.Server.CommunicationTunnel;
 import phase2.Server.ConsoleInputManager;
@@ -66,7 +68,9 @@ public class PingballServer {
     public static void main(String[] args) throws IOException {
 
         int port = DEFAULT_PORT;
-        if (args[0].equals("--port") && args.length==2) {
+        if (args.length==0) {
+            System.out.println("Using default port " + port);
+        } else if (args[0].equals("--port") && args.length==2) {
             try {
                 port = Integer.parseInt(args[1]);
             } catch (NumberFormatException nfe) {
@@ -75,8 +79,7 @@ public class PingballServer {
             if (port < 0 || port > MAXIMUM_PORT) {
                 throw new IllegalArgumentException("port " + port + " out of range");
             }
-        } else if (args.length == 0) {
-            System.out.println("Using default port " + port);
+
         } else throw new IllegalArgumentException("Too many arguments");
         
         runPingballServer(port);
