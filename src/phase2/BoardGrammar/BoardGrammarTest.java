@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.junit.Test;
 
@@ -45,8 +46,8 @@ public class BoardGrammarTest {
         List<Gadget> gadgets2 = new ArrayList<Gadget>();
         gadgets2.add(new CircleBumper(1, 2, "circle"));
         
-        Board board1 = new Board(gadgets1, "board");
-        Board board2 = new Board(gadgets2, "board");
+        Board board1 = new Board(gadgets1, "board", new LinkedBlockingQueue<>());
+        Board board2 = new Board(gadgets2, "board", new LinkedBlockingQueue<>());
         
         assertFalse(board1.hasEqualAttributes(board2));
     }
@@ -62,8 +63,8 @@ public class BoardGrammarTest {
         gadgets2.add(new CircleBumper(1, 1, "circle"));
         gadgets2.add(new CircleBumper(1, 2, "circle1"));
         
-        Board board1 = new Board(gadgets1, "board");
-        Board board2 = new Board(gadgets2, "board");
+        Board board1 = new Board(gadgets1, "board", new LinkedBlockingQueue<>());
+        Board board2 = new Board(gadgets2, "board", new LinkedBlockingQueue<>());
         
         assertFalse(board1.hasEqualAttributes(board2));
     }
@@ -73,7 +74,7 @@ public class BoardGrammarTest {
     public void makeBoardTest1() {
         Board board1 = Pingball.parseBoardFile(new File("src/phase2/BoardGrammar/boardFiles/simplestBoard.pb"));
         List<Gadget> gadgets1 = new ArrayList<Gadget>();
-        Board correctBoard = new Board(gadgets1, "sampleBoard1", 20.0, 0.020, 0.020);
+        Board correctBoard = new Board(gadgets1, "sampleBoard1", 20.0, 0.020, 0.020, new LinkedBlockingQueue<>());
         assertTrue(correctBoard.hasEqualAttributes(board1));
     }
     
@@ -82,7 +83,7 @@ public class BoardGrammarTest {
     public void makeBoardTest2() {
         Board board2 = Pingball.parseBoardFile(new File("src/phase2/BoardGrammar/boardFiles/ball.pb"));
         List<Gadget> gadgets2 = new ArrayList<Gadget>();
-        Board correctBoard = new Board(gadgets2, "sampleBoard1", 20.0, 0.020, 0.020);
+        Board correctBoard = new Board(gadgets2, "sampleBoard1", 20.0, 0.020, 0.020, new LinkedBlockingQueue<>());
         Vect ballVelocity = new Vect(2.5, 2.5);
         Ball ball = new Ball(0.5, 0.5, ballVelocity, "Ball");
         correctBoard.addBall(ball);
@@ -100,7 +101,7 @@ public class BoardGrammarTest {
         gadgets3.add(new SquareBumper(1, 2, "Square1"));
         gadgets3.add(new SquareBumper(2, 2, "Square2"));
         
-        Board correctBoard = new Board(gadgets3, "sampleBoard1", 20.0, 0.020, 0.020);
+        Board correctBoard = new Board(gadgets3, "sampleBoard1", 20.0, 0.020, 0.020, new LinkedBlockingQueue<>());
         Vect ballVelocity = new Vect(2.5, 2.5);
         Ball ball = new Ball(0.5, 0.5, ballVelocity, "Ball");
         correctBoard.addBall(ball);
@@ -121,7 +122,7 @@ public class BoardGrammarTest {
         gadgets.add(new TriangleBumper(8, 9, "Tri1", Orientation.TWO_HUNDRED_SEVENTY));
         gadgets.add(new TriangleBumper(11, 9, "Tri2", Orientation.ONE_HUNDRED_EIGHTY));
         
-        Board correctBoard = new Board(gadgets, "sampleBoard1", 20.0, 0.020, 0.020);
+        Board correctBoard = new Board(gadgets, "sampleBoard1", 20.0, 0.020, 0.020, new LinkedBlockingQueue<>());
         Vect ballVelocity = new Vect(2.5, 2.5);
         Ball ball = new Ball(0.5, 0.5, ballVelocity, "Ball");
         correctBoard.addBall(ball);
@@ -146,7 +147,7 @@ public class BoardGrammarTest {
         gadgets.add(new Flipper(8, 7, "FlipL2", BumperSide.LEFT, Orientation.ZERO));
         gadgets.add(new Flipper(10, 7, "FlipR2", BumperSide.RIGHT, Orientation.ZERO));
         
-        Board correctBoard = new Board(gadgets, "sampleBoard1", 20.0, 0.020, 0.020);
+        Board correctBoard = new Board(gadgets, "sampleBoard1", 20.0, 0.020, 0.020, new LinkedBlockingQueue<>());
         Vect ballVelocity = new Vect(2.5, 2.5);
         Ball ball = new Ball(0.5, 0.5, ballVelocity, "Ball");
         correctBoard.addBall(ball);
@@ -166,7 +167,7 @@ public class BoardGrammarTest {
         gadgets.add(new TriangleBumper(19, 0, "Tri", Orientation.ONE_HUNDRED_EIGHTY));
         gadgets.add(new Absorber(0, 18, "Abs", 20, 2));
         
-        Board correctBoard = new Board(gadgets, "Absorber", 25.0, 0.025, 0.025);
+        Board correctBoard = new Board(gadgets, "Absorber", 25.0, 0.025, 0.025, new LinkedBlockingQueue<>());
         Vect ballVelocity = new Vect(0.1, 0.1);
         Ball ballB = new Ball(19.25, 3.25, ballVelocity, "BallB");
         Ball ballC = new Ball(1.25, 5.25, ballVelocity, "BallC");
@@ -200,7 +201,7 @@ public class BoardGrammarTest {
         absorberTriggers.add(abs);
         abs.setGadgetsToTrigger(absorberTriggers);
 
-        Board correctBoard = new Board(gadgets, "Example", 25.0, 0.025, 0.025);
+        Board correctBoard = new Board(gadgets, "Example", 25.0, 0.025, 0.025, new LinkedBlockingQueue<>());
         Vect ballVelocity = new Vect(-3.4, -2.3);
         Ball ball = new Ball(1.8, 4.5, ballVelocity, "Ball");
         correctBoard.addBall(ball);

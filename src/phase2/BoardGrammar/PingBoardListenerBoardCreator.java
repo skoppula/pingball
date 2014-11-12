@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import jdk.nashorn.internal.parser.TokenStream;
 
@@ -19,6 +22,7 @@ import phase2.Board.*;
 import phase2.Board.Flipper.BumperSide;
 import phase2.Board.Gadget.Orientation;
 import phase2.Board.Util.InvalidInvariantException;
+import phase2.Messaging.Message;
 import physics.Vect;
 import sun.misc.Queue;
 
@@ -51,7 +55,7 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
                 gadget.setGadgetsToTrigger(gadgetsToTrigger);
             }
         }
-        board = new Board(gadgets, BOARD_NAME, GRAVITY, FRICTION1, FRICTION2);
+        board = new Board(gadgets, BOARD_NAME, GRAVITY, FRICTION1, FRICTION2, new LinkedBlockingQueue<Message>());
         for (Ball ball: ballsMap.values()) {
             board.addBall(ball);
         }

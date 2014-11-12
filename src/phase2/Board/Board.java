@@ -71,7 +71,7 @@ public class Board {
     /** A map from names of gadgets to the gadgets themselves */
     Map<String, Gadget> nameToGadgetMap = new HashMap<>();
     
-    public Board(File file) throws IOException {
+    public Board(File file, BlockingQueue<Message> outQ) throws IOException {
         // Read in board files using ANTLR
         // make a stream of characters to feed to the lexer
         FileReader filereader = new FileReader(file);
@@ -97,6 +97,7 @@ public class Board {
         this.GRAVITY_VECTOR = board.getGRAVITY_VECTOR();
         this.MU = board.getMU();
         this.MU2 = board.getMU2();
+        this.outQ = outQ;
     }
     
     /**
@@ -201,6 +202,8 @@ public class Board {
 
     /**
      * Mutates board to represent changes in gadgets after timeDelta seconds
+     * 
+     * Empty and process the Messages in the queue
      */
     public void updateBoard(double timeDelta) {
 
@@ -408,6 +411,7 @@ public class Board {
     }
 
 
+       
     public void syncChange(Message remove) {
         // TODO Auto-generated method stub
         
