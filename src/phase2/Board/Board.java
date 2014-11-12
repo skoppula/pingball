@@ -134,7 +134,7 @@ public class Board {
 			e.printStackTrace();
 		}
         
-        this.gadgets = gadgets;
+        this.gadgets = new ArrayList<>(gadgets);
         // set up walls
         this.wallMap = Wall.makeWalls(this);
         for(Orientation key: wallMap.keySet()){
@@ -171,7 +171,7 @@ public class Board {
 			e.printStackTrace();
 		}
         
-        this.gadgets = gadgets;
+        this.gadgets = new ArrayList<>(gadgets);
         this.GRAVITY_VECTOR = new Vect(0,gravity);
         this.MU = friction1;
         this.MU2 = friction2;
