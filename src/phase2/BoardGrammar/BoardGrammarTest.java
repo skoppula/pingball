@@ -132,7 +132,7 @@ public class BoardGrammarTest {
     // make a board with bumpers and flippers
     @Test
     public void makeBoardTest5() throws InvalidInvariantException {
-        Board board = Pingball.parseBoardFile(new File("src/phase2/BoardGrammar/boardFiles/flippers.pb"));
+        Board board = Pingball.parseBoardFile(new File("src/phase2/BoardGrammar/boardFiles/flipperTest.pb"));
         
         // add bumpers to correct board
         List<Gadget> gadgets = new ArrayList<Gadget>();

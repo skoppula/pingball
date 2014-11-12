@@ -1,26 +1,43 @@
-board name=sampleBoard1 gravity=20.0 friction1=0.020 friction2=0.020
-# This board is meant for stand-alone play. It is a loose 
-# representation of the screenshot in the project handout.
+board name=Flippers gravity = 25.0
+
+# define a ball
+ball name=BallA x=0.25 y=3.25 xVelocity=0.1 yVelocity=0.1 
+ball name=BallB x=5.25 y=3.25 xVelocity=0.1 yVelocity=0.1 
+ball name=BallC x=10.25 y=3.25 xVelocity=0.1 yVelocity=0.1 
+ball name=BallD x=15.25 y=3.25 xVelocity=0.1 yVelocity=0.1 
+ball name=BallE x=19.25 y=3.25 xVelocity=0.1 yVelocity=0.1 
+
+# define some left flippers
+leftFlipper name=FlipA x=0 y=8 orientation=90 
+leftFlipper name=FlipB x=4 y=10 orientation=90 
+leftFlipper name=FlipC x=9 y=8 orientation=90
+leftFlipper name=FlipD x=15 y=8 orientation=90
+
+# define some right flippers 
+rightFlipper name=FlipE x=2 y=15 orientation=0
+rightFlipper name=FlipF x=17 y=15 orientation=0
+
+# define some circle bumpers
+circleBumper name=CircleA x=5 y=18
+circleBumper name=CircleB x=7 y=13
+circleBumper name=CircleC x=0 y=5
+circleBumper name=CircleD x=5 y=5
+circleBumper name=CircleE x=10 y=5
+circleBumper name=CircleF x=15 y=5
+
+# define some triangle bumpers
+triangleBumper name=TriA x=19 y=0 orientation=180
+triangleBumper name=TriB x=10 y=18 orientation=90
+
+# define an absorber
+absorber name=Abs x=0 y=19 width=20 height=1 
 
 
-  # define a ball
-  ball name=Ball x=0.5 y=0.5 xVelocity=2.5 yVelocity=2.5
-
-  # define a series of square bumpers
-  squareBumper name=Square0 x=0 y=2
-  squareBumper name=Square1 x=1 y=2
-  
-  # define a series of circle bumpers
-  circleBumper name=Circle4 x=4 y=3
-  circleBumper name=Circle5 x=5 y=4
-  
-  # define some triangular bumpers
-  triangleBumper name=Tri1 x=8 y=9 orientation=270
-  triangleBumper name=Tri2 x=11 y=9 orientation=180
-  
-  # add some flippers
-  leftFlipper name=FlipL1 x=8 y=2 orientation=0
-  rightFlipper name=FlipR1 x=10 y=2 orientation=0
-  leftFlipper name=FlipL2 x=8 y=7 orientation=0
-  rightFlipper name=FlipR2 x=10 y=7 orientation=0
+# define events between gizmos
+fire trigger=CircleC action=FlipA
+fire trigger=CircleE action=FlipC
+fire trigger=CircleF action=FlipD
+fire trigger=Abs action=FlipE
+fire trigger=Abs action=FlipF
+fire trigger=Abs action=Abs
 
