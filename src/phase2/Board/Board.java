@@ -24,6 +24,7 @@ import phase2.BoardGrammar.PingBoardListener;
 import phase2.BoardGrammar.PingBoardListenerBoardCreator;
 import phase2.BoardGrammar.PingBoardParser;
 import phase2.BoardGrammar.PingBoardParser.RootContext;
+import phase2.Messaging.BoardInitMessage;
 import phase2.Messaging.Message;
 import physics.Geometry;
 import physics.Vect;
@@ -80,6 +81,13 @@ public class Board {
      */
     public Board(File file, BlockingQueue<Message> outQ) throws IOException {
     	this.outQ = outQ;
+        //Send the boardinit message
+        try {
+			outQ.put(new BoardInitMessage(this.name));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+        
     	
         // Read in board files using ANTLR
         // make a stream of characters to feed to the lexer
@@ -118,6 +126,13 @@ public class Board {
     public Board(List<Gadget> gadgets, String name, BlockingQueue<Message> outQ) {
     	this.outQ = outQ;
         this.name = name;
+        //Send the boardinit message
+        try {
+			outQ.put(new BoardInitMessage(this.name));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+        
         this.gadgets = gadgets;
         this.gadgetsWithoutWalls = gadgets;
         this.GRAVITY_VECTOR = new Vect(0,DEFAULT_GRAVITY_VALUE);
@@ -146,6 +161,13 @@ public class Board {
     		BlockingQueue<Message> outQ) {
     	this.outQ = outQ;
         this.name = name;
+        //Send the boardinit message
+        try {
+			outQ.put(new BoardInitMessage(this.name));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+        
         this.gadgets = gadgets;
         this.gadgetsWithoutWalls = gadgets;
         this.GRAVITY_VECTOR = new Vect(0,gravity);
