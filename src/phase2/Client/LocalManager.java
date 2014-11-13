@@ -62,7 +62,7 @@ public class LocalManager {
         System.out.println(port);
         Socket socket = new Socket(address, port); 
         System.out.println("HERE");
-        outQ.add(new BoardInitMessage(board.getName()));
+        //outQ.add(new BoardInitMessage(board.getName()));
         System.out.println("HERE2");
         lim = new Thread(new LocalInputManager(inQ, socket));
         lom = new Thread(new LocalOutputManager(outQ, socket));

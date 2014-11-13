@@ -78,7 +78,6 @@ public class Pingball {
                             String[] ipTokens = hostStr.split("\\.");
                                 System.out.println(Arrays.toString(ipTokens));
                             for(int i = 0; i < ipTokens.length; ++i) {
-                                //System.out.println(i + " " + ipTokens[i]);
                                 ip[i] = (byte) Integer.parseInt(ipTokens[i]);
                             }
                             try {
