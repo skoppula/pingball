@@ -35,7 +35,6 @@ public class PingballServer {
     protected HashSet<String> waitlist;
     
     BlockingQueue<Message> inQ;
-    BlockingQueue<Message> outQ;
     
     //When they ask me how I code so quick, I say poon-lickin
     //Don't doubt my shit, you'll have lisa and yo bitchin
