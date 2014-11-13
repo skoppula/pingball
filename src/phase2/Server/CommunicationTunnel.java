@@ -8,6 +8,8 @@ import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.antlr.v4.codegen.model.chunk.ThisRulePropertyRef_ctx;
+
 import phase2.Messaging.BoardInitMessage;
 import phase2.Messaging.Message;
 import phase2.Messaging.TerminateMessage;
@@ -52,7 +54,9 @@ public class CommunicationTunnel implements Runnable {
             assert(inMessage.getType() == MessageType.BOARDINIT);
 
             // handle the board init messages
+            System.out.println(inMessage);
             this.name = ((BoardInitMessage)inMessage).getBoardName();
+            System.out.println(name);
             QueueProcessor.nameToBoardTunnelMap.put(this.name, this);
             
             InputHandler ih = new InputHandler(in, serverInQ);
@@ -96,7 +100,6 @@ public class CommunicationTunnel implements Runnable {
                 e.printStackTrace();
             } 
         }
-        
     }
 
     private class OutputHandler implements Runnable {
