@@ -105,7 +105,6 @@ public class Pingball {
 
             if(!file.isPresent()) throw new IllegalArgumentException("No file provided");
         }
-
         
         LocalManager lm = null;
         if(host.isPresent()) lm = new LocalManager(file.get(), host.get(), port.get(), timeInSeconds);

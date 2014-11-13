@@ -15,8 +15,8 @@ public class LocalManager {
 
     //TODO make these types threadsafe, especially lim, lom
     private Board board;
-    private LocalInputManager lim;
-    private LocalOutputManager lom;
+    private Thread lim;
+    private Thread lom;
     protected BlockingQueue<Message> inQ; 
     protected BlockingQueue<Message> outQ;
     private final double deltaTime;
@@ -59,12 +59,14 @@ public class LocalManager {
         this.deltaTime = deltaTime;
         
         Socket socket = new Socket(address, port); 
-
+        System.out.println("HERE");
         outQ.add(new BoardInitMessage(board.getName()));
-        lim = new LocalInputManager(inQ, socket);
-        lom = new LocalOutputManager(outQ, socket);
-        lim.run();
-        lom.run();
+        System.out.println("HERE2");
+        lim = new Thread(new LocalInputManager(inQ, socket));
+        lom = new Thread(new LocalOutputManager(outQ, socket));
+        lim.start();
+        lom.start();
+        System.out.println("HERE3");
 
         System.out.println("Adding you to server " + address + " " + port);
     }
