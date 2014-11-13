@@ -124,6 +124,5 @@ public class CommunicationTunnel implements Runnable {
                 e.printStackTrace();
             } 
         }
-        
     }
 }
