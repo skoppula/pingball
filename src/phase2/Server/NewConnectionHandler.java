@@ -25,7 +25,6 @@ public class NewConnectionHandler implements Runnable {
         while (true) {
         	Socket socket = new Socket(); // we need a non-null socket
             try {
-
                 //Blocks until new connection
                 socket = serverSocket.accept();
 
