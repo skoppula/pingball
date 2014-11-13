@@ -99,6 +99,11 @@ public class LocalManager {
      */
     public void runGame() {
         while(true) {
+            try {
+                Thread.sleep(2);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
             while(!inQ.isEmpty())
 				try {
 					board.syncChange(inQ.take());
