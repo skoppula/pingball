@@ -6,8 +6,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -194,10 +196,6 @@ public class Board {
         ballToCollidables.put(ball, new ArrayList<Collidable>());
     }
     
-    public void removeBall(Ball ball){
-    	balls.remove(ball);
-    	ballToCollidables.remove(ball);
-    }
     
     /**
      * Mutates board to represent the board after timeDelta seconds based on
@@ -220,9 +218,14 @@ public class Board {
                     ball.updatePrevVelocity();
                 }
                 
+                removeFlaggedBalls(); // get rid of any balls that have been flagged (and thus absorbed
+                // by the wall). This is done to avoid taking the ball out of a list while still iterating
+                // over that list.
+                
                 if (timeDelta - timeToMove > Math.pow(10, -10)) {
                     updateBallPositions(timeDelta - timeToMove);
                 } 
+                
             }
             else {
                 for (Ball ball : ballToCollidables.keySet()) {
@@ -512,5 +515,27 @@ public class Board {
             throw new RuntimeException("Wrong message type for Board");
         }
     }
+
+    private Set<Ball> ballsToRemove = new HashSet<>();
+    /**
+     * Flags a ball for removal. The next time removeFlaggedBalls() is called, this ball will be removed.
+     * @param ball
+     */
+	protected void flagForRemoval(Ball ball) {
+		ballsToRemove.add(ball);
+	}
+	
+	/**
+	 * Removes all balls that have been flagged for removal.
+	 */
+	private void removeFlaggedBalls(){
+		for(Ball ball: ballsToRemove){
+			balls.remove(ball);
+			ballToCollidables.remove(ball);
+		}
+		ballsToRemove = new HashSet<>();
+	}
+	
+	
 }
     
