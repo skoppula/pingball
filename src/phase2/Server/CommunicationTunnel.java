@@ -13,7 +13,10 @@ import phase2.Messaging.Message;
 import phase2.Messaging.TerminateMessage;
 import phase2.Messaging.Message.MessageType;
 
-
+/**
+ * The class which handles communication with a given client.
+ * Has a serverInQ for messages to the server, and a tunnelOutQ for messages to the client over a socket.
+ */
 public class CommunicationTunnel implements Runnable {
     
     String name;
@@ -23,8 +26,10 @@ public class CommunicationTunnel implements Runnable {
     BlockingQueue<Message> serverInQ;
     BlockingQueue<Message> tunnelOutQ;
 
-    /*
-     * Maintains a connection with a client
+    /**
+     * Creates a new communicationTunnel
+     * @param socket the socket with which to communicate with the client
+     * @param serverInQ the queue to place messages to the queueProcessor
      */
     public CommunicationTunnel(Socket socket, BlockingQueue<Message> serverInQ) {
         this.socket = socket;
@@ -68,10 +73,20 @@ public class CommunicationTunnel implements Runnable {
         } 
     }
     
+    /**
+     * Used to send messages to the client
+     * @param message the message we want to send to the client
+     */
     public void addToOutQ(Message message) {
         tunnelOutQ.add(message);
     }
     
+    /**
+     * Handles the messages coming from the client to the server, by reading
+     * the socket and placing it on the serverInQ. When a disconnect occurs,
+     * sends a terminateMessage.
+     *
+     */
     private class InputHandler implements Runnable {
 
         private BufferedReader in;
@@ -109,6 +124,11 @@ public class CommunicationTunnel implements Runnable {
         }
     }
 
+    /**
+     * Takes messages given to the CommunicationTunnel, converts
+     * them to strings, and sends them over the socket
+     *
+     */
     private class OutputHandler implements Runnable {
 
         private PrintWriter out;

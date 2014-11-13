@@ -111,7 +111,7 @@ public class Board {
         	this.addBall(ball);
         }
         this.wallMap = new HashMap<>(board.wallMap);
-        this.GRAVITY_VECTOR = board.getGRAVITY_VECTOR();
+        this.GRAVITY_VECTOR = board.getGravityVector();
         this.MU = board.getMU();
         this.MU2 = board.getMU2();
         this.outQ = outQ;
@@ -120,8 +120,8 @@ public class Board {
     /**
      * Creates a board with the default values for friction1, friction2, and gravity,
      * and sends a greeting to the server.
-     * @param gadgets
-     * @param name
+     * @param gadgets the list of gadgets to be initialized (not including walls)
+     * @param name the name of our board
      * @param outQ the output queue from the board to the server
      */
     public Board(List<Gadget> gadgets, String name, BlockingQueue<Message> outQ) {
@@ -156,8 +156,8 @@ public class Board {
     /**
      * Creates a board with the specified values for friction1, friction2, and gravity,
      * and sends a greeting to the server
-     * @param gadgets
-     * @param name
+     * @param gadgets the list of gadgets in the board (not including walls)
+     * @param name the name of the board
      * @param outQ the output queue from the board to the server
      */
     public Board(List<Gadget> gadgets, String name, double gravity, double friction1, double friction2,
@@ -199,7 +199,7 @@ public class Board {
     
     /**
      * Mutates board to represent the board after timeDelta seconds based on
-     * ball changing position
+     * balls changing position.
      */
     public void updateBallPositions(double timeDelta) {
         if (timeDelta > 0) {
@@ -319,28 +319,30 @@ public class Board {
         }
     }
     
-    private double updateCollisions(double timeDelta) {
+    /**
+     * Collides balls with gadgets and other balls if they will collide in exactly timeDelta
+     * @param timeDelta must be positive
+     * @return 
+     */
+    private void updateCollisions(double timeDelta) {
 
-        Double time = timeDelta;
         Geometry.setForesight(timeDelta);
         for (Ball ball : balls) {
             for (Gadget gadget : gadgets) {
                 double time2 = gadget.getTimeUntilCollision(ball);
 
-                if (time2 == time) {
+                if (time2 == timeDelta) {
                     ballToCollidables.get(ball).add(gadget);
                 }
             }
             for (Ball ball2 : balls) {
                 double time2 = ball2.getTimeUntilCollision(ball);
 
-                if (time2 == time) {
+                if (time2 == timeDelta) {
                     ballToCollidables.get(ball).add(ball2);
                 }
             }
         }
-
-        return time;
     }
 
 
@@ -377,6 +379,10 @@ public class Board {
 
 
 
+    /**
+     * Stores information of a double and a tuple - used to keep track of board update state.
+     *
+     */
     private class boolDoubleTuple {
         public final boolean bool;
         public final double time;
@@ -387,7 +393,7 @@ public class Board {
         }
     }
     
-    public Vect getGRAVITY_VECTOR() {
+    public Vect getGravityVector() {
         return GRAVITY_VECTOR;
     }
 
@@ -416,7 +422,7 @@ public class Board {
      */
     public boolean hasEqualAttributes(Board otherBoard) {
         // check that constants are equal
-        boolean gravityEqual = this.getGRAVITY_VECTOR().equals(otherBoard.getGRAVITY_VECTOR());
+        boolean gravityEqual = this.getGravityVector().equals(otherBoard.getGravityVector());
         boolean friction1Equal = this.getMU()==otherBoard.getMU();
         boolean friction2Equal = this.getMU2()==otherBoard.getMU2();
         boolean nameEqual = this.getName().equals(otherBoard.getName());
@@ -451,8 +457,8 @@ public class Board {
 
 
     /**
-     * Processes the message Board receives
-     * @param message
+     * Processes the message Board receives and changes board's state according
+     * @param message must be either a BALL or a CLIENTWALLCHANGE message
      */
     public void syncChange(Message message) {
         // find which wall will either
