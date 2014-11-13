@@ -107,6 +107,9 @@ public class Board {
         // we never give anyone a reference to this board, so we can use its fields directly w/o rep exposure
         this.name = board.getName();
         this.gadgets = new ArrayList<>(board.gadgets);
+        for(Ball ball: board.balls){
+        	this.addBall(ball);
+        }
         this.wallMap = new HashMap<>(board.wallMap);
         this.GRAVITY_VECTOR = board.getGRAVITY_VECTOR();
         this.MU = board.getMU();
