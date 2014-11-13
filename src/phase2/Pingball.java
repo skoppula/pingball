@@ -66,6 +66,7 @@ public class Pingball {
                 try {
                     if (flag.equals("--port")) {
                         port = Optional.of(Integer.parseInt(arguments.remove()));
+
                         if (port.get() < 0 || port.get() > MAXIMUM_PORT)
                             throw new IllegalArgumentException("port " + port + " out of range");
 
