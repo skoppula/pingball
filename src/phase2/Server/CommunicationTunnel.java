@@ -54,9 +54,7 @@ public class CommunicationTunnel implements Runnable {
             assert(inMessage.getType() == MessageType.BOARDINIT);
 
             // handle the board init messages
-            System.out.println(inMessage);
             this.name = ((BoardInitMessage)inMessage).getBoardName();
-            System.out.println(name);
             QueueProcessor.nameToBoardTunnelMap.put(this.name, this);
             
             Thread ih = new Thread(new InputHandler(in, serverInQ));
