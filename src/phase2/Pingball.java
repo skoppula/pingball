@@ -30,6 +30,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import physics.Vect;
@@ -164,6 +165,8 @@ public class Pingball {
             ParseTreeWalker walker = new ParseTreeWalker();
             PingBoardListener listener = new PingBoardListenerBoardCreator();
             walker.walk(listener,tree);
+            System.err.println(tree.toStringTree(parser));
+            ((RuleContext)tree).inspect(parser);
             Board board = PingBoardListenerBoardCreator.getBoard();
             return board;
             
