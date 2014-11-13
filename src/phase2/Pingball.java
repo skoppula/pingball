@@ -159,8 +159,6 @@ public class Pingball {
             // feed the stream of tokens we've generated to the parser
             PingBoardParser parser = new PingBoardParser(tokens);
             RootContext tree = parser.root();
-            System.err.println(tree.toStringTree());
-            tree.inspect(parser);
             
             // Visit each node in the parse tree in order,
             // top-to-bottom, left-to-right, calling methods that we want
