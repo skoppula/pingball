@@ -28,7 +28,7 @@ public class ConsoleInputManager implements Runnable {
                 if (parts.length != 3) throw new IllegalArgumentException();
 
                 boolean isVerticalConnection = false;
-                if(parts[0].equals("v") || parts[1].equals("h")) {
+                if(parts[0].equals("v") || parts[0].equals("h")) {
                     isVerticalConnection = parts[0].equals("v");
                 } else throw new IllegalArgumentException();
 

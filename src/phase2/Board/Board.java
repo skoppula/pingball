@@ -455,7 +455,17 @@ public class Board {
         // find which wall will either
         // a) receive a new ball or
         // b) connect/disconnect
-        Orientation inOrientation = ((BallMessage) message).getBoardWall().wallOrientation();
+        Orientation inOrientation;
+        switch(message.getType()){
+		case BALL:
+			inOrientation = ((BallMessage) message).getBoardWall().wallOrientation();
+			break;
+		case CLIENTWALLCHANGE:
+			inOrientation = ((ClientWallChangeMessage)message).getOtherBoardWall().wallOrientation();
+			break;
+		default:
+			throw new IllegalStateException("This shouldn't be possible");
+        }
         Orientation outOrientation;
         switch (inOrientation) {
             case ZERO: outOrientation = Orientation.NINETY; break;

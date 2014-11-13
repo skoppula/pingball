@@ -104,13 +104,13 @@ public class QueueProcessor implements Runnable {
 			throw new IllegalStateException("DIS IS IMPOSIRBR");
     	}
     	
-    	CommunicationTunnel tunnel1 = nameToBoardTunnelMap.get(boardWall1);
-    	CommunicationTunnel tunnel2 = nameToBoardTunnelMap.get(boardWall2);
+    	CommunicationTunnel tunnel1 = nameToBoardTunnelMap.get(boardWall1.board());
+    	CommunicationTunnel tunnel2 = nameToBoardTunnelMap.get(boardWall2.board());
     	// If the map already contains a mapping for boardWall1, make sure to remove it, and its reverse mapping
-    	if(wallConnectionMap.containsKey(boardWall1)){
+    	if(wallConnectionMap.containsKey(boardWall1.board())){
     		// break the connection with boardWall1's old wall connection
     		BoardWallPair oldPair1 = wallConnectionMap.get(boardWall1);
-    		CommunicationTunnel oldPairTunnel1 = nameToBoardTunnelMap.get(oldPair1);
+    		CommunicationTunnel oldPairTunnel1 = nameToBoardTunnelMap.get(oldPair1.board());
     		oldPairTunnel1.addToOutQ(new ClientWallChangeMessage(boardWall1, false));
     		
     		//wallConnectionMap.remove(oldPair1);
@@ -122,9 +122,9 @@ public class QueueProcessor implements Runnable {
     		wallConnectionMap.remove(boardWall1);
     	}
     	// same with boardWall2
-    	if(wallConnectionMap.containsKey(boardWall2)){
+    	if(wallConnectionMap.containsKey(boardWall2.board())){
     		BoardWallPair oldPair2 = wallConnectionMap.get(boardWall2);
-    		CommunicationTunnel oldPairTunnel2 = nameToBoardTunnelMap.get(oldPair2);
+    		CommunicationTunnel oldPairTunnel2 = nameToBoardTunnelMap.get(oldPair2.board());
     		oldPairTunnel2.addToOutQ(new ClientWallChangeMessage(boardWall2, false));
     		//wallConnectionMap.remove(oldPair2);
     		// The above line is not necessary because balls which manage to sneak through before the wall becomes
