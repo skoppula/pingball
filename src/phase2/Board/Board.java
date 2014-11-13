@@ -79,11 +79,6 @@ public class Board {
      */
     public Board(File file, BlockingQueue<Message> outQ) throws IOException {
         //Send the boardinit message
-        try {
-			outQ.put(new BoardInitMessage(this.name));
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 
         // Read in board files using ANTLR
         // make a stream of characters to feed to the lexer
@@ -104,6 +99,11 @@ public class Board {
         Board board = PingBoardListenerBoardCreator.getBoard();
         // we never give anyone a reference to this board, so we can use its fields directly w/o rep exposure
         this.name = board.getName();
+        try {
+			outQ.put(new BoardInitMessage(this.name));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
         this.gadgets = new ArrayList<>(board.gadgets);
         for(Ball ball: board.balls){
         	this.addBall(ball);
