@@ -11,7 +11,7 @@ import phase2.Messaging.Message;
 public class LocalOutputManager implements Runnable {
 
     Queue<Message> outQ;
-    PrintWriter out = null;
+    PrintWriter out;
     Socket socket;
     
     /**
@@ -36,9 +36,16 @@ public class LocalOutputManager implements Runnable {
                     out.println(messageJSON);
                 }
             }
+        	
 
         } finally {
             out.close();
+            try {
+				socket.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
     }
 

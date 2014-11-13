@@ -32,8 +32,6 @@ public class PingballServer {
     private final ServerSocket serverSocket;
     
     //TODO make these types threadsafe
-    protected HashMap<String, CommunicationTunnel> tunnels;
-    protected HashMap<String, String> wallConnections;
     protected HashSet<String> waitlist;
     
     BlockingQueue<Message> inQ;
@@ -48,18 +46,15 @@ public class PingballServer {
     
     private PingballServer(int port) throws IOException {
         this.serverSocket = new ServerSocket(port);
-        this.tunnels = new HashMap<String, CommunicationTunnel>();
-        this.wallConnections = new HashMap<String, String>();
         this.inQ = new LinkedBlockingDeque<Message>();
-        this.outQ = new LinkedBlockingDeque<Message>();
     }
     
     private void serve() {
-        nch = new Thread(new NewConnectionHandler(serverSocket, tunnels, inQ));
+        nch = new Thread(new NewConnectionHandler(serverSocket, inQ));
         nch.start();
         cim = new Thread(new ConsoleInputManager(inQ));
         cim.start();
-        qp = new Thread(new QueueProcessor(outQ));
+        qp = new Thread(new QueueProcessor(inQ));
         qp.start();
     }
 

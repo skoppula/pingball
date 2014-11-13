@@ -61,6 +61,7 @@ public class CommunicationTunnel implements Runnable {
             Thread oh = new Thread(new OutputHandler(out, tunnelOutQ));
             oh.start();
             
+            
         } catch (IOException e) {
         	e.printStackTrace();
         } 

@@ -11,12 +11,10 @@ import phase2.Messaging.Message;
 public class NewConnectionHandler implements Runnable {
     
     ServerSocket serverSocket;
-    HashMap<String, CommunicationTunnel> serverTunnels;
     BlockingQueue<Message> serverInQ;
     
-    public NewConnectionHandler(ServerSocket serverSocket, HashMap<String, CommunicationTunnel> tunnels, BlockingQueue<Message> inQ) {
+    public NewConnectionHandler(ServerSocket serverSocket, BlockingQueue<Message> inQ) {
         this.serverSocket = serverSocket;
-        this.serverTunnels = tunnels;
         this.serverInQ = inQ;
     }
 
