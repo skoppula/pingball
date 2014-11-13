@@ -23,19 +23,25 @@ public class NewConnectionHandler implements Runnable {
     @Override
     public void run() {
         while (true) {
+        	Socket socket = new Socket(); // we need a non-null socket
             try {
 
                 //Blocks until new connection
-                Socket socket = serverSocket.accept();
+                socket = serverSocket.accept();
 
                 Thread tunnel = new Thread(new CommunicationTunnel(socket, serverInQ));
                 System.out.println("New client: " + socket);
                 tunnel.start();
-                
-                socket.close();
+                tunnel.run();
 
             } catch (IOException e) {
                 e.printStackTrace();
+            }finally {
+            	try {
+                	socket.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
             }
         }
     }
