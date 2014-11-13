@@ -42,9 +42,9 @@ public class PingballServer {
     //When they ask me how I code so quick, I say poon-lickin
     //Don't doubt my shit, you'll have lisa and yo bitchin
     
-    private NewConnectionHandler nch;
-    private ConsoleInputManager cim;
-    private QueueProcessor qp;
+    private Thread nch;
+    private Thread cim;
+    private Thread qp;
     
     private PingballServer(int port) throws IOException {
         this.serverSocket = new ServerSocket(port);
@@ -55,11 +55,11 @@ public class PingballServer {
     }
     
     private void serve() {
-        nch = new NewConnectionHandler(serverSocket, tunnels, inQ);
+        nch = new Thread(new NewConnectionHandler(serverSocket, tunnels, inQ));
         nch.run();
-        cim = new ConsoleInputManager(inQ);
+        cim = new Thread(new ConsoleInputManager(inQ));
         cim.run();
-        qp = new QueueProcessor(outQ);
+        qp = new Thread(new QueueProcessor(outQ));
         qp.run();
     }
 

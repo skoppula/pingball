@@ -62,11 +62,10 @@ public class QueueProcessor implements Runnable {
 					throw new IllegalStateException("Should never be able to get here. Server can only get"
 							+ "BALL, SERVERWALLCONNECT, and TERMINATE messages.");
 		    	}
-			}catch(InterruptedException e){
+			} catch(InterruptedException e) {
 				e.printStackTrace();
 			}
     	}
-        
     }
     
     /**
