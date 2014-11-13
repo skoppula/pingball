@@ -44,9 +44,11 @@ public class CommunicationTunnel implements Runnable {
 
 
             String line = in.readLine();
+            in.readLine();
 
             // THE FIRST MESSAGE SHOULD BE THE BOARD INIT MESSAGE, BECAUSE IT'S THE FIRST MESSAGE
             Message inMessage = Message.decode(line);
+            System.out.println("inMessage1: " + inMessage);
             assert(inMessage.getType() == MessageType.BOARDINIT);
 
             // handle the board init messages
@@ -86,11 +88,12 @@ public class CommunicationTunnel implements Runnable {
                 System.out.println(line);
                 while(line != null){
                     Message inMessage = Message.decode(line);
+                    System.out.println("inMessage: " + inMessage);
                     serverInQ.put(inMessage);
                     line = in.readLine();
                 }
                 serverInQ.put(new TerminateMessage(this.name));
-                System.out.println(serverInQ);
+                System.out.println("queue" + serverInQ);
                 socket.close();
             } catch(IOException e){
             	try{

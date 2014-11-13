@@ -46,25 +46,31 @@ public class QueueProcessor implements Runnable {
     public void run() {
     	while(true){
 	    	Message message;
-			try {
-				message = inQ.take();
-		    	switch(message.getType()){
-		    	case BALL:
-		    		handleBallMessage((BallMessage)message);
-		    		break;
-				case SERVERWALLCONNECT:
-					handleServerWallConnectMessage((ServerWallConnectMessage)message);
-					break;
-				case TERMINATE:
-					handleTerminateMessage((TerminateMessage)message);
-					break;
-				default:
-					throw new IllegalStateException("Should never be able to get here. Server can only get"
-							+ "BALL, SERVERWALLCONNECT, and TERMINATE messages.");
-		    	}
-			} catch(InterruptedException e) {
-				e.printStackTrace();
-			}
+            try {
+                System.out.println("waiting for message?");
+                System.out.println(inQ);
+                message = inQ.take();
+                System.out.println("message taken off queue");
+                switch(message.getType()){
+                case BALL:
+                	handleBallMessage((BallMessage)message);
+                	break;
+                case SERVERWALLCONNECT:
+                	handleServerWallConnectMessage((ServerWallConnectMessage)message);
+                	break;
+                case TERMINATE:
+                    System.out.println("EXTERMINATE!");
+                	handleTerminateMessage((TerminateMessage)message);
+                	break;
+                default:
+                	throw new IllegalStateException("Should never be able to get here. Server can only get"
+                			+ "BALL, SERVERWALLCONNECT, and TERMINATE messages.");
+                }
+            }
+            catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
     	}
     }
     

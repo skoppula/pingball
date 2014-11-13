@@ -19,7 +19,7 @@ public class TerminateMessage extends Message {
 	public TerminateMessage(String boardName){
 		this.boardName = boardName;
 		this.messageType = MessageType.TERMINATE;
-		assert(checkRep());
+		// assert(checkRep());
 	}
 
 
@@ -37,10 +37,10 @@ public class TerminateMessage extends Message {
 		obj.put("messageContents", contents);
 		return obj;
 	}
-	
+	/*
 	private boolean checkRep(){
 		return this.equals(TerminateMessage.fromJSON(this.toJSONObject()));
-	}
+	}*/
 	
 	/**
 	 * Converts the JSONObject given into a message of this type.
