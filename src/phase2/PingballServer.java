@@ -47,7 +47,6 @@ public class PingballServer {
     private PingballServer(int port) throws IOException {
         this.serverSocket = new ServerSocket(port);
         this.inQ = new LinkedBlockingDeque<Message>();
-        this.outQ = new LinkedBlockingDeque<Message>();
     }
     
     private void serve() {
@@ -55,7 +54,7 @@ public class PingballServer {
         nch.start();
         cim = new Thread(new ConsoleInputManager(inQ));
         cim.start();
-        qp = new Thread(new QueueProcessor(outQ));
+        qp = new Thread(new QueueProcessor(inQ));
         qp.start();
     }
 
