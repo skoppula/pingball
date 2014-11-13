@@ -176,7 +176,7 @@ public class Board {
         // set up walls
         this.wallMap = Wall.makeWalls(this);
         for(Orientation key: wallMap.keySet()){
-        	gadgets.add(wallMap.get(key));
+        	this.gadgets.add(wallMap.get(key));
         }
         
         for(Gadget gadget: gadgets){
