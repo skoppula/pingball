@@ -8,8 +8,6 @@ import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import org.antlr.v4.codegen.model.chunk.ThisRulePropertyRef_ctx;
-
 import phase2.Messaging.BoardInitMessage;
 import phase2.Messaging.Message;
 import phase2.Messaging.TerminateMessage;
@@ -54,9 +52,7 @@ public class CommunicationTunnel implements Runnable {
             assert(inMessage.getType() == MessageType.BOARDINIT);
 
             // handle the board init messages
-            System.out.println(inMessage);
             this.name = ((BoardInitMessage)inMessage).getBoardName();
-            System.out.println(name);
             QueueProcessor.nameToBoardTunnelMap.put(this.name, this);
             
             Thread ih = new Thread(new InputHandler(in, serverInQ, name));
@@ -89,11 +85,14 @@ public class CommunicationTunnel implements Runnable {
         
         public void run() {
             try{
-                String line = in.readLine();
-                while(line != null){
-		            Message inMessage = Message.decode(line);
-		            serverInQ.put(inMessage);
-		            line = in.readLine();
+                while(true) {
+                    String line = in.readLine();
+                    System.out.println(line);
+                    while(line != null){
+                        Message inMessage = Message.decode(line);
+                        serverInQ.put(inMessage);
+                        line = in.readLine();
+                    }
                 }
             } catch(IOException e){
             	try{
@@ -120,14 +119,15 @@ public class CommunicationTunnel implements Runnable {
 
         public void run() {
             try {
-                if(!tunnelOutQ.isEmpty()) {
-                    String messageJSON = tunnelOutQ.take().toString();
-                    out.println(messageJSON);
-		        }
+                while(true) {
+                    if(!tunnelOutQ.isEmpty()) {
+                        String messageJSON = tunnelOutQ.take().toString();
+                        out.println(messageJSON);
+                    }
+                }
             } catch(InterruptedException e) {
                 e.printStackTrace();
             } 
         }
-        
     }
 }
