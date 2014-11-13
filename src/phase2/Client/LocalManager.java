@@ -58,6 +58,8 @@ public class LocalManager {
         this.networkedGame = true;
         this.deltaTime = deltaTime;
         
+        System.out.println(address);
+        System.out.println(port);
         Socket socket = new Socket(address, port); 
         System.out.println("HERE");
         outQ.add(new BoardInitMessage(board.getName()));

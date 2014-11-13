@@ -75,12 +75,15 @@ public class Pingball {
                         String hostStr = arguments.remove();
                         if(hostStr.matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b")) {
                             byte[] ip = new byte[4];
-                            String[] ipTokens = hostStr.split(".");
+                            String[] ipTokens = hostStr.split("\\.");
+                                System.out.println(Arrays.toString(ipTokens));
                             for(int i = 0; i < ipTokens.length; ++i) {
-                                ip[i] = Byte.parseByte(ipTokens[i]);
+                                //System.out.println(i + " " + ipTokens[i]);
+                                ip[i] = (byte) Integer.parseInt(ipTokens[i]);
                             }
                             try {
                                 host = Optional.of(InetAddress.getByAddress(ip));
+
                             } catch (UnknownHostException|SecurityException e2) {
                                 throw new IllegalArgumentException("Unrecognized host IP");
                             }
