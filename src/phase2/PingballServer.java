@@ -56,11 +56,11 @@ public class PingballServer {
     
     private void serve() {
         nch = new Thread(new NewConnectionHandler(serverSocket, tunnels, inQ));
-        nch.run();
+        nch.start();
         cim = new Thread(new ConsoleInputManager(inQ));
-        cim.run();
+        cim.start();
         qp = new Thread(new QueueProcessor(outQ));
-        qp.run();
+        qp.start();
     }
 
     public static void main(String[] args) throws IOException {
