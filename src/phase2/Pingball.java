@@ -67,6 +67,7 @@ public class Pingball {
                 try {
                     if (flag.equals("--port")) {
                         port = Optional.of(Integer.parseInt(arguments.remove()));
+
                         if (port.get() < 0 || port.get() > MAXIMUM_PORT)
                             throw new IllegalArgumentException("port " + port + " out of range");
 
@@ -74,7 +75,7 @@ public class Pingball {
                         String hostStr = arguments.remove();
                         if(hostStr.matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b")) {
                             byte[] ip = new byte[4];
-                            String[] ipTokens = hostStr.split("\\.");
+                            String[] ipTokens = hostStr.split(".");
                             for(int i = 0; i < ipTokens.length; ++i) {
                                 ip[i] = Byte.parseByte(ipTokens[i]);
                             }
