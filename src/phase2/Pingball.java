@@ -40,7 +40,7 @@ public class Pingball {
     private static final int MAXIMUM_PORT = 65535;
     
     private static final long TIME_DELTA_MILLISECONDS = 1000/60;
-    static double timeInSeconds = TIME_DELTA_MILLISECONDS * .001;
+    static double timeInSeconds = TIME_DELTA_MILLISECONDS * .0001;
     static BlockingQueue<Message> outQ;
 
     /**
