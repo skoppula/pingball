@@ -32,7 +32,6 @@ public class NewConnectionHandler implements Runnable {
                 Thread tunnel = new Thread(new CommunicationTunnel(socket, serverInQ));
                 System.out.println("New client: " + socket);
                 tunnel.start();
-                tunnel.run();
 
             } catch (IOException e) {
                 e.printStackTrace();
