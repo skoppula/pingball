@@ -28,11 +28,10 @@ public class NewConnectionHandler implements Runnable {
                 //Blocks until new connection
                 socket = serverSocket.accept();
 
-                CommunicationTunnel tunnel = new CommunicationTunnel(socket, serverInQ);
+                Thread tunnel = new Thread(new CommunicationTunnel(socket, serverInQ));
                 System.out.println("New client: " + socket);
+                tunnel.start();
                 tunnel.run();
-                while(true);
-                
 
             } catch (IOException e) {
                 e.printStackTrace();

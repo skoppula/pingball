@@ -113,12 +113,12 @@ public class CommunicationTunnel implements Runnable {
         }
 
         public void run() {
-            try{
+            try {
                 if(!tunnelOutQ.isEmpty()) {
                     String messageJSON = tunnelOutQ.take().toString();
                     out.println(messageJSON);
 		        }
-            } catch(InterruptedException e){
+            } catch(InterruptedException e) {
                 e.printStackTrace();
             } 
         }
