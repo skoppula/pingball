@@ -29,16 +29,18 @@ public class LocalOutputManager implements Runnable {
 
     @Override
     public void run() {
-        try {
-
-            if(!outQ.isEmpty()) {
-                String messageJSON = outQ.remove().toString();
-                out.println(messageJSON);
-            }
-
-        } finally {
-            out.close();
-        }
+    	while(true){
+	        try {
+	
+	            if(!outQ.isEmpty()) {
+	                String messageJSON = outQ.remove().toString();
+	                out.println(messageJSON);
+	            }
+	
+	        } finally {
+	            out.close();
+	        }
+    	}
     }
 
 }

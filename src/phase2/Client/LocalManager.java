@@ -79,7 +79,7 @@ public class LocalManager {
     	this.inQ = new LinkedBlockingQueue<>(); // this queue should also never be given anything
     	try {
 			this.board = new Board(file, outQ);
-		} catch (IOException e) {
+		} catch (IOException e){
 			e.printStackTrace();
 		}
         this.networkedGame = false;
