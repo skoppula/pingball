@@ -30,10 +30,11 @@ public class LocalOutputManager implements Runnable {
     @Override
     public void run() {
         try {
-
-            if(!outQ.isEmpty()) {
-                String messageJSON = outQ.remove().toString();
-                out.println(messageJSON);
+            while(true) {
+                if(!outQ.isEmpty()) {
+                    String messageJSON = outQ.remove().toString();
+                    out.println(messageJSON);
+                }
             }
 
         } finally {
