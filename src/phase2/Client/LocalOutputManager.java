@@ -8,6 +8,10 @@ import java.util.Queue;
 import phase2.Messaging.BoardInitMessage;
 import phase2.Messaging.Message;
 
+/**
+ * Takes messages from the outQ, converts them into strings, and passes them over the socket.
+ *
+ */
 public class LocalOutputManager implements Runnable {
 
     Queue<Message> outQ;
@@ -16,9 +20,9 @@ public class LocalOutputManager implements Runnable {
     
     /**
      * Manages output for the local instance manager
-     * @param outQ
-     * @param socket
-     * @throws IOException
+     * @param outQ the queue for outgoing messages
+     * @param socket the socket over which to pass information
+     * @throws IOException if the connection is interrupted
      */
     public LocalOutputManager(Queue<Message> outQ, Socket socket) throws IOException {
         this.outQ = outQ;
