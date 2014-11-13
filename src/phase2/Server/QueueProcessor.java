@@ -78,8 +78,7 @@ public class QueueProcessor implements Runnable {
     		BoardWallPair destination = wallConnectionMap.get(message.getBoardWall());
     		CommunicationTunnel destTunnel = nameToBoardTunnelMap.get(destination);
     		destTunnel.addToOutQ(message); // reroute the message to the correct board, and leave the message untouched
-    	}
-    	else{
+    	} else {
     		System.out.println("This is odd. The ball we got doesn't know where to go. Oh well.");
     	}
     	

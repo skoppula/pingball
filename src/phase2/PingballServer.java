@@ -74,6 +74,7 @@ public class PingballServer {
             } catch (NumberFormatException nfe) {
                     throw new IllegalArgumentException("unable to parse number for " + port);
             }
+
             if (port < 0 || port > MAXIMUM_PORT) {
                 throw new IllegalArgumentException("port " + port + " out of range");
             }

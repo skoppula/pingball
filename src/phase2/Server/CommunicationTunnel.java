@@ -59,11 +59,11 @@ public class CommunicationTunnel implements Runnable {
             System.out.println(name);
             QueueProcessor.nameToBoardTunnelMap.put(this.name, this);
             
-            InputHandler ih = new InputHandler(in, serverInQ);
-            ih.run();
+            Thread ih = new Thread(new InputHandler(in, serverInQ));
+            ih.start();
             
-            OutputHandler oh = new OutputHandler(out, tunnelOutQ);
-            oh.run();
+            Thread oh = new Thread(new OutputHandler(out, tunnelOutQ));
+            oh.start();
             
         } catch (IOException e) {
             try {
