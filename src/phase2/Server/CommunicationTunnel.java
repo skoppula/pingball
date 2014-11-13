@@ -42,10 +42,8 @@ public class CommunicationTunnel implements Runnable {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
 
-            String line = null; // sorry, have to use nulls because readLine is evil!
-            while(line == null){
-            	line = in.readLine();
-            }
+
+            String line = in.readLine();
 
             // THE FIRST MESSAGE SHOULD BE THE BOARD INIT MESSAGE, BECAUSE IT'S THE FIRST MESSAGE
             Message inMessage = Message.decode(line);
@@ -85,15 +83,16 @@ public class CommunicationTunnel implements Runnable {
         
         public void run() {
             try{
-                while(true) {
-                    String line = in.readLine();
-                    while(line != null){
-                        Message inMessage = Message.decode(line);
-                        serverInQ.put(inMessage);
-                        System.out.println(line);
-                        line = in.readLine();
-                    }
+                String line = in.readLine();
+                System.out.println(line);
+                while(line != null){
+                    Message inMessage = Message.decode(line);
+                    serverInQ.put(inMessage);
+                    line = in.readLine();
                 }
+                serverInQ.put(new TerminateMessage(this.name));
+                System.out.println(serverInQ);
+                socket.close();
             } catch(IOException e){
             	try{
 					serverInQ.put(new TerminateMessage(this.name));
