@@ -48,6 +48,7 @@ public class QueueProcessor implements Runnable {
 	    	Message message;
 			try {
 				message = inQ.take();
+				System.out.println("message" + message);
 		    	switch(message.getType()){
 		    	case BALL:
 		    		handleBallMessage((BallMessage)message);
@@ -146,7 +147,6 @@ public class QueueProcessor implements Runnable {
      * @param message
      */
     private void handleTerminateMessage(TerminateMessage message){
-        System.out.println("NOOOOOOO I'm terminatingggggg D:");
     	String boardName = message.getBoardName();
     	List<Orientation> oriList = new ArrayList<>();
     	oriList.add(Orientation.NINETY);

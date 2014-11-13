@@ -468,10 +468,10 @@ public class Board {
         }
         Orientation outOrientation;
         switch (inOrientation) {
-            case ZERO: outOrientation = Orientation.NINETY; break;
-            case NINETY: outOrientation = Orientation.ZERO; break;
-            case ONE_HUNDRED_EIGHTY: outOrientation = Orientation.TWO_HUNDRED_SEVENTY; break;
-            default: outOrientation = Orientation.ONE_HUNDRED_EIGHTY; break; // 270 case
+            case ZERO: outOrientation = Orientation.ONE_HUNDRED_EIGHTY; break;
+            case NINETY: outOrientation = Orientation.TWO_HUNDRED_SEVENTY; break;
+            case ONE_HUNDRED_EIGHTY: outOrientation = Orientation.ZERO; break;
+            default: outOrientation = Orientation.NINETY; break; // 270 case
         }
         Wall newWall = wallMap.get(outOrientation);
         
