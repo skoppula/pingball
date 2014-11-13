@@ -59,22 +59,14 @@ public class CommunicationTunnel implements Runnable {
             System.out.println(name);
             QueueProcessor.nameToBoardTunnelMap.put(this.name, this);
             
-            Thread ih = new Thread(new InputHandler(in, serverInQ));
+            Thread ih = new Thread(new InputHandler(in, serverInQ, name));
             ih.start();
             
             Thread oh = new Thread(new OutputHandler(out, tunnelOutQ));
             oh.start();
             
         } catch (IOException e) {
-            try {
-				serverInQ.put(new TerminateMessage(this.name));
-				socket.close();
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} 
+        	e.printStackTrace();
         } 
     }
     
@@ -86,9 +78,11 @@ public class CommunicationTunnel implements Runnable {
 
         private BufferedReader in;
         private BlockingQueue<Message> serverInQ;
+        private String name;
 
-        public InputHandler(BufferedReader in, BlockingQueue<Message> serverInQ) {
+        public InputHandler(BufferedReader in, BlockingQueue<Message> serverInQ, String name) {
             this.serverInQ = serverInQ;
+            this.name = name;
             this.in = in;
         }
         
@@ -100,9 +94,16 @@ public class CommunicationTunnel implements Runnable {
 		            serverInQ.put(inMessage);
 		            line = in.readLine();
                 }
-            } catch(InterruptedException | IOException e){
-                e.printStackTrace();
-            } 
+            } catch(IOException e){
+            	try{
+					serverInQ.put(new TerminateMessage(this.name));
+            		socket.close();
+            	}catch(IOException | InterruptedException e2){
+            		e.printStackTrace();
+            	}
+            } catch(InterruptedException e){
+            	e.printStackTrace();
+            }
         }
     }
 
