@@ -87,10 +87,10 @@ public class CommunicationTunnel implements Runnable {
             try{
                 while(true) {
                     String line = in.readLine();
-                    System.out.println(line);
                     while(line != null){
                         Message inMessage = Message.decode(line);
                         serverInQ.put(inMessage);
+                        System.out.println(line);
                         line = in.readLine();
                     }
                 }
