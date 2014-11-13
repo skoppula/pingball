@@ -108,9 +108,9 @@ public class Pingball {
 
         
         LocalManager lm = null;
-        if(host.isPresent()) lm = new LocalManager(file.get(), host.get(), port.get());
-        else if (file.isPresent()) lm = new LocalManager(file.get());
-        else lm = new LocalManager(defaultBoard(outQ));
+        if(host.isPresent()) lm = new LocalManager(file.get(), host.get(), port.get(), timeInSeconds);
+        else if (file.isPresent()) lm = new LocalManager(file.get(), timeInSeconds);
+        else lm = new LocalManager(defaultBoard(outQ), timeInSeconds);
         lm.runGame();
     }
     

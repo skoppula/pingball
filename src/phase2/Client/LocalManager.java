@@ -19,6 +19,7 @@ public class LocalManager {
     private LocalOutputManager lom;
     protected BlockingQueue<Message> inQ; 
     protected BlockingQueue<Message> outQ;
+    private final double deltaTime;
     boolean networkedGame;
     
     /*
@@ -50,11 +51,12 @@ public class LocalManager {
      * @param port
      * @throws IOException
      */
-    public LocalManager(File file, InetAddress address, int port) throws IOException {
+    public LocalManager(File file, InetAddress address, int port, double deltaTime) throws IOException {
         this.inQ = new LinkedBlockingQueue<Message>();
         this.outQ = new LinkedBlockingQueue<Message>();
         this.board = new Board(file, outQ);
         this.networkedGame = true;
+        this.deltaTime = deltaTime;
         
         Socket socket = new Socket(address, port); 
 
@@ -68,7 +70,8 @@ public class LocalManager {
     }
     
 
-    public LocalManager(File file) {
+    public LocalManager(File file, double deltaTime) {
+    	this.deltaTime = deltaTime;
     	this.outQ = new LinkedBlockingQueue<>(); // note that we have to give the board some sort of queue
     	// however this queue should never have any items other than the startup message
     	this.inQ = new LinkedBlockingQueue<>(); // this queue should also never be given anything
@@ -81,7 +84,8 @@ public class LocalManager {
         System.out.println("Starting local game..");
     }
     
-    public LocalManager(Board board) {
+    public LocalManager(Board board, double deltaTime) {
+    	this.deltaTime = deltaTime;
     	this.outQ = new LinkedBlockingQueue<>(); // note that we have to give the board some sort of queue
     	this.inQ = new LinkedBlockingQueue<>(); // this queue should also never be given anything
     	this.board = board;
@@ -101,7 +105,7 @@ public class LocalManager {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-            board.updateBoard(0.01);
+            board.updateBoard(deltaTime);
             board.printBoard();
         }
     }
