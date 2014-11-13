@@ -68,7 +68,11 @@ public class CommunicationTunnel implements Runnable {
         } catch (IOException e) {
             try {
 				serverInQ.put(new TerminateMessage(this.name));
+				socket.close();
 			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} 
         } 
