@@ -209,6 +209,13 @@ public class BoardGrammarTest {
         assertTrue(correctBoard.hasEqualAttributes(board));
     }
     
+    // tests sample board 4
+    @Test
+    public void sampleBoard4Test() throws InvalidInvariantException {
+        Board board = Pingball.parseBoardFile(new File("src/phase2/BoardGrammar/boardFiles/sampleBoard4.pb"));
+      
+    }
+    
 
     
 }
