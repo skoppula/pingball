@@ -46,6 +46,7 @@ public class CommunicationTunnel implements Runnable {
             while(line == null){
             	line = in.readLine();
             }
+
             // THE FIRST MESSAGE SHOULD BE THE BOARD INIT MESSAGE, BECAUSE IT'S THE FIRST MESSAGE
             Message inMessage = Message.decode(line);
             assert(inMessage.getType() == MessageType.BOARDINIT);
