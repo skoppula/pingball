@@ -469,22 +469,6 @@ public class Board {
         // check that gadgets are equal
         boolean sameNumGadgets = this.gadgets.size() == otherBoard.gadgets.size();
         boolean gadgetsEqual = sameNumGadgets && this.gadgets.containsAll(otherBoard.gadgets);
-
-        System.out.println("c" + constantsEqual);
-        System.out.println("grav" + gravityEqual);
-        System.out.println("fric1" + friction1Equal);
-        System.out.println("fric2" + friction2Equal);
-        System.out.println("name" + nameEqual);
-        System.out.println(this.getMU());
-        System.out.println(otherBoard.getMU());
-
-        System.out.println("b" + ballsEqual);
-        System.out.println(this.balls);
-        System.out.println(otherBoard.balls);
-        
-        System.out.println("g" + gadgetsEqual);
-        System.out.println(this.gadgets);
-        System.out.println(otherBoard.gadgets);
         
         return constantsEqual && ballsEqual && gadgetsEqual;
     }

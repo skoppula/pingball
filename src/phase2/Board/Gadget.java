@@ -135,9 +135,19 @@ public abstract class Gadget implements Collidable{
         if (other instanceof Gadget) {
             boolean sameSizeList = this.physicsComponentList.size() == ((Gadget) other).getPhysicsComponents().size();
             return sameSizeList && this.physicsComponentList.containsAll(((Gadget) other).getPhysicsComponents());
+            
         }
         else {
             return false;
         }
+    }
+    
+    /**
+     * Returns hashcode of the gadget name
+     * @return 
+     */
+    @Override
+    public int hashCode() {
+        return name.hashCode();
     }
 }
