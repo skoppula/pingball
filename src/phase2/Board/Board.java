@@ -138,11 +138,13 @@ public class Board {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+/*
         for(Gadget g:gadgets) {
             if(g instanceof SquareBumper && g.getX()==1)
             System.out.println(g.getX() + " " + g.getY());
         }
         System.exit(0);;
+        */
     }
     
     /**
