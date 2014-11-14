@@ -4,10 +4,8 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import phase2.Board.Ball;
 import phase2.Board.Gadget.Orientation;
 import phase2.Messaging.Message.MessageType;
