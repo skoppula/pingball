@@ -40,9 +40,7 @@ public class Flipper extends Gadget {
 
     final private Corner pivotCorner; 
     // the corner that the flipper pivots around. Like pivot, but as an enum.
-    
-    final private Orientation orientation;
-    // orientation of the flipper
+
 
     private boolean isActive;
     // whether the flipper is currently rotating
@@ -75,7 +73,6 @@ public class Flipper extends Gadget {
     public Flipper(int x, int y, String name, BumperSide side, Orientation orientation){
         super(new GridPoint(x, y), name, 2, 2, .95);
         this.side = side;
-        this.orientation = orientation;
         this.isActive = false;
         this.angle = Angle.ZERO; // yolo
 

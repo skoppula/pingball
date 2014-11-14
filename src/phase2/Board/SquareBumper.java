@@ -1,8 +1,5 @@
 package phase2.Board;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import phase2.Board.Util.InvalidInvariantException;
 import phase2.PhysicsComponents.PhysicsComponent;
 import phase2.PhysicsComponents.StaticCircle;

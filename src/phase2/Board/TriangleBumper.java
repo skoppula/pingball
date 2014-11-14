@@ -1,7 +1,5 @@
 package phase2.Board;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import physics.Circle;
 import physics.LineSegment;

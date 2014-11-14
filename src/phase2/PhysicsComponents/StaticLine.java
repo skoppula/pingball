@@ -1,7 +1,5 @@
 package phase2.PhysicsComponents;
 
-import org.antlr.v4.codegen.model.chunk.ThisRulePropertyRef_ctx;
-
 import physics.Angle;
 import physics.Circle;
 import physics.Geometry;
