@@ -82,7 +82,6 @@ public class QueueProcessor implements Runnable {
     	} else {
     		System.out.println("This is odd. The ball we got doesn't know where to go. Oh well.");
     	}
-    	
     }
     
     /**
