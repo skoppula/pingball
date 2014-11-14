@@ -3,6 +3,7 @@ package phase2.BoardGrammar;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -21,6 +22,7 @@ import phase2.Board.SquareBumper;
 import phase2.Board.Gadget.Orientation;
 import phase2.Board.TriangleBumper;
 import phase2.Board.Util.InvalidInvariantException;
+import phase2.Messaging.Message;
 import physics.Vect;
 
 public class BoardGrammarTest {
@@ -37,6 +39,8 @@ public class BoardGrammarTest {
      *      - comments: start file, in middle of file, end file
      */
 
+    LinkedBlockingQueue<Message> q = new LinkedBlockingQueue<>(); // just for initializing Board, not actually used
+    
     // equals test - testing gadget equality
     @Test
     public void equalsTest1() throws InvalidInvariantException {
@@ -71,8 +75,8 @@ public class BoardGrammarTest {
     
     // make a board with friction1, friction2, and gravity defined
     @Test
-    public void makeBoardTest1() {
-        Board board1 = Pingball.parseBoardFile(new File("src/phase2/BoardGrammar/boardFiles/simplestBoard.pb"));
+    public void makeBoardTest1() throws IOException {
+        Board board1 = new Board(new File("src/phase2/BoardGrammar/boardFiles/simplestBoard.pb"), q);
         List<Gadget> gadgets1 = new ArrayList<Gadget>();
         Board correctBoard = new Board(gadgets1, "sampleBoard1", 20.0, 0.020, 0.020, new LinkedBlockingQueue<>());
         assertTrue(correctBoard.hasEqualAttributes(board1));
@@ -80,8 +84,8 @@ public class BoardGrammarTest {
     
     // make a board with a ball defined
     @Test
-    public void makeBoardTest2() {
-        Board board2 = Pingball.parseBoardFile(new File("src/phase2/BoardGrammar/boardFiles/ball.pb"));
+    public void makeBoardTest2() throws IOException {
+        Board board2 = new Board(new File("src/phase2/BoardGrammar/boardFiles/ball.pb"), q);
         List<Gadget> gadgets2 = new ArrayList<Gadget>();
         Board correctBoard = new Board(gadgets2, "sampleBoard1", 20.0, 0.020, 0.020, new LinkedBlockingQueue<>());
         Vect ballVelocity = new Vect(2.5, 2.5);
@@ -92,8 +96,8 @@ public class BoardGrammarTest {
     
     // make a board with square bumpers
     @Test
-    public void makeBoardTest3() throws InvalidInvariantException {
-        Board board3 = Pingball.parseBoardFile(new File("src/phase2/BoardGrammar/boardFiles/squareBumper.pb"));
+    public void makeBoardTest3() throws InvalidInvariantException, IOException {
+        Board board3 = new Board(new File("src/phase2/BoardGrammar/boardFiles/squareBumper.pb"), q);
         
         // add bumpers to correct board
         List<Gadget> gadgets3 = new ArrayList<Gadget>();
@@ -110,8 +114,8 @@ public class BoardGrammarTest {
     
     // make a board with triangle bumpers
     @Test
-    public void makeBoardTest4() throws InvalidInvariantException {
-        Board boardtemp = Pingball.parseBoardFile(new File("src/phase2/BoardGrammar/boardFiles/bumpers.bp"));
+    public void makeBoardTest4() throws InvalidInvariantException, IOException {
+        Board boardtemp = new Board(new File("src/phase2/BoardGrammar/boardFiles/bumpers.bp"), q);
         
         // add bumpers to correct board
         List<Gadget> gadgets = new ArrayList<Gadget>();
@@ -131,8 +135,8 @@ public class BoardGrammarTest {
     
     // make a board with bumpers and flippers
     @Test
-    public void makeBoardTest5() throws InvalidInvariantException {
-        Board board = Pingball.parseBoardFile(new File("src/phase2/BoardGrammar/boardFiles/flipperTest.pb"));
+    public void makeBoardTest5() throws InvalidInvariantException, IOException {
+        Board board = new Board(new File("src/phase2/BoardGrammar/boardFiles/flipperTest.pb"), q);
         
         // add bumpers to correct board
         List<Gadget> gadgets = new ArrayList<Gadget>();
@@ -157,8 +161,8 @@ public class BoardGrammarTest {
     // make a board with bumpers, flippers, and absorbers.
     // tests not having all board constants specified
     @Test
-    public void makeBoardTest6() throws InvalidInvariantException {
-        Board board = Pingball.parseBoardFile(new File("src/phase2/BoardGrammar/boardFiles/absorberTest.pb"));
+    public void makeBoardTest6() throws InvalidInvariantException, IOException {
+        Board board = new Board(new File("src/phase2/BoardGrammar/boardFiles/absorberTest.pb"), q);
         
         // add bumpers to correct board
         List<Gadget> gadgets = new ArrayList<Gadget>();
@@ -178,8 +182,8 @@ public class BoardGrammarTest {
     
     // tests trigger functionality
     @Test
-    public void makeBoardTest7() throws InvalidInvariantException {
-        Board board = Pingball.parseBoardFile(new File("src/phase2/BoardGrammar/boardFiles/simpeTrigger.pb"));
+    public void makeBoardTest7() throws InvalidInvariantException, IOException {
+        Board board = new Board(new File("src/phase2/BoardGrammar/boardFiles/simpeTrigger.pb"), q);
         
         // add bumpers to correct board
         List<Gadget> gadgets = new ArrayList<Gadget>();
@@ -211,15 +215,15 @@ public class BoardGrammarTest {
     
     // tests sample board 4
     @Test
-    public void sampleBoard4Test() throws InvalidInvariantException {
-        Board board = Pingball.parseBoardFile(new File("src/phase2/BoardGrammar/boardFiles/sampleBoard4.pb"));
+    public void sampleBoard4Test() throws InvalidInvariantException, IOException {
+        Board board = new Board(new File("src/phase2/BoardGrammar/boardFiles/sampleBoard4.pb"), q);
       
     }
     
     // tests default board
     @Test
-    public void defaultBoardTest() throws InvalidInvariantException {
-        Board board = Pingball.parseBoardFile(new File("src/phase2/BoardGrammar/boardFiles/default.pb"));
+    public void defaultBoardTest() throws InvalidInvariantException, IOException {
+        Board board = new Board(new File("src/phase2/BoardGrammar/boardFiles/default.pb"), q);
       
     }
     
