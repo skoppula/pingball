@@ -15,16 +15,10 @@ import physics.Geometry.VectPair;
  * A mutable class that represents a single ball. 
  * 
  */ 
-/* Rep Invariant: at any one step in time, a ball has:
- *  ballCircle that has size and a location inside the 20x20 grid
- *  Velocity that 
- *  immutable coefficient of reflection that is set during construction
- *  
- */
 public class Ball implements Collidable{
 	/*
 	 * Abstraction function: a Pingball ball of name this.name, represented by a circle ballCircle,
-	 * with velocity newVelocity and coefficientOfReflection 1.0
+	 * with velocity newVelocity and coefficient of reflection coefficientOfReflection
 	 * Rep invariant:
 	 * prevVelocity is velocity 1 timestep ago
 	 * velocity must be of magnitude between .01 and 200, or 0
