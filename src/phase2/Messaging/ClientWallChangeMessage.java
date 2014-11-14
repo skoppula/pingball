@@ -33,7 +33,6 @@ public class ClientWallChangeMessage extends Message {
 		this.messageType = MessageType.CLIENTWALLCHANGE;
 	}
 
-
 	private boolean checkRep(){
 		return this.equals(ClientWallChangeMessage.fromJSON(this.toJSONObject()));
 	}
