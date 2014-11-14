@@ -4,10 +4,10 @@ package phase2.Board;
  * An immutable class to represent a point on a board grid.
  *
  */
-/*
- * RepInvariant: must be inside the boardMatrix in order to be a valid gridpoint 
- */
 public class GridPoint {
+	/*
+	 * Abstraction function: represents a location on a grid
+	 */
     
     private final int x;
     private final int y;

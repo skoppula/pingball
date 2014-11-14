@@ -8,7 +8,15 @@ import physics.Circle;
 import physics.LineSegment;
 import physics.Vect;
 
+/**
+ * A gadget representing an immutable square bumper
+ *
+ */
 public class SquareBumper extends Gadget {
+	
+	/*
+	 * Rep invariant: the same as that in gadget
+	 */
 
     
 
