@@ -8,8 +8,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.antlr.v4.parse.ANTLRParser.ruleReturns_return;
-
 import phase2.Board.Gadget.Orientation;
 import phase2.Messaging.*;
 
@@ -166,7 +164,7 @@ public class QueueProcessor implements Runnable {
     		if(wallConnectionMap.containsKey(bwp)){
     			BoardWallPair otherBWP = wallConnectionMap.get(bwp);
     			CommunicationTunnel otherTunnel = nameToBoardTunnelMap.get(otherBWP.board());
-    			otherTunnel.addToOutQ(new ClientWallChangeMessage(otherBWP, false));
+    			otherTunnel.addToOutQ(new ClientWallChangeMessage(bwp, false));
     			wallConnectionMap.remove(bwp);
     		}
     	}
