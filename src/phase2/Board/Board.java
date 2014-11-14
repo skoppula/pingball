@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -61,10 +62,6 @@ public class Board {
         return BOARD_LENGTH;
     }
 
-    // make gravity and friction fields
-    private final double gravity = 25;
-
-
     final BlockingQueue<Message> outQ;
     private final double discreteTime = 0.00025;
 
@@ -83,9 +80,11 @@ public class Board {
      * @param outQ the queue that outputs from the board to the server
      * @throws IOException if the connection is disturbed
      */
+    @SuppressWarnings("unchecked")
     public Board(File file, BlockingQueue<Message> outQ) throws IOException {
-        //Send the boardinit message
-
+        // initialize fields that are independent of the file
+        this.outQ = outQ;
+        
         // Read in board files using ANTLR
         // make a stream of characters to feed to the lexer
         FileReader filereader = new FileReader(file);
@@ -100,25 +99,34 @@ public class Board {
         // Visit each node in the parse tree in order,
         // top-to-bottom, left-to-right, calling methods that we want
         ParseTreeWalker walker = new ParseTreeWalker();
-        PingBoardListener listener = new PingBoardListenerBoardCreator();
+        PingBoardListenerBoardCreator listener = new PingBoardListenerBoardCreator();
         walker.walk(listener,tree);
-        Board board = PingBoardListenerBoardCreator.getBoard();
-        // we never give anyone a reference to this board, so we can use its fields directly w/o rep exposure
-        this.name = board.getName();
-        try {
-			outQ.put(new BoardInitMessage(this.name));
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-        this.gadgets = new ArrayList<>(board.gadgets);
-        for(Ball ball: board.balls){
-        	this.addBall(ball);
+        List<Object> boardIngredients = listener.getBoardIngredients();
+        // boardIngredients are of the form [gadgets, name, gravity, friction1, friction2, balls]
+        this.gadgets = (ArrayList<Gadget>) boardIngredients.get(0);
+        this.name = (String) boardIngredients.get(1);
+        this.GRAVITY_VECTOR = new Vect(0, (double) boardIngredients.get(2));
+        this.MU = (double) boardIngredients.get(3);
+        this.MU2 = (double) boardIngredients.get(4);
+        this.wallMap = Wall.makeWalls(this);
+        for(Orientation key: wallMap.keySet()){
+            this.gadgets.add(wallMap.get(key));
         }
-        this.wallMap = new HashMap<>(board.wallMap);
-        this.GRAVITY_VECTOR = board.getGravityVector();
-        this.MU = board.getMU();
-        this.MU2 = board.getMU2();
-        this.outQ = outQ;
+        this.balls.addAll((Collection<Ball>) boardIngredients.get(5));
+        
+        for(Gadget gadget: gadgets){
+            if(nameToGadgetMap.containsKey(gadget.getName())){
+                throw new IllegalArgumentException("The provided list of gadgets has at least two gadgets with the same name:" + gadget.getName());
+            }
+            nameToGadgetMap.put(gadget.getName(), gadget);
+        }
+
+        //Send the boardinit message
+        try {
+            outQ.put(new BoardInitMessage(this.name));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     
     /**
@@ -272,7 +280,7 @@ public class Board {
         for (Ball ball : balls) {
             if (ball.inAbsorber) continue;
             Vect ballVelocity = ball.getVelocity();
-            double Gforce =  gravity * timeDelta;
+            double Gforce =  GRAVITY_VECTOR.length() * timeDelta;
             ballVelocity = ballVelocity.plus(new Vect(0, Gforce));
             ballVelocity = ballVelocity.times(1 - MU * timeDelta - MU2
                     * ballVelocity.length() * timeDelta);
