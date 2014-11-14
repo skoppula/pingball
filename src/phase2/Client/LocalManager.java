@@ -20,8 +20,10 @@ import phase2.Messaging.Message;
  *
  */
 public class LocalManager {
+	// Rep invariant: only one thread should ever take things off a queue
+	// deltaTime must be greater than 0
 
-    //TODO make these types threadsafe, especially lim, lom
+	
     private Board board;
     private Thread lim;
     private Thread lom;
@@ -119,7 +121,6 @@ public class LocalManager {
      * Runs the game (by updating the board) on the local machine.
      */
     public void runGame() {
-        System.out.println("HELLO WORLD");
         while(true) {
             try {
                 Thread.sleep(2);
