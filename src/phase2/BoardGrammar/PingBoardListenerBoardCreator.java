@@ -44,6 +44,7 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
     // create the board
     public void exitBoard(PingBoardParser.BoardContext ctx) {
         List<Gadget> gadgets = new ArrayList(gadgetsMap.values());
+        System.out.println(triggerToAction);
         for (Gadget gadget: gadgets) {
             if (triggerToAction.containsKey(gadget.getName())) {
                 ArrayList<Gadget> gadgetsToTrigger = new ArrayList<Gadget>();
@@ -134,9 +135,10 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
         }
         else {
             ArrayList<String> namesToTrigger = new ArrayList<String>();
-            namesToTrigger.add(triggerName);
+            namesToTrigger.add(actionName);
             triggerToAction.put(triggerName, namesToTrigger);
         }
+        System.out.println(triggerToAction);
     }
     
     
@@ -165,7 +167,6 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
             squareBumper = new SquareBumper(x, y, name);
             gadgetsMap.put(name, squareBumper);
         } catch (InvalidInvariantException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -253,7 +254,6 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
             absorber = new Absorber(x, y, name, width, height);
             gadgetsMap.put(name, absorber);
         } catch (InvalidInvariantException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -283,7 +283,6 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
             circleBumper = new CircleBumper(x, y, name);
             gadgetsMap.put(name, circleBumper);
         } catch (InvalidInvariantException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -329,7 +328,6 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
             triangleBumper = new TriangleBumper(x, y, name, orientation);
             gadgetsMap.put(name, triangleBumper);
         } catch (InvalidInvariantException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
