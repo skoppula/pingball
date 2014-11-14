@@ -14,6 +14,10 @@ import phase2.Messaging.ServerWallConnectMessage;
  *
  */
 public class ConsoleInputManager implements Runnable {
+	/*
+	 * Rep invariants:
+	 * Cannot take any values off of inQ.
+	 */
 
 	private final BlockingQueue<Message> inQ;
     

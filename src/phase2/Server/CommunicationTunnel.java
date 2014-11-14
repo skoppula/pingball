@@ -18,11 +18,15 @@ import phase2.Messaging.Message.MessageType;
  * Has a serverInQ for messages to the server, and a tunnelOutQ for messages to the client over a socket.
  */
 public class CommunicationTunnel implements Runnable {
+	/*
+	 * Rep invariants: only one thread can access the output of serverInQ or tunnelOutQ
+	 * 
+	 */
     
     String name;
     Socket socket;
     BufferedReader in;
-    PrintWriter out = null;
+    PrintWriter out;
     BlockingQueue<Message> serverInQ;
     BlockingQueue<Message> tunnelOutQ;
 
