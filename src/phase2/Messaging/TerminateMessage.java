@@ -4,7 +4,7 @@ import org.json.simple.JSONObject;
 
 /**
  * Informs the server that a board has exited
- * the simulation. Immutable.
+ * the simulation. Immutable, no mutators.
  *
  */
 public class TerminateMessage extends Message {

@@ -5,7 +5,7 @@ import org.json.simple.JSONObject;
 /**
  * A message to inform the server that a new board
  * has joined the simulation. This should be the
- * first message sent by any board. Immutable.
+ * first message sent by any board. Immutable, no mutators.
  *
  */
 public class BoardInitMessage extends Message {

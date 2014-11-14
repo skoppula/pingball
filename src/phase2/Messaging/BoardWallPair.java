@@ -7,7 +7,7 @@ import phase2.Board.Gadget.Orientation;
 /**
  * A class to store information
  * about a wall and its associated board.
- * Immutable.
+ * Immutable, not mutators.
  */
 public class BoardWallPair {
 	/*

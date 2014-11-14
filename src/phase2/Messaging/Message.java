@@ -6,7 +6,7 @@ import org.json.simple.parser.ParseException;
 
 /**
  * An abstract class for immutable messages to be exchanged between different parts
- * of the program. Immutable.
+ * of the program. Immutable, no mutators.
  */
 public abstract class Message{
 	/* Abstraction Function: Message = MessageType + Objects

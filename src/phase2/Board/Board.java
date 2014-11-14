@@ -466,7 +466,7 @@ public class Board {
         // check that balls are equal
         boolean equalNumberBalls = this.balls.size() == otherBoard.balls.size();
         boolean ballsEqual = equalNumberBalls && this.balls.containsAll(otherBoard.balls);
-         
+        
         // check that gadgets are equal
         boolean sameNumGadgets = this.gadgets.size() == otherBoard.gadgets.size();
         boolean gadgetsEqual = sameNumGadgets && this.gadgets.containsAll(otherBoard.gadgets);

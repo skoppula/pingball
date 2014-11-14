@@ -10,11 +10,16 @@ import org.junit.Test;
 
 import phase2.Board.Ball;
 import phase2.Board.Gadget.Orientation;
+import phase2.Messaging.Message.MessageType;
 import physics.Circle;
 import physics.Vect;
 
 public class MessageTest {
 
+    //1. Test that messages return themselves when they are converted to JSON and converted back
+    //2. Check that the actual JSON string is correct
+    //3. Check that information is preserved correctly in the message
+    
 	BallMessage ballMessage;
 	ClientWallChangeMessage cwcMessage;
 	BoardInitMessage boardInitMessage;
@@ -45,6 +50,7 @@ public class MessageTest {
 	}
 	
 	
+	//Test Partition 1
 	@Test
 	public void JSONReflexivityTest(){
 		for(Message message: messageList){
@@ -52,4 +58,16 @@ public class MessageTest {
 		}
 	}
 
+	//Test Partition 2
+	@Test
+	public void JSONValidity() {
+	    String correctJSONString = "{\"messageContents\":{\"connectOrDisconnect\":true,\"otherBoardWall\":{\"orientation\":\"90\",\"boardName\":\"myBoard\"}},\"messageType\":\"CLIENTWALLCHANGE\"}";
+	    assertEquals(messageList.get(1).toJSONObject().toJSONString(),correctJSONString);
+	}
+	
+	//Test Partition 3
+	@Test
+	public void MessageContentValidity() {
+	    assertEquals(messageList.get(1).messageType, MessageType.CLIENTWALLCHANGE);
+	}
 }
