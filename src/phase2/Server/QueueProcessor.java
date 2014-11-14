@@ -39,7 +39,6 @@ public class QueueProcessor implements Runnable {
 	private final Map<BoardWallPair, BoardWallPair> wallConnectionMap;
 	
     public QueueProcessor(BlockingQueue<Message> inQ) {
-    	
     	this.inQ = inQ;
     	wallConnectionMap = new HashMap<>();
     }
@@ -118,8 +117,8 @@ public class QueueProcessor implements Runnable {
     		oldPairTunnel1.addToOutQ(new ClientWallChangeMessage(boardWall1, false));
     		
     		//wallConnectionMap.remove(oldPair1);
-    		// The above line is not necessary because balls which manage to sneak through before the wall becomes
-    		// impermeable should be allowed to leave through the old connection
+    		//The above line is not necessary because balls which manage to sneak through before the wall becomes
+    		//impermeable should be allowed to leave through the old connection
     		
     		//tunnel1.addToOutQ(new ClientWallChangeMessage(oldPair1, false));
     		// The above line is not necessary, because if we are changing boardWall1's connection later anyway
@@ -145,7 +144,7 @@ public class QueueProcessor implements Runnable {
     	tunnel1.addToOutQ(new ClientWallChangeMessage(boardWall2, true));
     	tunnel2.addToOutQ(new ClientWallChangeMessage(boardWall1, true));
     	} else {
-    	    System.out.println("BOARD DOES NOT EXIST!");
+    	    System.out.println("YOU DUMB FUCKER! WRONG BOARD NAME");
     	}
     }
     

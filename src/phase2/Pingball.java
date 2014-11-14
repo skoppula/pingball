@@ -114,6 +114,7 @@ public class Pingball {
         if(host.isPresent()) lm = new LocalManager(file.get(), host.get(), port.get(), timeInSeconds);
         else if (file.isPresent()) lm = new LocalManager(file.get(), timeInSeconds);
         else lm = new LocalManager(defaultBoard(outQ), timeInSeconds);
+        System.out.println("YUM YUM");
         lm.runGame();
     }
     
