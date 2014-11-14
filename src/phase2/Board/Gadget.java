@@ -30,6 +30,7 @@ public abstract class Gadget implements Collidable{
         this.reflectionCoef = reflectionCoef;
     }
 
+
     protected void setTriggers(List<Gadget> lst) {
         this.gadgetsToTrigger = new ArrayList<>(lst);
     }
