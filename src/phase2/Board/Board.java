@@ -510,22 +510,23 @@ public class Board {
             double newX;
             double newY;
             Ball oldBall = ((BallMessage) message).getBall();
+            double radius = oldBall.getBallCircle().getRadius();
             switch(outOrientation) {
                 case ZERO:
-                    newX = newWall.getX()+1;
+                    newX = newWall.getX() + newWall.width + radius;
                     newY = oldBall.getBallCircle().getCenter().y();
                     break;
                 case NINETY:
                     newX = oldBall.getBallCircle().getCenter().x();
-                    newY = newWall.getY()+1;
+                    newY = newWall.getY() + newWall.width + radius;
                     break;
                 case ONE_HUNDRED_EIGHTY:
-                    newX = newWall.getX()-1;
+                    newX = newWall.getX() - newWall.width;
                     newY = oldBall.getBallCircle().getCenter().y();
                     break;
                 default: // case TWO HUNDRED SEVETY
                     newX = oldBall.getBallCircle().getCenter().x();
-                    newY = newWall.getY()-1;
+                    newY = newWall.getY() - newWall.width;
             }
             // ball's position changes, but velocity stays the same
             newBall = new Ball(newX, newY, oldBall.getVelocity(), oldBall.getName());
