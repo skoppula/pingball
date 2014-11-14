@@ -61,6 +61,10 @@ public class BallMessage extends Message {
 		return obj;
 	}
 	
+	/**
+	 * RI: checks 
+	 * @return whether RI is met
+	 */
 	private boolean checkRep(){
 		return this.equals(BallMessage.fromJSON(this.toJSONObject()));
 	}

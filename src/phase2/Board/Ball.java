@@ -73,7 +73,7 @@ public class Ball implements Collidable{
      * @return an object which describes the ball through its location, name, and velocity.
      */
     @SuppressWarnings("unchecked")
-	public JSONObject toJSONObject(){
+    public JSONObject toJSONObject(){
     	JSONObject obj = new JSONObject();
     	obj.put("x",ballCircle.getCenter().x());
     	obj.put("y",ballCircle.getCenter().y());
