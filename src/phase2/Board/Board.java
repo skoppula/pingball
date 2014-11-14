@@ -519,7 +519,7 @@ public class Board {
                     break;
                 case NINETY:
                     newX = oldBall.getBallCircle().getCenter().x();
-                    newY = newWall.getY() + newWall.width + radius + EPSILON;
+                    newY = newWall.getY() + newWall.height + radius + EPSILON;
                     break;
                 case ONE_HUNDRED_EIGHTY:
                     newX = newWall.getX() - newWall.width - EPSILON;
@@ -527,7 +527,7 @@ public class Board {
                     break;
                 default: // case TWO HUNDRED SEVETY
                     newX = oldBall.getBallCircle().getCenter().x();
-                    newY = newWall.getY() - newWall.width - EPSILON;
+                    newY = newWall.getY() - newWall.height - EPSILON;
             }
             // ball's position changes, but velocity stays the same
             newBall = new Ball(newX, newY, oldBall.getVelocity(), oldBall.getName());
