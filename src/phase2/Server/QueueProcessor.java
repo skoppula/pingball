@@ -74,6 +74,7 @@ public class QueueProcessor implements Runnable {
      * @param message
      */
     private void handleBallMessage(BallMessage message){
+        System.out.println("WALLE FONE HOME CONNECTION MAP: " + wallConnectionMap);
     	if(wallConnectionMap.containsKey(message.getBoardWall())){
     		BoardWallPair destination = wallConnectionMap.get(message.getBoardWall());
     		CommunicationTunnel destTunnel = nameToBoardTunnelMap.get(destination);
