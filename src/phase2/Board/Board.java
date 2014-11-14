@@ -311,6 +311,7 @@ public class Board {
      */
     private void collideBalls() {
         for (Ball ball : balls) {
+            if(ballsToRemove.contains(ball)) continue;
             List<Collidable> collidingObjects = ballToCollidables.get(ball);
             for (Collidable object : collidingObjects) {
                 object.collision(ball);

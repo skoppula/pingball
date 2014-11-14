@@ -8,6 +8,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.antlr.v4.runtime.misc.NullUsageProcessor;
+
 import phase2.Board.Gadget.Orientation;
 import phase2.Messaging.*;
 
@@ -107,6 +109,7 @@ public class QueueProcessor implements Runnable {
     	
     	CommunicationTunnel tunnel1 = nameToBoardTunnelMap.get(boardWall1.board());
     	CommunicationTunnel tunnel2 = nameToBoardTunnelMap.get(boardWall2.board());
+    	if(tunnel1 != null && tunnel2 != null) {
     	// If the map already contains a mapping for boardWall1, make sure to remove it, and its reverse mapping
     	if(wallConnectionMap.containsKey(boardWall1.board())){
     		// break the connection with boardWall1's old wall connection
@@ -122,17 +125,18 @@ public class QueueProcessor implements Runnable {
     		// The above line is not necessary, because if we are changing boardWall1's connection later anyway
     		wallConnectionMap.remove(boardWall1);
     	}
+
     	// same with boardWall2
     	if(wallConnectionMap.containsKey(boardWall2.board())){
     		BoardWallPair oldPair2 = wallConnectionMap.get(boardWall2);
     		CommunicationTunnel oldPairTunnel2 = nameToBoardTunnelMap.get(oldPair2.board());
     		oldPairTunnel2.addToOutQ(new ClientWallChangeMessage(boardWall2, false));
     		//wallConnectionMap.remove(oldPair2);
-    		// The above line is not necessary because balls which manage to sneak through before the wall becomes
-    		// impermeable should be allowed to leave through the old connection
+    		//The above line is not necessary because balls which manage to sneak through before the wall becomes
+    		//impermeable should be allowed to leave through the old connection
     		
-    		// tunnel1.addToOutQ(new ClientWallChangeMessage(oldPair2, false));
-    		// The above line is not necessary, because if we are changing boardWall1's connection later anyway
+    		//tunnel1.addToOutQ(new ClientWallChangeMessage(oldPair2, false));
+    		//The above line is not necessary, because if we are changing boardWall1's connection later anyway
     		wallConnectionMap.remove(boardWall1);
     	}
     	
@@ -140,6 +144,7 @@ public class QueueProcessor implements Runnable {
     	wallConnectionMap.put(boardWall1, boardWall2);
     	tunnel1.addToOutQ(new ClientWallChangeMessage(boardWall2, true));
     	tunnel2.addToOutQ(new ClientWallChangeMessage(boardWall1, true));
+    	}
     }
     
     /**

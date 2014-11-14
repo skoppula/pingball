@@ -29,7 +29,7 @@ public class ConsoleInputManager implements Runnable {
         try {
             while((input=br.readLine())!=null){
 
-                String[] parts = input.split(" ");
+                String[] parts = input.trim().split("\\s+");
                 if (parts.length != 3) throw new IllegalArgumentException();
 
                 boolean isVerticalConnection = false;
