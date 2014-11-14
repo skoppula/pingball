@@ -108,44 +108,42 @@ public class QueueProcessor implements Runnable {
     	
     	CommunicationTunnel tunnel1 = nameToBoardTunnelMap.get(boardWall1.board());
         System.out.println("name to Board tunnel map: " + nameToBoardTunnelMap);
-        System.out.println("tunnel1" + tunnel1);
     	CommunicationTunnel tunnel2 = nameToBoardTunnelMap.get(boardWall2.board());
-    	System.out.println("tunnel2" + tunnel2);
     	if(tunnel1 != null && tunnel2 != null) {
-    	// If the map already contains a mapping for boardWall1, make sure to remove it, and its reverse mapping
-    	if(wallConnectionMap.containsKey(boardWall1.board())){
-    		// break the connection with boardWall1's old wall connection
-    		BoardWallPair oldPair1 = wallConnectionMap.get(boardWall1);
-    		CommunicationTunnel oldPairTunnel1 = nameToBoardTunnelMap.get(oldPair1.board());
-    		oldPairTunnel1.addToOutQ(new ClientWallChangeMessage(boardWall1, false));
-    		
-    		//wallConnectionMap.remove(oldPair1);
-    		//The above line is not necessary because balls which manage to sneak through before the wall becomes
-    		//impermeable should be allowed to leave through the old connection
-    		
-    		//tunnel1.addToOutQ(new ClientWallChangeMessage(oldPair1, false));
-    		// The above line is not necessary, because if we are changing boardWall1's connection later anyway
-    		wallConnectionMap.remove(boardWall1);
-    	}
+    	    // If the map already contains a mapping for boardWall1, make sure to remove it, and its reverse mapping
+        	if(wallConnectionMap.containsKey(boardWall1.board())){
+        		// break the connection with boardWall1's old wall connection
+        		BoardWallPair oldPair1 = wallConnectionMap.get(boardWall1);
+        		CommunicationTunnel oldPairTunnel1 = nameToBoardTunnelMap.get(oldPair1.board());
+        		oldPairTunnel1.addToOutQ(new ClientWallChangeMessage(boardWall1, false));
+        		
+        		//wallConnectionMap.remove(oldPair1);
+        		//The above line is not necessary because balls which manage to sneak through before the wall becomes
+        		//impermeable should be allowed to leave through the old connection
+        		
+        		//tunnel1.addToOutQ(new ClientWallChangeMessage(oldPair1, false));
+        		// The above line is not necessary, because if we are changing boardWall1's connection later anyway
+        		wallConnectionMap.remove(boardWall1);
+        	}
 
-    	// same with boardWall2
-    	if(wallConnectionMap.containsKey(boardWall2.board())){
-    		BoardWallPair oldPair2 = wallConnectionMap.get(boardWall2);
-    		CommunicationTunnel oldPairTunnel2 = nameToBoardTunnelMap.get(oldPair2.board());
-    		oldPairTunnel2.addToOutQ(new ClientWallChangeMessage(boardWall2, false));
-    		//wallConnectionMap.remove(oldPair2);
-    		//The above line is not necessary because balls which manage to sneak through before the wall becomes
-    		//impermeable should be allowed to leave through the old connection
-    		
-    		//tunnel1.addToOutQ(new ClientWallChangeMessage(oldPair2, false));
-    		//The above line is not necessary, because if we are changing boardWall1's connection later anyway
-    		wallConnectionMap.remove(boardWall1);
-    	}
+        	// same with boardWall2
+        	if(wallConnectionMap.containsKey(boardWall2.board())){
+        		BoardWallPair oldPair2 = wallConnectionMap.get(boardWall2);
+        		CommunicationTunnel oldPairTunnel2 = nameToBoardTunnelMap.get(oldPair2.board());
+        		oldPairTunnel2.addToOutQ(new ClientWallChangeMessage(boardWall2, false));
+        		//wallConnectionMap.remove(oldPair2);
+        		//The above line is not necessary because balls which manage to sneak through before the wall becomes
+        		//impermeable should be allowed to leave through the old connection
+        		
+        		//tunnel1.addToOutQ(new ClientWallChangeMessage(oldPair2, false));
+        		//The above line is not necessary, because if we are changing boardWall1's connection later anyway
+        		wallConnectionMap.remove(boardWall1);
+        	}
     	
-    	wallConnectionMap.put(boardWall1, boardWall2);
-    	wallConnectionMap.put(boardWall1, boardWall2);
-    	tunnel1.addToOutQ(new ClientWallChangeMessage(boardWall2, true));
-    	tunnel2.addToOutQ(new ClientWallChangeMessage(boardWall1, true));
+        	wallConnectionMap.put(boardWall1, boardWall2);
+        	wallConnectionMap.put(boardWall1, boardWall2);
+        	tunnel1.addToOutQ(new ClientWallChangeMessage(boardWall2, true));
+        	tunnel2.addToOutQ(new ClientWallChangeMessage(boardWall1, true));
     	} else {
     	    System.out.println("YOU DUMB FUCKER! WRONG BOARD NAME");
     	}

@@ -29,6 +29,7 @@ public class BoardWallPair {
 	 * @param obj a JSON rep of BoardWallPair, see BoardWallPair implementation for details.
 	 */
 	protected BoardWallPair(JSONObject obj){
+	    System.out.println("json object: " + obj);
 		this.boardName = (String)obj.get("boardName");
 		Orientation orientation;
 		switch((String)obj.get("orientation")){

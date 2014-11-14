@@ -48,7 +48,7 @@ public class CommunicationTunnel implements Runnable {
             out = new PrintWriter(socket.getOutputStream(), true);
             
             String line = in.readLine();
-            System.out.println(line);
+            System.out.println("line: " + line);
 
             // THE FIRST MESSAGE SHOULD BE THE BOARD INIT MESSAGE, BECAUSE IT'S THE FIRST MESSAGE
             Message inMessage = Message.decode(line);
