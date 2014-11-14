@@ -4,7 +4,7 @@ import org.json.simple.JSONObject;
 
 /**
  * A class used to transmit information to a server
- * about connecting two walls. Immutable.
+ * about connecting two walls. Immutable, no mutators.
  *
  */
 public class ServerWallConnectMessage extends Message {

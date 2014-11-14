@@ -9,7 +9,7 @@ import phase2.Board.Ball;
  * information about a ball, and the board wall that
  * is relevant to it. For example, if a board is sending a ball
  * which should be teleporting to a server, the boardwall is the wall
- * it originated from. Immutable.
+ * it originated from. Immutable, no mutators.
  *
  */
 

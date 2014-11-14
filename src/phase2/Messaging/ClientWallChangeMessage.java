@@ -6,7 +6,7 @@ import org.json.simple.JSONObject;
  * A message responsible
  * for informing a board about which of its walls
  * is now involved or not involved in an inter-board connection.
- * Immutable.
+ * Immutable, no mutators.
  */
 public class ClientWallChangeMessage extends Message {
 	/*
