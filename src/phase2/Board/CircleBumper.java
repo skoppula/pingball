@@ -12,7 +12,7 @@ import physics.Vect;
  */
 public class CircleBumper extends Gadget {
 	/*
-	 * 
+	 * Rep Invariant: same as Gadget
 	 */
 	
 
