@@ -280,12 +280,14 @@ public class Board {
         for (Ball ball : balls) {
             if (ball.inAbsorber) continue;
             Vect ballVelocity = ball.getVelocity();
-            double Gforce =  GRAVITY_VECTOR.length() * timeDelta;
+            System.out.println(GRAVITY_VECTOR.y());
+            double Gforce =  GRAVITY_VECTOR.y() * timeDelta;
+            System.out.println(ballVelocity);
             ballVelocity = ballVelocity.plus(new Vect(0, Gforce));
             ballVelocity = ballVelocity.times(1 - MU * timeDelta - MU2
                     * ballVelocity.length() * timeDelta);
             ball.setVelocity(ballVelocity);
-            
+            System.out.println(ballVelocity);
         }
     }
     
