@@ -328,4 +328,12 @@ public class Ball implements Collidable{
         
     }
 
+    /**
+     * Returns hashcode of the ball name
+     * @return 
+     */
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
 }

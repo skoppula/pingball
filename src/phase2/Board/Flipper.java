@@ -520,4 +520,8 @@ public class Flipper extends Gadget {
 		trigger();
 		
 	}
+	
+	public BumperSide getBumperSide() {
+	    return this.side;
+	}
 }

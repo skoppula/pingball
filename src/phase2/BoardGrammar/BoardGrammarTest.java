@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import javafx.collections.WeakListChangeListener;
+
 import org.junit.Test;
 
 import phase2.Pingball;
@@ -16,6 +18,7 @@ import phase2.Board.Ball;
 import phase2.Board.Board;
 import phase2.Board.CircleBumper;
 import phase2.Board.Flipper;
+import phase2.Board.Wall;
 import phase2.Board.Flipper.BumperSide;
 import phase2.Board.Gadget;
 import phase2.Board.SquareBumper;
@@ -41,7 +44,7 @@ public class BoardGrammarTest {
 
     LinkedBlockingQueue<Message> q = new LinkedBlockingQueue<>(); // just for initializing Board, not actually used
     
-    // equals test - testing gadget equality
+    /*// equals test - testing gadget equality
     @Test
     public void equalsTest1() throws InvalidInvariantException {
         List<Gadget> gadgets1 = new ArrayList<Gadget>();
@@ -179,8 +182,8 @@ public class BoardGrammarTest {
         correctBoard.addBall(ballC);
         assertTrue(correctBoard.hasEqualAttributes(board));
     }
-    
-    // tests trigger functionality
+    */
+    /*// tests trigger functionality
     @Test
     public void makeBoardTest7() throws InvalidInvariantException, IOException {
         Board board = new Board(new File("src/phase2/BoardGrammar/boardFiles/simpeTrigger.pb"), q);
@@ -211,8 +214,8 @@ public class BoardGrammarTest {
         correctBoard.addBall(ball);
 
         assertTrue(correctBoard.hasEqualAttributes(board));
-    }
-    
+    }*/
+    /*
     // tests sample board 4
     @Test
     public void sampleBoard4Test() throws InvalidInvariantException, IOException {
@@ -225,6 +228,38 @@ public class BoardGrammarTest {
     public void defaultBoardTest() throws InvalidInvariantException, IOException {
         Board board = new Board(new File("src/phase2/BoardGrammar/boardFiles/default.pb"), q);
       
+    }*/
+    
+    // tests triggering 
+    @Test
+    public void flippersBoardTest() throws InvalidInvariantException, IOException {
+        Board board = new Board(new File("src/phase2/BoardGrammar/boardFiles/flippers.pb"), q);
+
+        List<Gadget> gadgets = new ArrayList<Gadget>();
+        gadgets.add(new Flipper(0,8,"FlipA",BumperSide.LEFT,Orientation.NINETY));
+        gadgets.add(new Flipper(4,10,"FlipB",BumperSide.LEFT,Orientation.NINETY));
+        gadgets.add(new Flipper(9,8,"FlipC",BumperSide.LEFT,Orientation.NINETY));
+        gadgets.add(new Flipper(15,8,"FlipD",BumperSide.LEFT,Orientation.NINETY));
+        
+        gadgets.add(new Flipper(2,15,"FlipE",BumperSide.RIGHT,Orientation.ZERO));
+        gadgets.add(new Flipper(17,15,"FlipF",BumperSide.RIGHT,Orientation.ZERO));
+        
+        gadgets.add(new CircleBumper(5, 18, "CircleA"));
+        gadgets.add(new CircleBumper(7, 13, "CircleB"));
+        gadgets.add(new CircleBumper(0, 5, "CircleC"));
+        gadgets.add(new CircleBumper(5, 5, "CircleD"));
+        gadgets.add(new CircleBumper(10, 5, "CircleE"));
+        gadgets.add(new CircleBumper(15, 5, "CircleF"));
+        
+        gadgets.add(new TriangleBumper(19, 0, "TriA", Orientation.NINETY));
+        gadgets.add(new TriangleBumper(10, 18, "TriB", Orientation.ONE_HUNDRED_EIGHTY));
+        
+        gadgets.add(new Absorber(0, 19, "Abs", 20, 1));
+        
+        Board correctBoard = new Board(gadgets, "Flippers", q);
+        
+        assertTrue(correctBoard.getGadgets().containsAll(board.getGadgets()));
+        assertTrue(correctBoard.getGadgets().size()==board.getGadgets().size());
     }
     
 }

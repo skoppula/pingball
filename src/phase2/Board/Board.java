@@ -97,6 +97,9 @@ public class Board {
         ParseTreeWalker walker = new ParseTreeWalker();
         PingBoardListenerBoardCreator listener = new PingBoardListenerBoardCreator();
         walker.walk(listener,tree);
+        
+        tree.inspect(parser);
+        
         List<Object> boardIngredients = listener.getBoardIngredients();
         // boardIngredients are of the form [gadgets, name, gravity, friction1, friction2, balls]
         this.gadgets = (ArrayList<Gadget>) boardIngredients.get(0);
@@ -565,6 +568,10 @@ public class Board {
 			ballToCollidables.remove(ball);
 		}
 		ballsToRemove = new HashSet<>();
+	}
+	
+	public List<Gadget> getGadgets() {
+	    return gadgets;
 	}
 	
 	
