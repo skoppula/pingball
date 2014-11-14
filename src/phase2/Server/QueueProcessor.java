@@ -111,7 +111,7 @@ public class QueueProcessor implements Runnable {
     	CommunicationTunnel tunnel2 = nameToBoardTunnelMap.get(boardWall2.board());
     	if(tunnel1 != null && tunnel2 != null) {
     	    // If the map already contains a mapping for boardWall1, make sure to remove it, and its reverse mapping
-        	if(wallConnectionMap.containsKey(boardWall1.board())){
+        	if(wallConnectionMap.containsKey(boardWall1)){
         		// break the connection with boardWall1's old wall connection
         		BoardWallPair oldPair1 = wallConnectionMap.get(boardWall1);
         		CommunicationTunnel oldPairTunnel1 = nameToBoardTunnelMap.get(oldPair1.board());
@@ -127,7 +127,7 @@ public class QueueProcessor implements Runnable {
         	}
 
         	// same with boardWall2
-        	if(wallConnectionMap.containsKey(boardWall2.board())){
+        	if(wallConnectionMap.containsKey(boardWall2)){
         		BoardWallPair oldPair2 = wallConnectionMap.get(boardWall2);
         		CommunicationTunnel oldPairTunnel2 = nameToBoardTunnelMap.get(oldPair2.board());
         		oldPairTunnel2.addToOutQ(new ClientWallChangeMessage(boardWall2, false));

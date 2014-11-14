@@ -98,7 +98,7 @@ public class BoardWallPair {
 			return false;
 		}
 		BoardWallPair otherM = (BoardWallPair)other;
-		return(this.boardName == otherM.boardName && this.wallOrientation == otherM.wallOrientation());
+		return(this.boardName.equals(otherM.boardName) && this.wallOrientation == otherM.wallOrientation());
 	}
 	
 	@Override
