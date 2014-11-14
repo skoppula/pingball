@@ -11,7 +11,8 @@ import org.json.simple.parser.ParseException;
  */
 public abstract class Message{
 	/* Abstraction Function: Message = MessageType + Objects
-	* Rep invariant: message = MessageType.fromJSONObject(message.toJSONObject()) 
+	* Rep invariant: message is immutable
+	* message = MessageType.fromJSONObject(message.toJSONObject()) 
 	* (these checkReps are stored in subclasses)
 	* if a.toString().equals(b.toString()), a must be observationally equal to b
 	* (meaning toString() is 1-to-1 with a given object observationally)
