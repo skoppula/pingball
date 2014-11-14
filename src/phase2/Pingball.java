@@ -1,4 +1,5 @@
 package phase2;
+
 import phase2.Board.Ball;
 import phase2.Board.Board;
 import phase2.Board.CircleBumper;
@@ -7,16 +8,12 @@ import phase2.Board.SquareBumper;
 import phase2.Board.TriangleBumper;
 import phase2.Board.Gadget.Orientation;
 import phase2.Board.Util.InvalidInvariantException;
-import phase2.BoardGrammar.*;
-import phase2.BoardGrammar.PingBoardParser.RootContext;
 import phase2.Client.LocalManager;
 import phase2.Messaging.Message;
 
 import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,12 +23,6 @@ import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
-
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.RuleContext;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import physics.Vect;
 

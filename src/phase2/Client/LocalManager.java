@@ -121,7 +121,6 @@ public class LocalManager {
      * Runs the game (by updating the board) on the local machine.
      */
     public void runGame() {
-        System.out.println("HELLO WORLD");
         while(true) {
             try {
                 Thread.sleep(2);

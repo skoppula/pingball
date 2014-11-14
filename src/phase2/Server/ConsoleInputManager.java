@@ -37,7 +37,6 @@ public class ConsoleInputManager implements Runnable {
                     isVerticalConnection = parts[0].equals("v");
                 } else throw new IllegalArgumentException();
 
-                System.out.println("isV" + isVerticalConnection);
                 ServerWallConnectMessage message = new ServerWallConnectMessage(parts[1], parts[2], isVerticalConnection ? ServerWallConnectMessage.ConnectionType.VERTICAL : ServerWallConnectMessage.ConnectionType.HORIZONTAL);
                 inQ.add(message);
 
