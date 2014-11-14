@@ -26,6 +26,9 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 import physics.Vect;
 
+/**
+ * AF: Runs the client-side control of a multi-client pingball game (either a local game or a networked game)
+ */
 public class Pingball {
     
     private static final int DEFAULT_PORT = 4444;
@@ -45,14 +48,12 @@ public class Pingball {
 
         outQ = new LinkedBlockingDeque<Message>();
         
-        Board board;
         Optional<Integer> port = Optional.of(DEFAULT_PORT);
         Optional<InetAddress> host = Optional.empty();
         Optional<File> file = Optional.empty();
         Queue<String> arguments = new LinkedList<String>(Arrays.asList(args));
         
-        if (args.length == 0) board = defaultBoard(outQ);
-        else {
+        if (args.length != 0) {
             while (!arguments.isEmpty()) {
                 String flag = arguments.remove();
                 try {
@@ -105,7 +106,6 @@ public class Pingball {
         if(host.isPresent()) lm = new LocalManager(file.get(), host.get(), port.get(), timeInSeconds);
         else if (file.isPresent()) lm = new LocalManager(file.get(), timeInSeconds);
         else lm = new LocalManager(defaultBoard(outQ), timeInSeconds);
-        System.out.println("YUM YUM");
         lm.runGame();
     }
     

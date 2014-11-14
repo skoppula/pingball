@@ -12,20 +12,14 @@ package phase2;
     
 import java.io.*;
 import java.net.*;
-import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
 import phase2.Messaging.Message;
-import phase2.Server.CommunicationTunnel;
 import phase2.Server.ConsoleInputManager;
 import phase2.Server.NewConnectionHandler;
 import phase2.Server.QueueProcessor;
 
-/**
- * Runs the server-side control of a multi-client pingball game.
- *
- */
 public class PingballServer {
 	
 	/*
@@ -116,12 +110,7 @@ public class PingballServer {
 
     private final ServerSocket serverSocket;
     
-    protected HashSet<String> waitlist;
-    
     BlockingQueue<Message> inQ;
-    
-    //When they ask me how I code so quick, I say poon-lickin
-    //Don't doubt my shit, you'll have lisa and yo bitchin
     
     private Thread nch;
     private Thread cim;
