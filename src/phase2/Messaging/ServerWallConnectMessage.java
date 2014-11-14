@@ -4,7 +4,7 @@ import org.json.simple.JSONObject;
 
 /**
  * A class used to transmit information to a server
- * about connecting two walls
+ * about connecting two walls. Immutable.
  *
  */
 public class ServerWallConnectMessage extends Message {
@@ -36,15 +36,19 @@ public class ServerWallConnectMessage extends Message {
 	public ServerWallConnectMessage(String boardName1, String boardName2, ConnectionType connectionType){
 		this.boardName1 = boardName1;
 		this.boardName2 = boardName2;
+		System.out.println("Connecting " + boardName1 + " " + boardName2);
 		this.connectionType = connectionType;
 		this.messageType = MessageType.SERVERWALLCONNECT;
-		// assert(checkRep());
+		assert(checkRep());
 	}
-/*
-	private boolean checkRep(){
-		return this.equals(ServerWallConnectMessage.fromJSON(this.toJSONObject()));
-	}*/
 
+	/**
+	 * RI: Connection message has valid boardnames
+	 * @return whether RI is satisfied
+	 */
+	private boolean checkRep(){
+	    return this.boardName1 != null && this.boardName2 != null;
+	}
 
 	public String getBoardName1() {
 		return boardName1;

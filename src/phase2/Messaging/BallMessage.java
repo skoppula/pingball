@@ -9,15 +9,15 @@ import phase2.Board.Ball;
  * information about a ball, and the board wall that
  * is relevant to it. For example, if a board is sending a ball
  * which should be teleporting to a server, the boardwall is the wall
- * it originated from.
+ * it originated from. Immutable.
  *
  */
+
 public class BallMessage extends Message {
 	/*
 	 * Rep invariant: see Message
 	 */
 	
-
 	private final Ball ball;
 	private final BoardWallPair boardWall;
 	
@@ -31,6 +31,7 @@ public class BallMessage extends Message {
 		this.ball = ball;
 		this.boardWall = boardWall;
 		this.messageType = MessageType.BALL;
+		assert(checkRep());
 	}
 	
 	/**
@@ -41,7 +42,6 @@ public class BallMessage extends Message {
 	}
 	
 	/**
-	 * 
 	 * @return the boardWallPair that the ball came from
 	 */
 	public BoardWallPair getBoardWall(){
@@ -62,11 +62,11 @@ public class BallMessage extends Message {
 	}
 	
 	/**
-	 * RI: checks 
-	 * @return whether RI is met
+	 * RI: Message has valid ball and wall
+	 * @return whether RI is satisfied
 	 */
 	private boolean checkRep(){
-		return this.equals(BallMessage.fromJSON(this.toJSONObject()));
+	    return this.ball != null && this.messageType != null;
 	}
 	
 	/**
