@@ -7,7 +7,15 @@ import physics.Vect;
 import phase2.Board.Board.InvalidInvariantException;
 import phase2.PhysicsComponents.*;
 
+/**
+ * A gadget that represents an immutable triangle bumper.
+ *
+ */
 public class TriangleBumper extends Gadget {
+	/*
+	 * Rep invariant: 
+	 * see gadget, no internal invariants
+	 */
 
     private Orientation orientation;
 

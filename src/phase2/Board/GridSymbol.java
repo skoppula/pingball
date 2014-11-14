@@ -6,6 +6,10 @@ import physics.Vect;
  * An immutable class to represent a grid symbol
  */
 public class GridSymbol {
+	/*
+	 * Abstraction function: a grid pixel with an associated character
+	 */
+	
     private final char c;
     // the character representing of this symbol
     private final GridPoint position;
