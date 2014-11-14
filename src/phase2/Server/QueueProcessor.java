@@ -144,6 +144,8 @@ public class QueueProcessor implements Runnable {
     	wallConnectionMap.put(boardWall1, boardWall2);
     	tunnel1.addToOutQ(new ClientWallChangeMessage(boardWall2, true));
     	tunnel2.addToOutQ(new ClientWallChangeMessage(boardWall1, true));
+    	} else {
+    	    System.out.println("BOARD DOES NOT EXIST!");
     	}
     }
     

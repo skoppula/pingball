@@ -218,11 +218,15 @@ public class Board {
                     ball.updatePrevVelocity();
                 }
                 
+                System.out.println("BALLS TO REMOVE" + ballsToRemove);
                 removeFlaggedBalls(); // get rid of any balls that have been flagged (and thus absorbed
                 // by the wall). This is done to avoid taking the ball out of a list while still iterating
                 // over that list.
+                System.out.println("BALLS TO REMOVE2" + ballsToRemove);
+                System.out.println("BALLS" + balls);
                 
-                if (timeDelta - timeToMove > Math.pow(10, -10)) {
+                if (timeDelta - timeToMove > Math.pow(10, -10) && balls.size() != 0) {
+                    System.out.println("HERE " + (timeDelta-timeToMove));
                     updateBallPositions(timeDelta - timeToMove);
                 } 
                 
@@ -524,12 +528,15 @@ public class Board {
     }
 
     private Set<Ball> ballsToRemove = new HashSet<>();
+
     /**
      * Flags a ball for removal. The next time removeFlaggedBalls() is called, this ball will be removed.
      * @param ball
      */
 	protected void flagForRemoval(Ball ball) {
+	    System.out.println("BALL2REMOVE" + ballsToRemove);
 		ballsToRemove.add(ball);
+	    System.out.println("BALL2REMOVE2" + ballsToRemove);
 	}
 	
 	/**
