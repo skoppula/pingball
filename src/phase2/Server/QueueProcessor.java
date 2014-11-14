@@ -166,7 +166,8 @@ public class QueueProcessor implements Runnable {
     		if(wallConnectionMap.containsKey(bwp)){
     			BoardWallPair otherBWP = wallConnectionMap.get(bwp);
     			CommunicationTunnel otherTunnel = nameToBoardTunnelMap.get(otherBWP.board());
-    			otherTunnel.addToOutQ(new ClientWallChangeMessage(otherBWP, false));
+    			otherTunnel.addToOutQ(new ClientWallChangeMessage(bwp, false));
+    			wallConnectionMap.remove(otherBWP);
     			wallConnectionMap.remove(bwp);
     		}
     	}
