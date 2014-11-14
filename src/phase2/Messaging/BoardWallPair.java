@@ -1,6 +1,5 @@
 package phase2.Messaging;
 
-import org.antlr.v4.parse.ANTLRParser.ruleReturns_return;
 import org.json.simple.JSONObject;
 
 import phase2.Board.Gadget.Orientation;
@@ -30,7 +29,7 @@ public class BoardWallPair {
 	 * @param obj a JSON rep of BoardWallPair, see BoardWallPair implementation for details.
 	 */
 	protected BoardWallPair(JSONObject obj){
-	    System.out.println("json object: " + obj);
+	    //System.out.println("json object: " + obj);
 		this.boardName = (String)obj.get("boardName");
 		Orientation orientation;
 		switch((String)obj.get("orientation")){
