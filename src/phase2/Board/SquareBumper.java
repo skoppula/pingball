@@ -1,6 +1,6 @@
 package phase2.Board;
 
-import phase2.Board.Util.InvalidInvariantException;
+import phase2.Board.Board.InvalidInvariantException;
 import phase2.PhysicsComponents.PhysicsComponent;
 import phase2.PhysicsComponents.StaticCircle;
 import phase2.PhysicsComponents.StaticLine;
@@ -36,7 +36,7 @@ public class SquareBumper extends Gadget {
         physicsComponentList.add(new StaticCircle(new Circle(this.getX() + 1, this.getY() + 1, 0.01), this.reflectionCoef));
 
         if (!this.checkRep()) {
-            throw new Util.InvalidInvariantException();
+            throw new Board.InvalidInvariantException();
         }
     }
 

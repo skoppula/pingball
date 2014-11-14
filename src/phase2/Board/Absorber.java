@@ -1,7 +1,7 @@
 package phase2.Board;
 
 import java.util.ArrayList;
-import phase2.Board.Util.InvalidInvariantException;
+import phase2.Board.Board.InvalidInvariantException;
 import phase2.PhysicsComponents.PhysicsComponent;
 import phase2.PhysicsComponents.StaticCircle;
 import phase2.PhysicsComponents.StaticLine;
@@ -9,7 +9,14 @@ import physics.Circle;
 import physics.LineSegment;
 import physics.Vect;
 
+/**
+ * A gadget that represents an absorber in a PingBall game.
+ * It is mutable, but only because it can be mutated to hold or not hold a ball.
+ */
 public class Absorber extends Gadget {
+	/*
+	 * rep invariant: if this.loaded == true, this.loadedBall must be the ball currently in the absorber.
+	 */
 
     private boolean loaded;
     private Ball loadedBall;
@@ -43,13 +50,6 @@ public class Absorber extends Gadget {
     }
 
     
-    /**
-     * Function that sets if the absorber contains a ball or not
-     * It changes the state of toggle whenever the absorber contains or not a ball
-     */
-    public void setLoaded(boolean b) {
-        this.loaded = b;
-    }
     
     /**
      * @return string representation of absorber
@@ -86,7 +86,7 @@ public class Absorber extends Gadget {
             this.loadedBall.updateCenterY(this.getY() + height - this.loadedBall.getBallCircle().getRadius());
             this.loadedBall.inAbsorber = true;
             this.loadedBall.setVelocity(new Vect(0.0, 0.0));
-            setLoaded(true);
+            this.loaded = true;
         }
         else{
         	PhysicsComponent gadgetPartToCollideWith = this.physicsComponentList.get(0);
@@ -122,7 +122,7 @@ public class Absorber extends Gadget {
     public void action() {
         final double BALL_RADIUS = 0.25;
         if (this.loaded) {
-            setLoaded(false);
+            this.loaded = false;
             this.loadedBall.setVelocity(new Vect(0, - 50));
             loadedBall.updateCenterX(this.getX() + width - BALL_RADIUS); 
             loadedBall.updateCenterY(this.getY() - BALL_RADIUS);

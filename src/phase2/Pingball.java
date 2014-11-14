@@ -7,7 +7,7 @@ import phase2.Board.Gadget;
 import phase2.Board.SquareBumper;
 import phase2.Board.TriangleBumper;
 import phase2.Board.Gadget.Orientation;
-import phase2.Board.Util.InvalidInvariantException;
+import phase2.Board.Board.InvalidInvariantException;
 import phase2.Client.LocalManager;
 import phase2.Messaging.Message;
 

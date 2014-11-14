@@ -3,16 +3,14 @@ package phase2.Board;
 import java.util.List;
 
 /**
- * @author Yo Shavit
  * This is a mutable class used in the graphical representation of a Board.
  */
 
-/* 
- * Rep. Invariant: A BoardMatrix is valid if: 
- *   it contains no newlines as tile Symbols 
- *   It has width 20L and height 20L
- */
 class BoardMatrix {
+	/* 
+	 * Rep. Invariant: A BoardMatrix is valid if
+	 *   it contains no newlines as tile Symbols  
+	 */
 
     private int BOARD_SIZE;
     // The number of tiles in the board.
