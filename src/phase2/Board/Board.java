@@ -37,6 +37,7 @@ public class Board {
     private final Vect GRAVITY_VECTOR;
     private final double MU;
     private final double MU2;
+    private final double EPSILON = 0.25;
     
     // default values
     private final double DEFAULT_GRAVITY_VALUE = 25;
@@ -513,20 +514,20 @@ public class Board {
             double radius = oldBall.getBallCircle().getRadius();
             switch(outOrientation) {
                 case ZERO:
-                    newX = newWall.getX() + newWall.width + radius;
+                    newX = newWall.getX() + newWall.width + radius + EPSILON;
                     newY = oldBall.getBallCircle().getCenter().y();
                     break;
                 case NINETY:
                     newX = oldBall.getBallCircle().getCenter().x();
-                    newY = newWall.getY() + newWall.width + radius;
+                    newY = newWall.getY() + newWall.width + radius + EPSILON;
                     break;
                 case ONE_HUNDRED_EIGHTY:
-                    newX = newWall.getX() - newWall.width;
+                    newX = newWall.getX() - newWall.width - EPSILON;
                     newY = oldBall.getBallCircle().getCenter().y();
                     break;
                 default: // case TWO HUNDRED SEVETY
                     newX = oldBall.getBallCircle().getCenter().x();
-                    newY = newWall.getY() - newWall.width;
+                    newY = newWall.getY() - newWall.width - EPSILON;
             }
             // ball's position changes, but velocity stays the same
             newBall = new Ball(newX, newY, oldBall.getVelocity(), oldBall.getName());
