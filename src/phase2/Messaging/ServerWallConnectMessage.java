@@ -31,14 +31,16 @@ public class ServerWallConnectMessage extends Message {
 	public ServerWallConnectMessage(String boardName1, String boardName2, ConnectionType connectionType){
 		this.boardName1 = boardName1;
 		this.boardName2 = boardName2;
+		System.out.println(boardName1);
+		System.out.println(boardName2);
 		this.connectionType = connectionType;
 		this.messageType = MessageType.SERVERWALLCONNECT;
-		assert(checkRep());
+		// assert(checkRep());
 	}
-
+/*
 	private boolean checkRep(){
 		return this.equals(ServerWallConnectMessage.fromJSON(this.toJSONObject()));
-	}
+	}*/
 
 
 	public String getBoardName1() {

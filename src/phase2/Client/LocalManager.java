@@ -70,7 +70,7 @@ public class LocalManager {
         System.out.println(address);
         System.out.println(port);
         System.out.println("TROLOLOl");
-        address = InetAddress.getByName("18.189.26.107");
+        address = InetAddress.getByName("192.54.222.4");
         Socket socket = new Socket(address, port); 
         System.out.println("HERE");
         //outQ.add(new BoardInitMessage(board.getName()));
