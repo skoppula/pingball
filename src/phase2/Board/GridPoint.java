@@ -13,7 +13,7 @@ public class GridPoint {
     private final int y;
     
     /**
-     * Creates a new Gridpoint at coordinate (x,y) 
+     * Creates a new Gridpoint at coordinate (x,y)
      * @param x a valid X coordinate that is inside the boardMatrix
      * @param y a valid y coordinate that is inside the boardMatrix
      */

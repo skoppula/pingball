@@ -11,6 +11,9 @@ import physics.Vect;
  *
  */
 public class CircleBumper extends Gadget {
+	/*
+	 * 
+	 */
 	
 
     /**
