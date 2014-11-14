@@ -25,7 +25,6 @@ public class ClientWallChangeMessage extends Message {
 		this.otherBoardWall = otherBoardWall;
 		this.connectOrDisconnect = connectOrDisconnect;
 		this.messageType = MessageType.CLIENTWALLCHANGE;
-		assert(checkRep());
 	}
 
 

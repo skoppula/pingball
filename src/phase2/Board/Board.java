@@ -27,6 +27,10 @@ import phase2.Messaging.*;
 import physics.Geometry;
 import physics.Vect;
 
+/**
+ * The main board class. Represents a given pingball board.
+ *
+ */
 public class Board {
 	//Rep Invariant: triggerMap: if triggerMap[key] = value, then must have triggerMap[value] = key
 	// outQ should only ever be accessed if the board is online

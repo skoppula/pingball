@@ -28,7 +28,6 @@ public class BallMessage extends Message {
 		this.ball = ball;
 		this.boardWall = boardWall;
 		this.messageType = MessageType.BALL;
-		assert(checkRep());
 	}
 	
 	/**
