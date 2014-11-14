@@ -16,8 +16,8 @@ public class Wall extends Gadget {
 	//Rep Invariant: isTeleporter can be true only if board.isOnline == true
     
 	private final Board board;
-	private boolean isTeleporter = false;
-	private final Orientation orientation;
+	protected boolean isTeleporter = false;
+	protected final Orientation orientation;
 	private String text;
     /**
      * Creates a new Wall.

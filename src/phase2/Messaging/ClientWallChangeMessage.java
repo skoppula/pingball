@@ -43,7 +43,6 @@ public class ClientWallChangeMessage extends Message {
 	}
 
 	/**
-	 * 
 	 * @return whether our board should be connecting or disconnecting our wall
 	 * to the other board. Connecting --> true, disconnecting --> false
 	 */

@@ -144,41 +144,4 @@ public class Pingball {
         board.addBall(ball);
         return board;
     }
-    
-    /**
-     * Return board from file
-     * @param file 
-     * @return a board
-     */
-    public static Board parseBoardFile(File file) {
-        
-        // Read in board files using ANTLR
-        try {
-            // make a stream of characters to feed to the lexer
-            FileReader filereader = new FileReader(file);
-            CharStream stream = new ANTLRInputStream(filereader);
-            // pass the character stream to an instance of the generated lexer class
-            PingBoardLexer lexer = new PingBoardLexer(stream);
-            CommonTokenStream tokens = new CommonTokenStream(lexer);
-            // feed the stream of tokens we've generated to the parser
-            PingBoardParser parser = new PingBoardParser(tokens);
-            RootContext tree = parser.root();
-            
-            // Visit each node in the parse tree in order,
-            // top-to-bottom, left-to-right, calling methods that we want
-            ParseTreeWalker walker = new ParseTreeWalker();
-            PingBoardListener listener = new PingBoardListenerBoardCreator();
-            walker.walk(listener,tree);
-            System.err.println(tree.toStringTree(parser));
-            ((RuleContext)tree).inspect(parser);
-            Board board = PingBoardListenerBoardCreator.getBoard();
-            return board;
-            
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }
