@@ -69,6 +69,7 @@ public class Ball implements Collidable{
      * Converts the current ball into a JSON object.
      * @return an object which describes the ball through its location, name, and velocity.
      */
+    @SuppressWarnings("unchecked")
     public JSONObject toJSONObject(){
     	JSONObject obj = new JSONObject();
     	obj.put("x",ballCircle.getCenter().x());
