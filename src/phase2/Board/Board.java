@@ -519,7 +519,7 @@ public class Board {
                     break;
                 case NINETY:
                     newX = oldBall.getBallCircle().getCenter().x();
-                    newY = newWall.getY() + newWall.width + radius + EPSILON;
+                    newY = newWall.getY() + newWall.height + radius + EPSILON;
                     break;
                 case ONE_HUNDRED_EIGHTY:
                     newX = newWall.getX() - newWall.width - EPSILON;
