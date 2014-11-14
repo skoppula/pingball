@@ -8,6 +8,11 @@ import org.json.simple.JSONObject;
  *
  */
 public class ServerWallConnectMessage extends Message {
+	/*
+	 * Abstraction function: a message sent to the server to connect boardName1 and boardName2
+	 * in the direction of connectionType.
+	 * Rep Invariant: see Message
+	 */
 	
 	public enum ConnectionType{
 		HORIZONTAL,
