@@ -43,24 +43,17 @@ public class CommunicationTunnel implements Runnable {
     public void run() {
 
         try {
-            System.out.println("shit tons of print statements");
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
             
             String line = in.readLine();
-            System.out.println(line);
 
-            // THE FIRST MESSAGE SHOULD BE THE BOARD INIT MESSAGE, BECAUSE IT'S THE FIRST MESSAGE
             Message inMessage = Message.decode(line);
-            System.out.println("inMessage1: " + inMessage);
             assert(inMessage.getType() == MessageType.BOARDINIT);
+            System.out.println("Reading board init message:" + inMessage);
 
-            // handle the board init messages
-            this.name = ((BoardInitMessage)inMessage).getBoardName();
+            this.name = ((BoardInitMessage) inMessage).getBoardName();
             QueueProcessor.nameToBoardTunnelMap.put(this.name, this);
-            System.out.println("map: " + QueueProcessor.nameToBoardTunnelMap);
-            System.out.println("map get name: " + QueueProcessor.nameToBoardTunnelMap.get(name));
-            System.out.println(name);
             
             Thread ih = new Thread(new InputHandler(in, serverInQ, name));
             ih.start();

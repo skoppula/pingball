@@ -35,7 +35,6 @@ public class LocalInputManager implements Runnable {
             while(true) {
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-                System.out.println("here");
                 for (String line = in.readLine(); line != null; line = in.readLine()) {
                     Message inMessage = Message.decode(line);
                     inQ.add(inMessage);

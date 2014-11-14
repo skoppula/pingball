@@ -70,15 +70,12 @@ public class LocalManager {
         System.out.println(address);
         System.out.println(port);
         Socket socket = new Socket(address, port); 
-        System.out.println("HERE");
         //outQ.add(new BoardInitMessage(board.getName()));
-        System.out.println("HERE2");
         lim = new Thread(new LocalInputManager(inQ, socket));
         lom = new Thread(new LocalOutputManager(outQ, socket));
         lim.start();
         lom.start();
 
-        System.out.println("HERE3");
 
         System.out.println("Adding you to server " + address + " " + port);
     }

@@ -222,15 +222,11 @@ public class Board {
                     ball.updatePrevVelocity();
                 }
                 
-                System.out.println("BALLS TO REMOVE" + ballsToRemove);
                 removeFlaggedBalls(); // get rid of any balls that have been flagged (and thus absorbed
                 // by the wall). This is done to avoid taking the ball out of a list while still iterating
                 // over that list.
-                System.out.println("BALLS TO REMOVE2" + ballsToRemove);
-                System.out.println("BALLS" + balls);
                 
                 if (timeDelta - timeToMove > Math.pow(10, -10) && balls.size() != 0) {
-                    System.out.println("HERE " + (timeDelta-timeToMove));
                     updateBallPositions(timeDelta - timeToMove);
                 } 
                 
@@ -322,6 +318,17 @@ public class Board {
             if(ballsToRemove.contains(ball)) continue;
             List<Collidable> collidingObjects = ballToCollidables.get(ball);
             for (Collidable object : collidingObjects) {
+                if(object instanceof Wall) {
+                    if(((Wall) object).isTeleporter) {
+                        ballsToRemove.add(ball);
+                        try {
+                            outQ.put(new BallMessage(ball, new BoardWallPair(this.name, ((Wall) object).orientation)));
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        continue;
+                    } 
+                }
                 object.collision(ball);
             }
             ballToCollidables.put(ball, new ArrayList<Collidable>());
@@ -536,10 +543,8 @@ public class Board {
      * Flags a ball for removal. The next time removeFlaggedBalls() is called, this ball will be removed.
      * @param ball
      */
-		void flagForRemoval(Ball ball) {
-	    System.out.println("BALL2REMOVE" + ballsToRemove);
+    void flagForRemoval(Ball ball) {
 		ballsToRemove.add(ball);
-	    System.out.println("BALL2REMOVE2" + ballsToRemove);
 	}
 	
 	/**

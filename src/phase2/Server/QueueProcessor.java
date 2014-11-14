@@ -47,7 +47,7 @@ public class QueueProcessor implements Runnable {
 	    	Message message;
 			try {
 				message = inQ.take();
-				System.out.println("message" + message);
+				System.out.println("Processing message: " + message);
 		    	switch(message.getType()){
 		    	case BALL:
 		    		handleBallMessage((BallMessage)message);
@@ -105,13 +105,11 @@ public class QueueProcessor implements Runnable {
     	}
     	
     	CommunicationTunnel tunnel1 = nameToBoardTunnelMap.get(boardWall1.board());
-        System.out.println("name to Board tunnel map: " + nameToBoardTunnelMap);
-        System.out.println("tunnel1" + tunnel1);
     	CommunicationTunnel tunnel2 = nameToBoardTunnelMap.get(boardWall2.board());
-    	System.out.println("tunnel2" + tunnel2);
     	if(tunnel1 != null && tunnel2 != null) {
     	// If the map already contains a mapping for boardWall1, make sure to remove it, and its reverse mapping
     	if(wallConnectionMap.containsKey(boardWall1)){
+
     		// break the connection with boardWall1's old wall connection
     		BoardWallPair oldPair1 = wallConnectionMap.get(boardWall1);
     		CommunicationTunnel oldPairTunnel1 = nameToBoardTunnelMap.get(oldPair1.board());
