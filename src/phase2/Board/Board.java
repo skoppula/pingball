@@ -33,9 +33,8 @@ public class Board {
 	//Rep Invariant: triggerMap: if triggerMap[key] = value, then must have triggerMap[value] = key
 	// outQ should only ever be accessed if the board is online
 
-    /*
-     * 
-     */
+	
+	
     private final String name;
     private final int width = 20;
     private final int height = 20;
@@ -47,6 +46,7 @@ public class Board {
     private final double DEFAULT_GRAVITY_VALUE = 25;
     private final double DEFAULT_MU = .025;
     private final double DEFAULT_MU2 = .025;
+    private Set<Ball> ballsToRemove = new HashSet<>();
     
     /*
      * Length of board (in units distance)
@@ -527,13 +527,12 @@ public class Board {
         }
     }
 
-    private Set<Ball> ballsToRemove = new HashSet<>();
 
     /**
      * Flags a ball for removal. The next time removeFlaggedBalls() is called, this ball will be removed.
      * @param ball
      */
-	protected void flagForRemoval(Ball ball) {
+		void flagForRemoval(Ball ball) {
 	    System.out.println("BALL2REMOVE" + ballsToRemove);
 		ballsToRemove.add(ball);
 	    System.out.println("BALL2REMOVE2" + ballsToRemove);
