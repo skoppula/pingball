@@ -8,6 +8,11 @@ import java.util.concurrent.BlockingQueue;
 import phase2.Messaging.Message;
 import phase2.Messaging.ServerWallConnectMessage;
 
+/**
+ * Handles the input from the console on the server side,
+ * and converts it into Messages, which are given to QueueProcessor
+ *
+ */
 public class ConsoleInputManager implements Runnable {
 
 	private final BlockingQueue<Message> inQ;
@@ -24,14 +29,15 @@ public class ConsoleInputManager implements Runnable {
         try {
             while((input=br.readLine())!=null){
 
-                String[] parts = input.split(" ");
+                String[] parts = input.trim().split("\\s+");
                 if (parts.length != 3) throw new IllegalArgumentException();
 
                 boolean isVerticalConnection = false;
-                if(parts[0].equals("v") || parts[1].equals("h")) {
+                if(parts[0].equals("v") || parts[0].equals("h")) {
                     isVerticalConnection = parts[0].equals("v");
                 } else throw new IllegalArgumentException();
 
+                System.out.println("isV" + isVerticalConnection);
                 ServerWallConnectMessage message = new ServerWallConnectMessage(parts[1], parts[2], isVerticalConnection ? ServerWallConnectMessage.ConnectionType.VERTICAL : ServerWallConnectMessage.ConnectionType.HORIZONTAL);
                 inQ.add(message);
 

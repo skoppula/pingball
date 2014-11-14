@@ -8,6 +8,11 @@ import java.util.concurrent.BlockingQueue;
 
 import phase2.Messaging.Message;
 
+/**
+ * Listens for new connections on the port,
+ * and creates CommunicationTunnels to handle the communication with these clients.
+ *
+ */
 public class NewConnectionHandler implements Runnable {
     
     ServerSocket serverSocket;

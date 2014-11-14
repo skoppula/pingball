@@ -108,8 +108,7 @@ public class Wall extends Gadget {
 	        trigger();
     	}
     	else{
-    		board.removeBall(ball);
-    		//TODO Does this give a concurrentmodificationexception?
+    		board.flagForRemoval(ball);
     		try {
 				board.outQ.put(new BallMessage(ball, new BoardWallPair(this.name, this.orientation)));
 			} catch (InterruptedException e) {

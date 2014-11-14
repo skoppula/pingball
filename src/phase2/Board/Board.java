@@ -6,8 +6,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -109,7 +111,7 @@ public class Board {
         	this.addBall(ball);
         }
         this.wallMap = new HashMap<>(board.wallMap);
-        this.GRAVITY_VECTOR = board.getGRAVITY_VECTOR();
+        this.GRAVITY_VECTOR = board.getGravityVector();
         this.MU = board.getMU();
         this.MU2 = board.getMU2();
         this.outQ = outQ;
@@ -118,8 +120,8 @@ public class Board {
     /**
      * Creates a board with the default values for friction1, friction2, and gravity,
      * and sends a greeting to the server.
-     * @param gadgets
-     * @param name
+     * @param gadgets the list of gadgets to be initialized (not including walls)
+     * @param name the name of our board
      * @param outQ the output queue from the board to the server
      */
     public Board(List<Gadget> gadgets, String name, BlockingQueue<Message> outQ) {
@@ -154,8 +156,8 @@ public class Board {
     /**
      * Creates a board with the specified values for friction1, friction2, and gravity,
      * and sends a greeting to the server
-     * @param gadgets
-     * @param name
+     * @param gadgets the list of gadgets in the board (not including walls)
+     * @param name the name of the board
      * @param outQ the output queue from the board to the server
      */
     public Board(List<Gadget> gadgets, String name, double gravity, double friction1, double friction2,
@@ -194,14 +196,10 @@ public class Board {
         ballToCollidables.put(ball, new ArrayList<Collidable>());
     }
     
-    public void removeBall(Ball ball){
-    	balls.remove(ball);
-    	ballToCollidables.remove(ball);
-    }
     
     /**
      * Mutates board to represent the board after timeDelta seconds based on
-     * ball changing position
+     * balls changing position.
      */
     public void updateBallPositions(double timeDelta) {
         if (timeDelta > 0) {
@@ -220,9 +218,14 @@ public class Board {
                     ball.updatePrevVelocity();
                 }
                 
+                removeFlaggedBalls(); // get rid of any balls that have been flagged (and thus absorbed
+                // by the wall). This is done to avoid taking the ball out of a list while still iterating
+                // over that list.
+                
                 if (timeDelta - timeToMove > Math.pow(10, -10)) {
                     updateBallPositions(timeDelta - timeToMove);
                 } 
+                
             }
             else {
                 for (Ball ball : ballToCollidables.keySet()) {
@@ -308,6 +311,7 @@ public class Board {
      */
     private void collideBalls() {
         for (Ball ball : balls) {
+            if(ballsToRemove.contains(ball)) continue;
             List<Collidable> collidingObjects = ballToCollidables.get(ball);
             for (Collidable object : collidingObjects) {
                 object.collision(ball);
@@ -316,28 +320,30 @@ public class Board {
         }
     }
     
-    private double updateCollisions(double timeDelta) {
+    /**
+     * Collides balls with gadgets and other balls if they will collide in exactly timeDelta
+     * @param timeDelta must be positive
+     * @return 
+     */
+    private void updateCollisions(double timeDelta) {
 
-        Double time = timeDelta;
         Geometry.setForesight(timeDelta);
         for (Ball ball : balls) {
             for (Gadget gadget : gadgets) {
                 double time2 = gadget.getTimeUntilCollision(ball);
 
-                if (time2 == time) {
+                if (time2 == timeDelta) {
                     ballToCollidables.get(ball).add(gadget);
                 }
             }
             for (Ball ball2 : balls) {
                 double time2 = ball2.getTimeUntilCollision(ball);
 
-                if (time2 == time) {
+                if (time2 == timeDelta) {
                     ballToCollidables.get(ball).add(ball2);
                 }
             }
         }
-
-        return time;
     }
 
 
@@ -374,6 +380,10 @@ public class Board {
 
 
 
+    /**
+     * Stores information of a double and a tuple - used to keep track of board update state.
+     *
+     */
     private class boolDoubleTuple {
         public final boolean bool;
         public final double time;
@@ -384,7 +394,7 @@ public class Board {
         }
     }
     
-    public Vect getGRAVITY_VECTOR() {
+    public Vect getGravityVector() {
         return GRAVITY_VECTOR;
     }
 
@@ -413,7 +423,7 @@ public class Board {
      */
     public boolean hasEqualAttributes(Board otherBoard) {
         // check that constants are equal
-        boolean gravityEqual = this.getGRAVITY_VECTOR().equals(otherBoard.getGRAVITY_VECTOR());
+        boolean gravityEqual = this.getGravityVector().equals(otherBoard.getGravityVector());
         boolean friction1Equal = this.getMU()==otherBoard.getMU();
         boolean friction2Equal = this.getMU2()==otherBoard.getMU2();
         boolean nameEqual = this.getName().equals(otherBoard.getName());
@@ -448,20 +458,30 @@ public class Board {
 
 
     /**
-     * Processes the message Board receives
-     * @param message
+     * Processes the message Board receives and changes board's state according
+     * @param message must be either a BALL or a CLIENTWALLCHANGE message
      */
     public void syncChange(Message message) {
         // find which wall will either
         // a) receive a new ball or
         // b) connect/disconnect
-        Orientation inOrientation = ((BallMessage) message).getBoardWall().wallOrientation();
+        Orientation inOrientation;
+        switch(message.getType()){
+		case BALL:
+			inOrientation = ((BallMessage) message).getBoardWall().wallOrientation();
+			break;
+		case CLIENTWALLCHANGE:
+			inOrientation = ((ClientWallChangeMessage)message).getOtherBoardWall().wallOrientation();
+			break;
+		default:
+			throw new IllegalStateException("This shouldn't be possible");
+        }
         Orientation outOrientation;
         switch (inOrientation) {
-            case ZERO: outOrientation = Orientation.NINETY; break;
-            case NINETY: outOrientation = Orientation.ZERO; break;
-            case ONE_HUNDRED_EIGHTY: outOrientation = Orientation.TWO_HUNDRED_SEVENTY; break;
-            default: outOrientation = Orientation.ONE_HUNDRED_EIGHTY; break; // 270 case
+            case ZERO: outOrientation = Orientation.ONE_HUNDRED_EIGHTY; break;
+            case NINETY: outOrientation = Orientation.TWO_HUNDRED_SEVENTY; break;
+            case ONE_HUNDRED_EIGHTY: outOrientation = Orientation.ZERO; break;
+            default: outOrientation = Orientation.NINETY; break; // 270 case
         }
         Wall newWall = wallMap.get(outOrientation);
         
@@ -502,5 +522,27 @@ public class Board {
             throw new RuntimeException("Wrong message type for Board");
         }
     }
+
+    private Set<Ball> ballsToRemove = new HashSet<>();
+    /**
+     * Flags a ball for removal. The next time removeFlaggedBalls() is called, this ball will be removed.
+     * @param ball
+     */
+	protected void flagForRemoval(Ball ball) {
+		ballsToRemove.add(ball);
+	}
+	
+	/**
+	 * Removes all balls that have been flagged for removal.
+	 */
+	private void removeFlaggedBalls(){
+		for(Ball ball: ballsToRemove){
+			balls.remove(ball);
+			ballToCollidables.remove(ball);
+		}
+		ballsToRemove = new HashSet<>();
+	}
+	
+	
 }
     

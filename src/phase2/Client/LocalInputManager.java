@@ -7,6 +7,10 @@ import java.net.Socket;
 import java.util.Queue;
 import phase2.Messaging.Message;
 
+/**
+ * Takes information from the socket, converts it to messages,
+ * and passes those messages back through a queue.
+ */
 public class LocalInputManager implements Runnable {
 
     Socket socket;
@@ -15,9 +19,9 @@ public class LocalInputManager implements Runnable {
     
     /**
      * Manages the inputs of the local client
-     * @param inQ
-     * @param socket
-     * @throws IOException
+     * @param inQ the queue to place read messages on
+     * @param socket the socket to read information from
+     * @throws IOException if the socket communication fails
      */
     protected LocalInputManager(Queue<Message> inQ, Socket socket) throws IOException {
         this.socket = socket;

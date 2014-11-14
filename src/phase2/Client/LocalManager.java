@@ -11,6 +11,11 @@ import phase2.Board.Board;
 import phase2.Messaging.BoardInitMessage;
 import phase2.Messaging.Message;
 
+/**
+ * Manages the playing of PingBall from the client side.
+ * Does this by handling input and output, and the updating of the gameBoard itself.
+ *
+ */
 public class LocalManager {
 
     //TODO make these types threadsafe, especially lim, lom
@@ -45,10 +50,11 @@ public class LocalManager {
      */
 
     /**
-     * Manages the game of the local manager
-     * @param board
-     * @param address
-     * @param port
+     * Creates a local manager that will connect to a server.
+     * @param file the location of the file (of type .pb) through which we generate boards
+     * @param address the address over which to communicate with the server
+     * @param port the port over which to communicate with the server
+     * @param deltaTime the time between frames when visualizing the board
      * @throws IOException
      */
     public LocalManager(File file, InetAddress address, int port, double deltaTime) throws IOException {
@@ -74,6 +80,11 @@ public class LocalManager {
     }
     
 
+    /**
+     * Creates a localManager for a local game
+     * @param file describes the gadgets and balls on the board, using a file of type .pb
+     * @param deltaTime the time in between frames of visualization of the board
+     */
     public LocalManager(File file, double deltaTime) {
     	this.deltaTime = deltaTime;
     	this.outQ = new LinkedBlockingQueue<>(); // note that we have to give the board some sort of queue
@@ -88,6 +99,11 @@ public class LocalManager {
         System.out.println("Starting local game..");
     }
     
+    /**
+     * Creates a localManager for a local game
+     * @param board takes in a predetermined board file
+     * @param deltaTime the time in between frames of visualization of the board
+     */
     public LocalManager(Board board, double deltaTime) {
     	this.deltaTime = deltaTime;
     	this.outQ = new LinkedBlockingQueue<>(); // note that we have to give the board some sort of queue
@@ -99,7 +115,7 @@ public class LocalManager {
     }
 
     /**
-     * Runs the game on the local machine
+     * Runs the game (by updating the board) on the local machine.
      */
     public void runGame() {
         while(true) {

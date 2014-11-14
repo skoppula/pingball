@@ -8,6 +8,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.antlr.v4.runtime.misc.NullUsageProcessor;
+
 import phase2.Board.Gadget.Orientation;
 import phase2.Messaging.*;
 
@@ -46,31 +48,26 @@ public class QueueProcessor implements Runnable {
     public void run() {
     	while(true){
 	    	Message message;
-            try {
-                System.out.println("waiting for message?");
-                System.out.println(inQ);
-                message = inQ.take();
-                System.out.println("message taken off queue");
-                switch(message.getType()){
-                case BALL:
-                	handleBallMessage((BallMessage)message);
-                	break;
-                case SERVERWALLCONNECT:
-                	handleServerWallConnectMessage((ServerWallConnectMessage)message);
-                	break;
-                case TERMINATE:
-                    System.out.println("EXTERMINATE!");
-                	handleTerminateMessage((TerminateMessage)message);
-                	break;
-                default:
-                	throw new IllegalStateException("Should never be able to get here. Server can only get"
-                			+ "BALL, SERVERWALLCONNECT, and TERMINATE messages.");
-                }
-            }
-            catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+			try {
+				message = inQ.take();
+				System.out.println("message" + message);
+		    	switch(message.getType()){
+		    	case BALL:
+		    		handleBallMessage((BallMessage)message);
+		    		break;
+				case SERVERWALLCONNECT:
+					handleServerWallConnectMessage((ServerWallConnectMessage)message);
+					break;
+				case TERMINATE:
+					handleTerminateMessage((TerminateMessage)message);
+					break;
+				default:
+					throw new IllegalStateException("Should never be able to get here. Server can only get"
+							+ "BALL, SERVERWALLCONNECT, and TERMINATE messages.");
+		    	}
+			} catch(InterruptedException e) {
+				e.printStackTrace();
+			}
     	}
     }
     
@@ -110,13 +107,14 @@ public class QueueProcessor implements Runnable {
 			throw new IllegalStateException("DIS IS IMPOSIRBR");
     	}
     	
-    	CommunicationTunnel tunnel1 = nameToBoardTunnelMap.get(boardWall1);
-    	CommunicationTunnel tunnel2 = nameToBoardTunnelMap.get(boardWall2);
+    	CommunicationTunnel tunnel1 = nameToBoardTunnelMap.get(boardWall1.board());
+    	CommunicationTunnel tunnel2 = nameToBoardTunnelMap.get(boardWall2.board());
+    	if(tunnel1 != null && tunnel2 != null) {
     	// If the map already contains a mapping for boardWall1, make sure to remove it, and its reverse mapping
-    	if(wallConnectionMap.containsKey(boardWall1)){
+    	if(wallConnectionMap.containsKey(boardWall1.board())){
     		// break the connection with boardWall1's old wall connection
     		BoardWallPair oldPair1 = wallConnectionMap.get(boardWall1);
-    		CommunicationTunnel oldPairTunnel1 = nameToBoardTunnelMap.get(oldPair1);
+    		CommunicationTunnel oldPairTunnel1 = nameToBoardTunnelMap.get(oldPair1.board());
     		oldPairTunnel1.addToOutQ(new ClientWallChangeMessage(boardWall1, false));
     		
     		//wallConnectionMap.remove(oldPair1);
@@ -127,17 +125,18 @@ public class QueueProcessor implements Runnable {
     		// The above line is not necessary, because if we are changing boardWall1's connection later anyway
     		wallConnectionMap.remove(boardWall1);
     	}
+
     	// same with boardWall2
-    	if(wallConnectionMap.containsKey(boardWall2)){
+    	if(wallConnectionMap.containsKey(boardWall2.board())){
     		BoardWallPair oldPair2 = wallConnectionMap.get(boardWall2);
-    		CommunicationTunnel oldPairTunnel2 = nameToBoardTunnelMap.get(oldPair2);
+    		CommunicationTunnel oldPairTunnel2 = nameToBoardTunnelMap.get(oldPair2.board());
     		oldPairTunnel2.addToOutQ(new ClientWallChangeMessage(boardWall2, false));
     		//wallConnectionMap.remove(oldPair2);
-    		// The above line is not necessary because balls which manage to sneak through before the wall becomes
-    		// impermeable should be allowed to leave through the old connection
+    		//The above line is not necessary because balls which manage to sneak through before the wall becomes
+    		//impermeable should be allowed to leave through the old connection
     		
-    		// tunnel1.addToOutQ(new ClientWallChangeMessage(oldPair2, false));
-    		// The above line is not necessary, because if we are changing boardWall1's connection later anyway
+    		//tunnel1.addToOutQ(new ClientWallChangeMessage(oldPair2, false));
+    		//The above line is not necessary, because if we are changing boardWall1's connection later anyway
     		wallConnectionMap.remove(boardWall1);
     	}
     	
@@ -145,6 +144,7 @@ public class QueueProcessor implements Runnable {
     	wallConnectionMap.put(boardWall1, boardWall2);
     	tunnel1.addToOutQ(new ClientWallChangeMessage(boardWall2, true));
     	tunnel2.addToOutQ(new ClientWallChangeMessage(boardWall1, true));
+    	}
     }
     
     /**
@@ -152,7 +152,6 @@ public class QueueProcessor implements Runnable {
      * @param message
      */
     private void handleTerminateMessage(TerminateMessage message){
-        System.out.println("NOOOOOOO I'm terminatingggggg D:");
     	String boardName = message.getBoardName();
     	List<Orientation> oriList = new ArrayList<>();
     	oriList.add(Orientation.NINETY);
