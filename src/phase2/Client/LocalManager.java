@@ -69,8 +69,6 @@ public class LocalManager {
         
         System.out.println(address);
         System.out.println(port);
-        System.out.println("TROLOLOl");
-        address = InetAddress.getByName("192.54.222.4");
         Socket socket = new Socket(address, port); 
         System.out.println("HERE");
         //outQ.add(new BoardInitMessage(board.getName()));
@@ -79,6 +77,7 @@ public class LocalManager {
         lom = new Thread(new LocalOutputManager(outQ, socket));
         lim.start();
         lom.start();
+
         System.out.println("HERE3");
 
         System.out.println("Adding you to server " + address + " " + port);
