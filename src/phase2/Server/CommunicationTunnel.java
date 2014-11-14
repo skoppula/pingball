@@ -96,15 +96,12 @@ public class CommunicationTunnel implements Runnable {
         public void run() {
             try{
                 String line = in.readLine();
-                System.out.println(line);
                 while(line != null){
                     Message inMessage = Message.decode(line);
-                    System.out.println("inMessage: " + inMessage);
                     serverInQ.put(inMessage);
                     line = in.readLine();
                 }
                 serverInQ.put(new TerminateMessage(this.name));
-                System.out.println("queue" + serverInQ);
                 socket.close();
             } catch(IOException e){
             	try{

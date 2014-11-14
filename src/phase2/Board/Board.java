@@ -17,11 +17,8 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.stringtemplate.v4.compiler.STParser.ifstat_return;
-
 import phase2.Board.Gadget.Orientation;
 import phase2.BoardGrammar.PingBoardLexer;
-import phase2.BoardGrammar.PingBoardListener;
 import phase2.BoardGrammar.PingBoardListenerBoardCreator;
 import phase2.BoardGrammar.PingBoardParser;
 import phase2.BoardGrammar.PingBoardParser.RootContext;
@@ -34,8 +31,6 @@ public class Board {
 	//Rep Invariant: triggerMap: if triggerMap[key] = value, then must have triggerMap[value] = key
 	// outQ should only ever be accessed if the board is online
 
-	
-	
     private final String name;
     private final int width = 20;
     private final int height = 20;
