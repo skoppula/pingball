@@ -4,7 +4,7 @@ package phase2.Board;
 import physics.Circle;
 import physics.LineSegment;
 import physics.Vect;
-import phase2.Board.Util.InvalidInvariantException;
+import phase2.Board.Board.InvalidInvariantException;
 import phase2.PhysicsComponents.*;
 
 public class TriangleBumper extends Gadget {
@@ -62,7 +62,7 @@ public class TriangleBumper extends Gadget {
         }
         
         if (!this.checkRep()) {
-            throw new Util.InvalidInvariantException();
+            throw new Board.InvalidInvariantException();
         }
         
     }

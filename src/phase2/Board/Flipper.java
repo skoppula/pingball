@@ -10,9 +10,6 @@ import physics.Circle;
 import physics.LineSegment;
 import physics.Vect;
 
-/*
- * From Yo's phase 1
- */
 
 /**
  * A mutable flipper gadget. When activated, it swings either upward or downward.
@@ -21,7 +18,9 @@ import physics.Vect;
  * the top left. Flippers take up 2L * 2L space, and are happy.
  */
 public class Flipper extends Gadget {
-    // Rep. Invariant: 
+    /* Rep. Invariant: At the end of any function call, flipper's PhysicsComponents must be
+	* within the confines of the 2x2 flipper area
+	*/
 
     private Angle angle;
     // The angle that the flipper is at, clockwise from north.

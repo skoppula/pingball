@@ -1,6 +1,9 @@
 package phase2.Board;
 
-
+/**
+ * An interface for any element of a Pingball game that can be collided with.
+ *
+ */
 public interface Collidable {
 
     /**
