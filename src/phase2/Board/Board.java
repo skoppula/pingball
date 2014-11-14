@@ -46,6 +46,10 @@ public class Board {
     private final double DEFAULT_GRAVITY_VALUE = 25;
     private final double DEFAULT_MU = .025;
     private final double DEFAULT_MU2 = .025;
+    
+    /**
+     * The list of balls being dealt with for removal
+     */
     private Set<Ball> ballsToRemove = new HashSet<>();
     
     /*
