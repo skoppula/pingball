@@ -39,7 +39,6 @@ public class QueueProcessor implements Runnable {
 	private final Map<BoardWallPair, BoardWallPair> wallConnectionMap;
 	
     public QueueProcessor(BlockingQueue<Message> inQ) {
-    	
     	this.inQ = inQ;
     	wallConnectionMap = new HashMap<>();
     }
@@ -108,7 +107,10 @@ public class QueueProcessor implements Runnable {
     	}
     	
     	CommunicationTunnel tunnel1 = nameToBoardTunnelMap.get(boardWall1.board());
+        System.out.println("name to Board tunnel map: " + nameToBoardTunnelMap);
+        System.out.println("tunnel1" + tunnel1);
     	CommunicationTunnel tunnel2 = nameToBoardTunnelMap.get(boardWall2.board());
+    	System.out.println("tunnel2" + tunnel2);
     	if(tunnel1 != null && tunnel2 != null) {
     	// If the map already contains a mapping for boardWall1, make sure to remove it, and its reverse mapping
     	if(wallConnectionMap.containsKey(boardWall1)){
@@ -118,8 +120,8 @@ public class QueueProcessor implements Runnable {
     		oldPairTunnel1.addToOutQ(new ClientWallChangeMessage(boardWall1, false));
     		
     		//wallConnectionMap.remove(oldPair1);
-    		// The above line is not necessary because balls which manage to sneak through before the wall becomes
-    		// impermeable should be allowed to leave through the old connection
+    		//The above line is not necessary because balls which manage to sneak through before the wall becomes
+    		//impermeable should be allowed to leave through the old connection
     		
     		//tunnel1.addToOutQ(new ClientWallChangeMessage(oldPair1, false));
     		// The above line is not necessary, because if we are changing boardWall1's connection later anyway
@@ -144,6 +146,8 @@ public class QueueProcessor implements Runnable {
     	wallConnectionMap.put(boardWall1, boardWall2);
     	tunnel1.addToOutQ(new ClientWallChangeMessage(boardWall2, true));
     	tunnel2.addToOutQ(new ClientWallChangeMessage(boardWall1, true));
+    	} else {
+    	    System.out.println("YOU DUMB FUCKER! WRONG BOARD NAME");
     	}
     }
     

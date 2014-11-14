@@ -4,8 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 import phase2.Board.Board;
 import phase2.Messaging.BoardInitMessage;
@@ -74,6 +77,7 @@ public class LocalManager {
         lom = new Thread(new LocalOutputManager(outQ, socket));
         lim.start();
         lom.start();
+
         System.out.println("HERE3");
 
         System.out.println("Adding you to server " + address + " " + port);
@@ -118,6 +122,7 @@ public class LocalManager {
      * Runs the game (by updating the board) on the local machine.
      */
     public void runGame() {
+        System.out.println("HELLO WORLD");
         while(true) {
             try {
                 Thread.sleep(2);
