@@ -44,7 +44,7 @@ public class BoardGrammarTest {
 
     LinkedBlockingQueue<Message> q = new LinkedBlockingQueue<>(); // just for initializing Board, not actually used
     
-    /*// equals test - testing gadget equality
+    // equals test - testing gadget equality
     @Test
     public void equalsTest1() throws InvalidInvariantException {
         List<Gadget> gadgets1 = new ArrayList<Gadget>();
@@ -182,8 +182,8 @@ public class BoardGrammarTest {
         correctBoard.addBall(ballC);
         assertTrue(correctBoard.hasEqualAttributes(board));
     }
-    */
-    /*// tests trigger functionality
+    
+    // tests trigger functionality
     @Test
     public void makeBoardTest7() throws InvalidInvariantException, IOException {
         Board board = new Board(new File("src/phase2/BoardGrammar/boardFiles/simpeTrigger.pb"), q);
@@ -214,8 +214,8 @@ public class BoardGrammarTest {
         correctBoard.addBall(ball);
 
         assertTrue(correctBoard.hasEqualAttributes(board));
-    }*/
-    /*
+    }
+    
     // tests sample board 4
     @Test
     public void sampleBoard4Test() throws InvalidInvariantException, IOException {
@@ -228,7 +228,7 @@ public class BoardGrammarTest {
     public void defaultBoardTest() throws InvalidInvariantException, IOException {
         new Board(new File("src/phase2/BoardGrammar/boardFiles/default.pb"), q);
       
-    }*/
+    }
     
     // tests triggering 
     @Test
@@ -257,9 +257,14 @@ public class BoardGrammarTest {
         gadgets.add(new Absorber(0, 19, "Abs", 20, 1));
         
         Board correctBoard = new Board(gadgets, "Flippers", q);
+        Vect ballVelocity = new Vect(0,0);
+        correctBoard.addBall(new Ball(0.25, 3.25, ballVelocity, "BallA"));
+        correctBoard.addBall(new Ball(5.25, 3.25, ballVelocity, "BallB"));
+        correctBoard.addBall(new Ball(10.25, 3.25, ballVelocity, "BallC"));
+        correctBoard.addBall(new Ball(15.25, 3.25, ballVelocity, "BallD"));
+        correctBoard.addBall(new Ball(19.25, 3.25, ballVelocity, "BallE"));
         
-        assertTrue(correctBoard.getGadgets().containsAll(board.getGadgets()));
-        assertTrue(correctBoard.getGadgets().size()==board.getGadgets().size());
+        assertTrue(correctBoard.hasEqualAttributes(board));
     }
     
 }
