@@ -39,8 +39,8 @@ public class Ball implements Collidable{
 
     /**
      * Creates a new ball
-     * @param x coordinate between (.5, .5) and ( 19.5, 19.5) 
-     * @param y coordinate between (.5, .5) and ( 19.5, 19.5) 
+     * @param x coordinate between .25 and 19.75 
+     * @param y coordinate between .25 and 19.75 
      * @param newVelocity a Vect representing the ball's velocity
      * @param name the name of the ball
      */
