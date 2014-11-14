@@ -1,5 +1,6 @@
 package phase2.Messaging;
 
+import org.antlr.v4.parse.ANTLRParser.ruleReturns_return;
 import org.json.simple.JSONObject;
 
 import phase2.Board.Gadget.Orientation;
@@ -104,5 +105,10 @@ public class BoardWallPair {
 	public int hashCode(){
 		return this.board().hashCode();
 	}
+	
+    @Override
+    public String toString() {
+        return boardName + wallOrientation;
+    }
 
 }
