@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 
+import org.antlr.v4.codegen.model.chunk.ThisRulePropertyRef_ctx;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -137,6 +138,11 @@ public class Board {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        for(Gadget g:gadgets) {
+            if(g instanceof SquareBumper && g.getX()==1)
+            System.out.println(g.getX() + " " + g.getY());
+        }
+        System.exit(0);;
     }
     
     /**

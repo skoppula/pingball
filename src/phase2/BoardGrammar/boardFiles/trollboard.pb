@@ -1,4 +1,4 @@
-board name=Absorber gravity = 25.0
+board name=trollboard gravity = 25.0
 
 # define a ball
 ball name=BallA x=10.25 y=10.25 xVelocity=0 yVelocity=0
@@ -213,13 +213,9 @@ squareBumper name=Square106 x=10 y=6
 squareBumper name=Square107 x=10 y=7
 squareBumper name=Square108 x=10 y=8
 squareBumper name=Square109 x=10 y=9
-squareBumper name=Square1010 x=10 y=10
-squareBumper name=Square1011 x=10 y=11
 squareBumper name=Square1012 x=10 y=12
 squareBumper name=Square1013 x=10 y=13
 squareBumper name=Square1014 x=10 y=14
-squareBumper name=Square1015 x=10 y=15
-squareBumper name=Square1016 x=10 y=16
 squareBumper name=Square1017 x=10 y=17
 squareBumper name=Square1018 x=10 y=18
 squareBumper name=Square1019 x=10 y=19
@@ -233,8 +229,6 @@ squareBumper name=Square116 x=11 y=6
 squareBumper name=Square117 x=11 y=7
 squareBumper name=Square118 x=11 y=8
 squareBumper name=Square119 x=11 y=9
-squareBumper name=Square1110 x=11 y=10
-squareBumper name=Square1111 x=11 y=11
 squareBumper name=Square1112 x=11 y=12
 squareBumper name=Square1113 x=11 y=13
 squareBumper name=Square1114 x=11 y=14
