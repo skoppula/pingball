@@ -17,6 +17,7 @@ import org.antlr.v4.codegen.model.chunk.ThisRulePropertyRef_ctx;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import phase2.Board.Gadget.Orientation;
@@ -113,6 +114,7 @@ public class Board {
         List<Object> boardIngredients = listener.getBoardIngredients();
         // boardIngredients are of the form [gadgets, name, gravity, friction1, friction2, balls]
         this.gadgets = (ArrayList<Gadget>) boardIngredients.get(0);
+        
         this.name = (String) boardIngredients.get(1);
         this.GRAVITY_VECTOR = new Vect(0, (double) boardIngredients.get(2));
         this.MU = (double) boardIngredients.get(3);
@@ -138,11 +140,6 @@ public class Board {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        for(Gadget g:gadgets) {
-            if(g instanceof SquareBumper && g.getX()==1)
-            System.out.println(g.getX() + " " + g.getY());
-        }
-        System.exit(0);;
     }
     
     /**
@@ -577,6 +574,10 @@ public class Board {
         private static final long serialVersionUID = 1L;
         
     }
+    
+    /**
+     * Checks Boa
+     */
 	
 	
 }
