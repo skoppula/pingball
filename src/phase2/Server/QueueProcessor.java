@@ -75,6 +75,7 @@ public class QueueProcessor implements Runnable {
      */
     private void handleBallMessage(BallMessage message){
         System.out.println("WALLE FONE HOME CONNECTION MAP: " + wallConnectionMap);
+        System.out.println("yum yum " + message.getBoardWall());
     	if(wallConnectionMap.containsKey(message.getBoardWall())){
     		BoardWallPair destination = wallConnectionMap.get(message.getBoardWall());
     		CommunicationTunnel destTunnel = nameToBoardTunnelMap.get(destination.board());
@@ -138,7 +139,7 @@ public class QueueProcessor implements Runnable {
         	}
     	
         	wallConnectionMap.put(boardWall1, boardWall2);
-        	wallConnectionMap.put(boardWall1, boardWall2);
+        	wallConnectionMap.put(boardWall2, boardWall1);
         	tunnel1.addToOutQ(new ClientWallChangeMessage(boardWall2, true));
         	tunnel2.addToOutQ(new ClientWallChangeMessage(boardWall1, true));
     	} else {
