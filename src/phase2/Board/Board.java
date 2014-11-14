@@ -516,13 +516,13 @@ public class Board {
                     newY = oldBall.getBallCircle().getCenter().y();
                 case NINETY:
                     newX = oldBall.getBallCircle().getCenter().x();
-                    newY = newWall.getY()-1;
+                    newY = newWall.getY()+1;
                 case ONE_HUNDRED_EIGHTY:
                     newX = newWall.getX()-1;
                     newY = oldBall.getBallCircle().getCenter().y();
                 default: // case TWO HUNDRED SEVETY
                     newX = oldBall.getBallCircle().getCenter().x();
-                    newY = newWall.getY()+1;
+                    newY = newWall.getY()-1;
             }
             // ball's position changes, but velocity stays the same
             newBall = new Ball(newX, newY, oldBall.getVelocity(), oldBall.getName());
