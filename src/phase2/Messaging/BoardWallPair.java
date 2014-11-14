@@ -7,7 +7,7 @@ import phase2.Board.Gadget.Orientation;
 /**
  * A class to store information
  * about a wall and its associated board.
- *
+ * Immutable.
  */
 public class BoardWallPair {
 	/*
@@ -25,6 +25,7 @@ public class BoardWallPair {
 	public BoardWallPair(String boardName, Orientation wallOrientation){
 		this.boardName = boardName;
 		this.wallOrientation = wallOrientation;
+		assert(checkRep());
 	}
 	
 	/**
@@ -112,5 +113,13 @@ public class BoardWallPair {
     public String toString() {
         return boardName + wallOrientation;
     }
+    
+	/**
+	 * RI: Message has valid boardname
+	 * @return whether RI is satisfied
+	 */
+	private boolean checkRep(){
+	    return this.boardName != null && this.wallOrientation != null;
+	}
 
 }

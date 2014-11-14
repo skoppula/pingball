@@ -4,7 +4,7 @@ import org.json.simple.JSONObject;
 
 /**
  * Informs the server that a board has exited
- * the simulation. 
+ * the simulation. Immutable.
  *
  */
 public class TerminateMessage extends Message {
@@ -23,9 +23,16 @@ public class TerminateMessage extends Message {
 	public TerminateMessage(String boardName){
 		this.boardName = boardName;
 		this.messageType = MessageType.TERMINATE;
-		// assert(checkRep());
+		assert(checkRep());
 	}
 
+	/**
+	 * RI: Connection message has valid boardnames
+	 * @return whether RI is satisfied
+	 */
+	private boolean checkRep(){
+	    return this.boardName != null;
+	}
 
 	public String getBoardName() {
 		return boardName;
