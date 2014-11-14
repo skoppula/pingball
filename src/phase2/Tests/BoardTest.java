@@ -3,18 +3,16 @@ package phase2.Tests;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.junit.Test;
 
 import phase2.Board.*;
+import phase2.Board.Board.InvalidInvariantException;
 import phase2.Board.Flipper.BumperSide;
 import phase2.Board.Gadget.Orientation;
-import phase2.Board.Util.InvalidInvariantException;
 import phase2.Messaging.Message;
 import physics.Vect;
 import physics.Geometry.DoublePair;
@@ -114,7 +112,7 @@ public class BoardTest {
     }
     
     // test for a gadget declared out of bounds
-    @Test(expected=InvalidInvariantException.class)
+    @Test(expected=AssertionError.class)
     public void testInvalidBoardOutOfBoundsGadgets1() throws InvalidInvariantException {
         DoublePair trianglePos = new DoublePair(20, 1);
         List<Gadget> empty = new ArrayList<Gadget>();
