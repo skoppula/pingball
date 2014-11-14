@@ -229,7 +229,7 @@ public class BoardGrammarTest {
         new Board(new File("src/phase2/BoardGrammar/boardFiles/default.pb"), q);
       
     }
-    
+
     // tests triggering 
     @Test
     public void flippersBoardTest() throws InvalidInvariantException, IOException {
