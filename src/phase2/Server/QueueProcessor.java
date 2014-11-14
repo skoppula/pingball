@@ -77,7 +77,7 @@ public class QueueProcessor implements Runnable {
         System.out.println("WALLE FONE HOME CONNECTION MAP: " + wallConnectionMap);
     	if(wallConnectionMap.containsKey(message.getBoardWall())){
     		BoardWallPair destination = wallConnectionMap.get(message.getBoardWall());
-    		CommunicationTunnel destTunnel = nameToBoardTunnelMap.get(destination);
+    		CommunicationTunnel destTunnel = nameToBoardTunnelMap.get(destination.board());
     		destTunnel.addToOutQ(message); // reroute the message to the correct board, and leave the message untouched
     	} else {
     		System.out.println("This is odd. The ball we got doesn't know where to go. Oh well.");
