@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Queue;
 
-import phase2.Messaging.BoardInitMessage;
 import phase2.Messaging.Message;
 
 /**

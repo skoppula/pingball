@@ -3,8 +3,6 @@ package phase2.Board;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.List;
 
 import phase2.PhysicsComponents.PhysicsComponent;
 
@@ -29,6 +27,7 @@ public abstract class Gadget implements Collidable{
         this.height = height;
         this.reflectionCoef = reflectionCoef;
     }
+
 
     protected void setTriggers(List<Gadget> lst) {
         this.gadgetsToTrigger = new ArrayList<>(lst);
@@ -135,9 +134,19 @@ public abstract class Gadget implements Collidable{
         if (other instanceof Gadget) {
             boolean sameSizeList = this.physicsComponentList.size() == ((Gadget) other).getPhysicsComponents().size();
             return sameSizeList && this.physicsComponentList.containsAll(((Gadget) other).getPhysicsComponents());
+            
         }
         else {
             return false;
         }
+    }
+    
+    /**
+     * Returns hashcode of the gadget name
+     * @return 
+     */
+    @Override
+    public int hashCode() {
+        return name.hashCode();
     }
 }

@@ -35,10 +35,6 @@ public class Ball implements Collidable{
     private final double mass = 1;
     private final String name;
     
-
-    private boolean doNotUpdate = false;
-    // this is true if a ball is in an absorber, for example.
-
     /**
      * Creates a new ball
      * @param x coordinate between .25 and 19.75 
@@ -263,4 +259,12 @@ public class Ball implements Collidable{
         
     }
 
+    /**
+     * Returns hashcode of the ball name
+     * @return 
+     */
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
 }
