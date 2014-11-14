@@ -514,12 +514,15 @@ public class Board {
                 case ZERO:
                     newX = newWall.getX()+1;
                     newY = oldBall.getBallCircle().getCenter().y();
+                    break;
                 case NINETY:
                     newX = oldBall.getBallCircle().getCenter().x();
                     newY = newWall.getY()+1;
+                    break;
                 case ONE_HUNDRED_EIGHTY:
                     newX = newWall.getX()-1;
                     newY = oldBall.getBallCircle().getCenter().y();
+                    break;
                 default: // case TWO HUNDRED SEVETY
                     newX = oldBall.getBallCircle().getCenter().x();
                     newY = newWall.getY()-1;
