@@ -35,6 +35,7 @@ public class TriangleBumper extends Gadget {
             this.physicsComponentList.add(new StaticCircle(new Circle(x, y + 1, 0.01), reflectionCoef));
         }
         else if(orientation.equals(Orientation.NINETY)){
+            System.out.println(y + ": ninety");
             this.physicsComponentList.add(new StaticLine(new LineSegment(x, y, x + 1, y), reflectionCoef));
             this.physicsComponentList.add(new StaticLine(new LineSegment(x + 1, y, x + 1, y + 1), reflectionCoef));
             this.physicsComponentList.add(new StaticLine(new LineSegment(x, y, x + 1, y + 1), reflectionCoef));
@@ -43,6 +44,7 @@ public class TriangleBumper extends Gadget {
             this.physicsComponentList.add(new StaticCircle(new Circle(x + 1, y + 1, 0.01), reflectionCoef));
         }
         else if(orientation.equals(Orientation.ONE_HUNDRED_EIGHTY)){
+            System.out.println(y + ": 180");
             this.physicsComponentList.add(new StaticLine(new LineSegment(x, y + 1, x + 1, y + 1), reflectionCoef));
             this.physicsComponentList.add(new StaticLine(new LineSegment(x + 1, y, x + 1, y + 1), reflectionCoef));
             this.physicsComponentList.add(new StaticLine(new LineSegment(x + 1, y, x, y + 1), reflectionCoef));

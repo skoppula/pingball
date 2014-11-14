@@ -137,12 +137,11 @@ public class Board {
     private boolDoubleTuple willCollide(double timeDelta) {
 
         Double time = timeDelta;
-
         Geometry.setForesight(timeDelta);
         for (Ball ball : balls) {
             for (Gadget gadget : gadgets) {
                 double time2 = gadget.getTimeUntilCollision(ball);
-
+                
                 if (time2 < time) {
                     time = time2;
                 }
