@@ -20,6 +20,7 @@ public class BoardInitMessage extends Message {
 	public BoardInitMessage(String boardName){
 		this.boardName = boardName;
 		this.messageType = MessageType.BOARDINIT;
+		System.out.println("boardName: " + boardName);
 		//assert(checkRep());
 	}
 
