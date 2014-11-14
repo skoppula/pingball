@@ -25,8 +25,7 @@ import phase2.Server.NewConnectionHandler;
 import phase2.Server.QueueProcessor;
 
 /**
- * Runs the server-side control of a multi-client pingball game.
- *
+ * AF: Runs the server-side control of a multi-client pingball game.
  */
 public class PingballServer {
 	
