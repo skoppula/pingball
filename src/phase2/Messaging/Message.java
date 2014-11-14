@@ -127,18 +127,7 @@ public abstract class Message{
 					+ "which must correspond to a valid message type!");
 		}
 		
-		
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
 
