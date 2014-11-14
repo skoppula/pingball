@@ -36,7 +36,7 @@ public class LocalManager {
      * lim and lom were twins
      * - they loved each other so much
      * so so much
-     * like i love lisa nd yo
+     * like i love lisa and yo
      * 
      * anyways they decided to go on a walk
      * but then they saw race 
