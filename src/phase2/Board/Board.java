@@ -112,7 +112,9 @@ public class Board {
         for(Orientation key: wallMap.keySet()){
             this.gadgets.add(wallMap.get(key));
         }
-        this.balls.addAll((Collection<Ball>) boardIngredients.get(5));
+        for(Ball ball:(Collection<Ball>) boardIngredients.get(5)){
+        	this.addBall(ball);
+        }
         
         for(Gadget gadget: gadgets){
             if(nameToGadgetMap.containsKey(gadget.getName())){
