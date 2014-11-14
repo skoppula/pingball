@@ -10,7 +10,7 @@ import java.util.Stack;
 import phase2.Board.*;
 import phase2.Board.Flipper.BumperSide;
 import phase2.Board.Gadget.Orientation;
-import phase2.Board.Util.InvalidInvariantException;
+import phase2.Board.Board.InvalidInvariantException;
 import physics.Vect;
 
 public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
@@ -38,7 +38,7 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
                     Gadget nextActionGadget = gadgetsMap.get(nameOfActionGadget);
                     gadgetsToTrigger.add(nextActionGadget);
                 }
-                gadget.setGadgetsToTrigger(gadgetsToTrigger);
+                gadget.setTriggers(gadgetsToTrigger);
             }
         }
         boardIngredientsList.addAll(Arrays.asList(gadgets, BOARD_NAME, GRAVITY, FRICTION1, FRICTION2, ballsMap.values()));

@@ -1,11 +1,15 @@
 package phase2.Board;
 
-import phase2.Board.Util.InvalidInvariantException;
+import phase2.Board.Board.InvalidInvariantException;
 import phase2.PhysicsComponents.PhysicsComponent;
 import phase2.PhysicsComponents.StaticCircle;
 import physics.Circle;
 import physics.Vect;
 
+/**
+ * Represents an immutable circle bumper in a pingball game.
+ *
+ */
 public class CircleBumper extends Gadget {
 	
 
@@ -21,7 +25,7 @@ public class CircleBumper extends Gadget {
     	physicsComponentList.add(new StaticCircle(new Circle(new Vect(this.getX() + CIRCLE_RADIUS, this.getY() + CIRCLE_RADIUS), CIRCLE_RADIUS),
     			this.reflectionCoef));
         if (!this.checkRep()) {
-            throw new Util.InvalidInvariantException();
+            throw new Board.InvalidInvariantException();
         }
     }
 

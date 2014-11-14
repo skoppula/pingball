@@ -17,6 +17,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+
 import phase2.Board.Gadget.Orientation;
 import phase2.BoardGrammar.PingBoardLexer;
 import phase2.BoardGrammar.PingBoardListenerBoardCreator;
@@ -28,7 +29,7 @@ import physics.Geometry;
 import physics.Vect;
 
 /**
- * The main board class. Represents a given pingball board.
+ * Represents a mutable Pingball board.
  *
  */
 public class Board {
@@ -465,7 +466,7 @@ public class Board {
         // check that balls are equal
         boolean equalNumberBalls = this.balls.size() == otherBoard.balls.size();
         boolean ballsEqual = equalNumberBalls && this.balls.containsAll(otherBoard.balls);
-         
+        
         // check that gadgets are equal
         boolean sameNumGadgets = this.gadgets.size() == otherBoard.gadgets.size();
         boolean gadgetsEqual = sameNumGadgets && this.gadgets.containsAll(otherBoard.gadgets);
@@ -564,9 +565,14 @@ public class Board {
 		ballsToRemove = new HashSet<>();
 	}
 	
-	public List<Gadget> getGadgets() {
-	    return gadgets;
-	}
+	
+    /**
+     * Class for Invalid Invariant Exception
+     */
+    public static class InvalidInvariantException extends Exception {
+        private static final long serialVersionUID = 1L;
+        
+    }
 	
 	
 }

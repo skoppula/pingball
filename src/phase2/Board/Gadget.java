@@ -6,8 +6,19 @@ import java.util.List;
 
 import phase2.PhysicsComponents.PhysicsComponent;
 
-
+/**
+ * The abstract class representing every type of gadget placed on a board.
+ * It is theoretically mutable if people call setTriggers to change the gadgets triggered
+ * by this gadget. However, as is detailed in that method's spec, it should never be called
+ * other than immediately after the gadget is initialized. Otherwise it is immutable.
+ */
 public abstract class Gadget implements Collidable{
+	/*
+	 * Rep invariant:
+	 * gadgetsToTrigger should not contain duplicates
+	 * location should be inside the board (x and y should be from -1 to 20)
+	 * width and height must be between 1 and 22
+	 */
     
     protected List<PhysicsComponent> physicsComponentList = new ArrayList<>();
     protected String name;
@@ -29,7 +40,13 @@ public abstract class Gadget implements Collidable{
     }
 
 
-    protected void setTriggers(List<Gadget> lst) {
+    /**
+     * Set this gadget to trigger the following objects.
+     * Note that this method should only ever be called once, immediately after the gadget constructor,
+     * and before the initialization of the gadget's board.
+     * @param lst
+     */
+    public void setTriggers(List<Gadget> lst) {
         this.gadgetsToTrigger = new ArrayList<>(lst);
     }
     
@@ -70,15 +87,9 @@ public abstract class Gadget implements Collidable{
      */
     public abstract void updateGadgetPosition(double timeDelta);
     
-    /**
-     * Adds the gadgets that this Gadget should trigger to gadgetsToTrigger
-     */
-    public void setGadgetsToTrigger(ArrayList<Gadget> gadgetsToTrigger) {
-        this.gadgetsToTrigger = gadgetsToTrigger;
-    }
+
     
     /**
-
      * @return character representing one space of that Gadget
      */
     public abstract char charRep();
@@ -110,12 +121,6 @@ public abstract class Gadget implements Collidable{
         return this.location.getY();
     }
     
-    /**
-     * Sets the gadget's identifying name
-     */
-    public void setName(String newName) {
-        this.name = newName;
-    }
     
     /**
      * Returns physics components list

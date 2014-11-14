@@ -12,8 +12,16 @@ import phase2.PhysicsComponents.StaticLine;
 import physics.LineSegment;
 import physics.Vect;
 
+/**
+ * A mutable gadget that represents a wall.
+ *
+ */
 public class Wall extends Gadget {
-	//Rep Invariant: isTeleporter can be true only if board.isOnline == true
+	/* Rep Invariant: isTeleporter can be true only if board.isOnline == true
+	* the wall must be within the confines of the board, i.e. -1<= x, y <=20
+	* text must be of length less than 20
+	* 
+	*/
     
 	private final Board board;
 	protected boolean isTeleporter = false;
