@@ -58,7 +58,6 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
                 GRAVITY = Double.parseDouble(value);
             }
             else if (type.equals("friction1")) {
-                System.out.println("friction1" + FRICTION1);
                 FRICTION1 = Double.parseDouble(value);
             }
             else if (type.equalsIgnoreCase("friction2")) {
@@ -121,7 +120,7 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
         }
         else {
             ArrayList<String> namesToTrigger = new ArrayList<String>();
-            namesToTrigger.add(triggerName);
+            namesToTrigger.add(actionName);
             triggerToAction.put(triggerName, namesToTrigger);
         }
     }

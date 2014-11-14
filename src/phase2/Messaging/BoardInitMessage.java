@@ -23,19 +23,16 @@ public class BoardInitMessage extends Message {
 		this.boardName = boardName;
 		this.messageType = MessageType.BOARDINIT;
 		System.out.println("Created board init message for boardName: " + boardName);
-		//assert(checkRep());
+		assert(checkRep());
 	}
 
-/*
 	private boolean checkRep(){
-		return this.equals(BoardInitMessage.fromJSON(this.toJSONObject()));
+	    return this.boardName != null;
 	}
-*/
 	
 	public String getBoardName() {
 		return boardName;
 	}
-
 	
 	@SuppressWarnings("unchecked")
 	protected JSONObject toJSONObject() {

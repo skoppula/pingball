@@ -1,6 +1,5 @@
 package phase2.Board;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -264,4 +263,12 @@ public class Ball implements Collidable{
         
     }
 
+    /**
+     * Returns hashcode of the ball name
+     * @return 
+     */
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
 }

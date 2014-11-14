@@ -21,6 +21,7 @@ public class LocalHandlerTest {
 
 	@Test
 	public void test() {
+	    assert(true);
 	}
 
 }
