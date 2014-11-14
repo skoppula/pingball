@@ -203,10 +203,10 @@ public class BoardGrammarTest {
         // set up triggers
         ArrayList<Gadget> squareTriggers = new ArrayList<Gadget>();
         squareTriggers.add(flipL);
-        square.setGadgetsToTrigger(squareTriggers);
+        square.setTriggers(squareTriggers);
         ArrayList<Gadget> absorberTriggers = new ArrayList<Gadget>();
         absorberTriggers.add(abs);
-        abs.setGadgetsToTrigger(absorberTriggers);
+        abs.setTriggers(absorberTriggers);
 
         Board correctBoard = new Board(gadgets, "Example", 25.0, 0.025, 0.025, new LinkedBlockingQueue<>());
         Vect ballVelocity = new Vect(-3.4, -2.3);

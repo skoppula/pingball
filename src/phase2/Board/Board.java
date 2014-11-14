@@ -109,8 +109,6 @@ public class Board {
         PingBoardListenerBoardCreator listener = new PingBoardListenerBoardCreator();
         walker.walk(listener,tree);
         
-        tree.inspect(parser);
-        
         List<Object> boardIngredients = listener.getBoardIngredients();
         // boardIngredients are of the form [gadgets, name, gravity, friction1, friction2, balls]
         this.gadgets = (ArrayList<Gadget>) boardIngredients.get(0);
