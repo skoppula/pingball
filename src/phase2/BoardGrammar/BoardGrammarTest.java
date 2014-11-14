@@ -158,7 +158,7 @@ public class BoardGrammarTest {
     // tests not having all board constants specified
     @Test
     public void makeBoardTest6() throws InvalidInvariantException {
-        Board board = Pingball.parseBoardFile(new File("src/phase2/BoardGrammar/boardFiles/absorber.pb"));
+        Board board = Pingball.parseBoardFile(new File("src/phase2/BoardGrammar/boardFiles/absorberTest.pb"));
         
         // add bumpers to correct board
         List<Gadget> gadgets = new ArrayList<Gadget>();
@@ -216,6 +216,11 @@ public class BoardGrammarTest {
       
     }
     
-
+    // tests default board
+    @Test
+    public void defaultBoardTest() throws InvalidInvariantException {
+        Board board = Pingball.parseBoardFile(new File("src/phase2/BoardGrammar/boardFiles/default.pb"));
+      
+    }
     
 }

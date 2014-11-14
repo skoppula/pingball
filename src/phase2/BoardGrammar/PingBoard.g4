@@ -56,18 +56,18 @@ newline: NEWLINE;
 comment : COMMENT; // either the line is blank or the line has a comment
 equals : WHITESPACE* EQUALS WHITESPACE*;
 name : WHITESPACE* NAMEID equals NAME;
-gravity : WHITESPACE* GRAVITYID equals FLOAT;
-friction1 : WHITESPACE* FRICTION1ID equals FLOAT;
-friction2 : WHITESPACE* FRICTION2ID equals FLOAT;
+gravity : WHITESPACE* GRAVITYID equals (FLOAT | INTEGER);
+friction1 : WHITESPACE* FRICTION1ID equals (FLOAT | INTEGER);
+friction2 : WHITESPACE* FRICTION2ID equals (FLOAT | INTEGER);
 intX : WHITESPACE* XID equals INTEGER;
 intY : WHITESPACE* YID equals INTEGER;
 orientation : WHITESPACE* ORIENTATIONID equals INTEGER;
 width : WHITESPACE* WIDTHID equals INTEGER;
 height : WHITESPACE* HEIGHTID equals INTEGER;
-floatX : WHITESPACE* XID equals FLOAT;
-floatY : WHITESPACE* YID equals FLOAT;
-xVelocity : WHITESPACE* XVELOCITYID equals FLOAT;
-yVelocity : WHITESPACE* YVELOCITYID equals FLOAT*;
+floatX : WHITESPACE* XID equals (FLOAT | INTEGER);
+floatY : WHITESPACE* YID equals (FLOAT | INTEGER);
+xVelocity : WHITESPACE* XVELOCITYID equals (FLOAT | INTEGER);
+yVelocity : WHITESPACE* YVELOCITYID equals (FLOAT | INTEGER);
 trigger : WHITESPACE* TRIGGERID equals NAME;
 action : WHITESPACE* ACTIONID equals NAME;
 
