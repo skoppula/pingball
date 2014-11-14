@@ -526,7 +526,7 @@ public class Board {
             }
             // ball's position changes, but velocity stays the same
             newBall = new Ball(newX, newY, oldBall.getVelocity(), oldBall.getName());
-            balls.add(newBall);
+            this.addBall(newBall);
         }
         else if (message.getType().equals(MessageType.CLIENTWALLCHANGE)) {
             if (((ClientWallChangeMessage) message).isConnectOrDisconnect()) { // connecting
