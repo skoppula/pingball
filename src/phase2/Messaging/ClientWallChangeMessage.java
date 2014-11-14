@@ -9,6 +9,12 @@ import org.json.simple.JSONObject;
  *
  */
 public class ClientWallChangeMessage extends Message {
+	/*
+	 * abstractionFunction: represents a message to (connectOrDisconnect? connect : disconnect)
+	 * a wall from a board, which is the opposite wall from otherBoardWall.
+	 * Rep Invariant: see Message
+	 * 
+	 */
 	
 	private final BoardWallPair otherBoardWall;
 	private final boolean connectOrDisconnect;
@@ -25,7 +31,6 @@ public class ClientWallChangeMessage extends Message {
 		this.otherBoardWall = otherBoardWall;
 		this.connectOrDisconnect = connectOrDisconnect;
 		this.messageType = MessageType.CLIENTWALLCHANGE;
-		assert(checkRep());
 	}
 
 

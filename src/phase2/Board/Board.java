@@ -27,9 +27,19 @@ import phase2.Messaging.*;
 import physics.Geometry;
 import physics.Vect;
 
+/**
+ * The main board class. Represents a given pingball board.
+ *
+ */
 public class Board {
-	//Rep Invariant: triggerMap: if triggerMap[key] = value, then must have triggerMap[value] = key
-	// outQ should only ever be accessed if the board is online
+	/* Rep Invariant: triggerMap: if triggerMap[key] = value, then must have triggerMap[value] = key
+	* outQ should only ever be accessed if the board is online
+	* ball is in this.balls iff ball is a key in this.ballToCollidables
+	* balls contains no ball twice
+	* gadgets contains no two gadgets of the same name
+	* wallMap has a wall for each orientation, and if gadget is in wallMap, it is also in gadgets
+	* 
+	*/
 
     private final String name;
     private final int width = 20;

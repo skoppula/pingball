@@ -1,7 +1,5 @@
 package phase2.Client;
 
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,7 +10,7 @@ public class LocalHandlerTest {
 	}
 	
 	/*
-	 * We didn't have the time to actually write these tests, because they're very
+	 * We didn't actually write these tests, because testing Socket connections is
 	 * difficult to automate. However, the following testing protocol was implemented manually:
 	 * 
 	 * LocalManager

@@ -16,13 +16,16 @@ import physics.Geometry.VectPair;
  * A mutable class that represents a single ball. 
  * 
  */ 
-/* Rep Invariant: at any one step in time, a ball has:
- *  ballCircle that has size and a location inside the 20x20 grid
- *  Velocity that 
- *  immutable coefficient of reflection that is set during construction
- *  
- */
 public class Ball implements Collidable{
+	/*
+	 * Abstraction function: a Pingball ball of name this.name, represented by a circle ballCircle,
+	 * with velocity newVelocity and coefficient of reflection coefficientOfReflection
+	 * Rep invariant:
+	 * prevVelocity is velocity 1 timestep ago
+	 * velocity must be of magnitude between .01 and 200, or 0
+	 * center position must be between .25 and 19.75 for both x and y
+	 * required that ball = new Ball(ball.toJSONObject())
+	 */
 
     private Circle ballCircle;
     private Vect velocity;
@@ -69,6 +72,7 @@ public class Ball implements Collidable{
      * Converts the current ball into a JSON object.
      * @return an object which describes the ball through its location, name, and velocity.
      */
+    @SuppressWarnings("unchecked")
     public JSONObject toJSONObject(){
     	JSONObject obj = new JSONObject();
     	obj.put("x",ballCircle.getCenter().x());
@@ -80,20 +84,6 @@ public class Ball implements Collidable{
     	
     }
 
-    /**
-     * allows ball to be updated 
-     */
-    public void allowUpdates() {
-        this.doNotUpdate = false;
-    }
-
-    /**
-     * returns whether or not the ball is allowed to be updated
-     * @return true if the ball can be updated
-     */
-    public boolean canUpdate(){
-        return ! this.doNotUpdate;
-    }
 
     public void updateCenterX(double x) {
         this.ballCircle = new Circle(x, this.ballCircle.getCenter().y(), this.ballCircle.getRadius());
@@ -103,12 +93,6 @@ public class Ball implements Collidable{
         this.ballCircle = new Circle(this.ballCircle.getCenter().x(), y, this.ballCircle.getRadius());
     }
 
-    /**
-     * disallows ball to be updated
-     */
-    public void disallowUpdates() {
-        this.doNotUpdate = true;
-    }
     
         
     /**
@@ -180,56 +164,8 @@ public class Ball implements Collidable{
      */
     public void setVelocity(Vect newVelocity){
         this.velocity =  newVelocity;
-        /*
-        if (newVelocity.length() < .01*L){
-            this.velocity = new Vect(0, 0); //if the velocity is less than .01, then set it to zero 
-            System.out.println("here");
-        }
-        else if (newVelocity.length() > 200*L){ //if the newVelocity is greater than 200*L, then set it to 200*L in the same direction
-            Vect unitVect = newVelocity.unitSize(); 
-            Vect scaledLargestPosVector = unitVect.times(200); 
-            this.velocity = scaledLargestPosVector; //if the velocity is less than .01, then set it to zero 
-        }
-        else{
-            this.velocity =  newVelocity; 
-        }*/
     }
 
-        /**
-         * updates the position of the ball given the amount of time that has passed.
-         * @param time The time to advance the ball by- may not be long enough to make the ball move to a position outside of the board or make the velocity illegal. 
-         * @throws IllegalArgumentException if the time is large enough to make the ball travel outside of the bounds of grid. 
-         */
-        /*public void updateBallPosition(double time){
-            //a velocity vector scaled by the amount of time that has passed 
-            Vect scaledVector = this.getVelocity().times(time);  // d = (vi)*t 
-            Vect newBallCenter = scaledVector.plus(this.getBallCircle().getCenter()); 
-    
-            if (isValidLocation(new Circle(newBallCenter, .25))){ //the update operation is going to place the ball in a valid circle location
-                Circle newCircle = new Circle(newBallCenter, this.getBallCircle().getRadius()); 
-                this.setBallCircle(newCircle); 
-            }
-            else{ //otherwise lets reset whatever parameter is outside the board (either x or y) to be inside the board 
-                final double minGridCoordinate = 0.25;
-                final double maxGridCoordinate = 19.75;
-                double xCoord =  newBallCenter.x(); 
-                double yCoord =  newBallCenter.y(); 
-                if (xCoord < minGridCoordinate){
-                    xCoord = minGridCoordinate; //reset 
-                }
-                else if (xCoord > maxGridCoordinate){
-                    xCoord = maxGridCoordinate; 
-                }
-    
-                if ( yCoord < minGridCoordinate ){
-                    yCoord = minGridCoordinate; 
-                }
-                else if (yCoord > maxGridCoordinate){
-                    yCoord = maxGridCoordinate; 
-                }
-                this.setBallCircle(new Circle(xCoord, yCoord, this.getBallCircle().getRadius()));
-            }
-        }*/
     
     /**
      * moves ball at constant velocity for given time delta

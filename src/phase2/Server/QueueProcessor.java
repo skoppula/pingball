@@ -20,8 +20,13 @@ import phase2.Messaging.*;
  * should ever be running at the same time.
  */
 public class QueueProcessor implements Runnable {
-	//rep invariants: wallConnectionMap.get(a) == b iff wallConnectionMap.get(b) == a
-
+	/*rep invariants: wallConnectionMap.get(a) == b iff wallConnectionMap.get(b) == a
+	* wallConnectionMap should only contain wallConnections with boards that are in nameToBoardTunnelMap 
+	* only one thread should ever access the output of inQ
+	* any change in wallConnectionMap should be accompanied by a ClientWallChange method 
+	* through the appropriate client's tunnel
+	*/
+	
 	/**
 	 * The input queue to our server.
 	 */
@@ -71,7 +76,7 @@ public class QueueProcessor implements Runnable {
     /**
      * Handles incoming ball messages, and sends the appropriate notifications
      * to other boards.
-     * @param message
+     * @param message the message to be handled
      */
     private void handleBallMessage(BallMessage message){
         System.out.println("WALLE FONE HOME CONNECTION MAP: " + wallConnectionMap);
@@ -87,7 +92,7 @@ public class QueueProcessor implements Runnable {
     
     /**
      * Handles the connection of two walls according to a server
-     * @param message
+     * @param message the message to be handled
      */
     private void handleServerWallConnectMessage(ServerWallConnectMessage message){
     	BoardWallPair boardWall1;
@@ -114,13 +119,6 @@ public class QueueProcessor implements Runnable {
         		BoardWallPair oldPair1 = wallConnectionMap.get(boardWall1);
         		CommunicationTunnel oldPairTunnel1 = nameToBoardTunnelMap.get(oldPair1.board());
         		oldPairTunnel1.addToOutQ(new ClientWallChangeMessage(boardWall1, false));
-        		
-        		//wallConnectionMap.remove(oldPair1);
-        		//The above line is not necessary because balls which manage to sneak through before the wall becomes
-        		//impermeable should be allowed to leave through the old connection
-        		
-        		//tunnel1.addToOutQ(new ClientWallChangeMessage(oldPair1, false));
-        		// The above line is not necessary, because if we are changing boardWall1's connection later anyway
         		wallConnectionMap.remove(boardWall1);
         	}
 
@@ -129,12 +127,6 @@ public class QueueProcessor implements Runnable {
         		BoardWallPair oldPair2 = wallConnectionMap.get(boardWall2);
         		CommunicationTunnel oldPairTunnel2 = nameToBoardTunnelMap.get(oldPair2.board());
         		oldPairTunnel2.addToOutQ(new ClientWallChangeMessage(boardWall2, false));
-        		//wallConnectionMap.remove(oldPair2);
-        		//The above line is not necessary because balls which manage to sneak through before the wall becomes
-        		//impermeable should be allowed to leave through the old connection
-        		
-        		//tunnel1.addToOutQ(new ClientWallChangeMessage(oldPair2, false));
-        		//The above line is not necessary, because if we are changing boardWall1's connection later anyway
         		wallConnectionMap.remove(boardWall1);
         	}
     	
@@ -149,7 +141,7 @@ public class QueueProcessor implements Runnable {
     
     /**
      * Handles the removal of a board from all components of the server
-     * @param message
+     * @param message the message to be handled
      */
     private void handleTerminateMessage(TerminateMessage message){
     	String boardName = message.getBoardName();

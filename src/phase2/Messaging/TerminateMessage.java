@@ -8,6 +8,10 @@ import org.json.simple.JSONObject;
  *
  */
 public class TerminateMessage extends Message {
+	/*
+	 * Abstraction function: sent to a server to remove the board with name boardName
+	 * Rep Invariant: see message
+	 */
 	
 	private final String boardName;
 

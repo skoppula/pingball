@@ -14,6 +14,11 @@ import phase2.Messaging.Message;
  *
  */
 public class NewConnectionHandler implements Runnable {
+	/*
+	 * Rep invariants:
+	 * CommunicationTunnels are responsible for closing their own sockets.
+	 * Should not access the output of serverInQ.
+	 */
     
     ServerSocket serverSocket;
     BlockingQueue<Message> serverInQ;

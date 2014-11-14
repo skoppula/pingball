@@ -13,6 +13,9 @@ import phase2.Board.Ball;
  *
  */
 public class BallMessage extends Message {
+	/*
+	 * Rep invariant: see Message
+	 */
 	
 
 	private final Ball ball;
@@ -28,7 +31,6 @@ public class BallMessage extends Message {
 		this.ball = ball;
 		this.boardWall = boardWall;
 		this.messageType = MessageType.BALL;
-		assert(checkRep());
 	}
 	
 	/**
@@ -59,6 +61,10 @@ public class BallMessage extends Message {
 		return obj;
 	}
 	
+	/**
+	 * RI: checks 
+	 * @return whether RI is met
+	 */
 	private boolean checkRep(){
 		return this.equals(BallMessage.fromJSON(this.toJSONObject()));
 	}

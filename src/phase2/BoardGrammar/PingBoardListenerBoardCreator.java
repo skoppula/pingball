@@ -6,25 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.LinkedBlockingQueue;
-
-import jdk.nashorn.internal.parser.TokenStream;
-
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.misc.NotNull;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNode;
-import org.stringtemplate.v4.compiler.STParser.ifstat_return;
 
 import phase2.Board.*;
 import phase2.Board.Flipper.BumperSide;
 import phase2.Board.Gadget.Orientation;
 import phase2.Board.Util.InvalidInvariantException;
-import phase2.Messaging.Message;
 import physics.Vect;
-import sun.misc.Queue;
 
 public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
     
@@ -43,8 +30,7 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
     
     // create the board
     public void exitBoard(PingBoardParser.BoardContext ctx) {
-        List<Gadget> gadgets = new ArrayList(gadgetsMap.values());
-        System.out.println(triggerToAction);
+        List<Gadget> gadgets = new ArrayList<Gadget>(gadgetsMap.values());
         for (Gadget gadget: gadgets) {
             if (triggerToAction.containsKey(gadget.getName())) {
                 ArrayList<Gadget> gadgetsToTrigger = new ArrayList<Gadget>();

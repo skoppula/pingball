@@ -3,7 +3,6 @@ package phase2.Board;
 import phase2.PhysicsComponents.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import physics.Angle;
@@ -47,7 +46,7 @@ public class Flipper extends Gadget {
 
     private boolean isActive;
     // whether the flipper is currently rotating
-    
+
 
     /**
      * Determines which type the bumper is.

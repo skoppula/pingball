@@ -9,7 +9,9 @@ import org.json.simple.JSONObject;
  *
  */
 public class BoardInitMessage extends Message {
-	
+	/*
+	 * Rep Invariant: see Message
+	 */
 
 	protected final String boardName;
 

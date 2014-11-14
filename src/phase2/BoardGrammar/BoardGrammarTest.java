@@ -12,7 +12,6 @@ import javafx.collections.WeakListChangeListener;
 
 import org.junit.Test;
 
-import phase2.Pingball;
 import phase2.Board.Absorber;
 import phase2.Board.Ball;
 import phase2.Board.Board;
@@ -29,16 +28,17 @@ import phase2.Messaging.Message;
 import physics.Vect;
 
 public class BoardGrammarTest {
+
     /*
      * Testing strategy
      *      - creates a board with the correct friction & gravity given any number of those parameters
      *      - with/without ball
      *      - with/without gadgets
-     *          *square bumpers
-     *          *circle bumpers
-     *          *triangle bumpers
-     *          *flippers
-     *          *absorbers
+     *          * square bumpers
+     *          * circle bumpers
+     *          * triangle bumpers
+     *          * flippers
+     *          * absorbers
      *      - comments: start file, in middle of file, end file
      */
 
@@ -219,14 +219,14 @@ public class BoardGrammarTest {
     // tests sample board 4
     @Test
     public void sampleBoard4Test() throws InvalidInvariantException, IOException {
-        Board board = new Board(new File("src/phase2/BoardGrammar/boardFiles/sampleBoard4.pb"), q);
+        new Board(new File("src/phase2/BoardGrammar/boardFiles/sampleBoard4.pb"), q);
       
     }
     
     // tests default board
     @Test
     public void defaultBoardTest() throws InvalidInvariantException, IOException {
-        Board board = new Board(new File("src/phase2/BoardGrammar/boardFiles/default.pb"), q);
+        new Board(new File("src/phase2/BoardGrammar/boardFiles/default.pb"), q);
       
     }*/
     
