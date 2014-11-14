@@ -13,6 +13,9 @@ import phase2.Board.Ball;
  *
  */
 public class BallMessage extends Message {
+	/*
+	 * Rep invariant: see Message
+	 */
 	
 
 	private final Ball ball;

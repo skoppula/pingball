@@ -10,6 +10,9 @@ import phase2.Board.Gadget.Orientation;
  *
  */
 public class BoardWallPair {
+	/*
+	 * Abstraction function: represents a wall associated with a given board
+	 */
 	
 	private final String boardName;
 	private final Orientation wallOrientation;
