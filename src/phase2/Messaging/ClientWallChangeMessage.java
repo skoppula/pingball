@@ -6,7 +6,7 @@ import org.json.simple.JSONObject;
  * A message responsible
  * for informing a board about which of its walls
  * is now involved or not involved in an inter-board connection.
- *
+ * Immutable.
  */
 public class ClientWallChangeMessage extends Message {
 	/*
@@ -31,10 +31,15 @@ public class ClientWallChangeMessage extends Message {
 		this.otherBoardWall = otherBoardWall;
 		this.connectOrDisconnect = connectOrDisconnect;
 		this.messageType = MessageType.CLIENTWALLCHANGE;
+		assert(checkRep());
 	}
 
+	/**
+	 * RI: Message has valid other board
+	 * @return whether RI is satisfied
+	 */
 	private boolean checkRep(){
-		return this.equals(ClientWallChangeMessage.fromJSON(this.toJSONObject()));
+	    return this.otherBoardWall != null;
 	}
 	
 	/**

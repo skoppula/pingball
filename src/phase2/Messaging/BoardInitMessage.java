@@ -5,7 +5,7 @@ import org.json.simple.JSONObject;
 /**
  * A message to inform the server that a new board
  * has joined the simulation. This should be the
- * first message sent by any board. 
+ * first message sent by any board. Immutable.
  *
  */
 public class BoardInitMessage extends Message {
@@ -26,6 +26,10 @@ public class BoardInitMessage extends Message {
 		assert(checkRep());
 	}
 
+	/**
+	 * RI: Message has valid boardname
+	 * @return whether RI is satisfied
+	 */
 	private boolean checkRep(){
 	    return this.boardName != null;
 	}
