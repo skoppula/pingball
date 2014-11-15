@@ -1,4 +1,4 @@
-package phase2.Tests;
+package phase2.BoardGrammar;
 
 import static org.junit.Assert.*;
 

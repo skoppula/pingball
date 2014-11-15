@@ -597,24 +597,31 @@ public class Board {
         private static final long serialVersionUID = 1L;
         
     }
+    
+    public boolean gadgetsInBounds() {
+        for (Gadget gadget: gadgets) {
+            if (gadget.getX() >= this.width || gadget.getY() >= this.height) {
+                return false;
+            }
+            if (gadget.getX() < 0 || gadget.getY() < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     
     /**
      * Checks Board's representation invariants of 
      * gadgets not overlapping and gadgets being contained in the board
      */
-	private void checkRep() {
+	public void checkRep() {
 	    // check that gadgets are in bounds
-	    for (Gadget gadget : gadgets) {
-	        assert(gadget.getX() < this.width);
-	        assert(gadget.getY() < this.height);
-	        assert(gadget.getX() >= 0);
-	        assert(gadget.getY() >= 0);
-	    }
+	    assert(this.gadgetsInBounds());
 	    
 	    // check that no gadgets overlap
 	    for (Gadget gadget : gadgets) {
-	        overlapsWithGadget(gadget.getX(), gadget.getY());
+	        assert(!overlapsWithGadget(gadget.getX(), gadget.getY()));
 	    }
 	}
 

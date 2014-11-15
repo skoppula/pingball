@@ -1,4 +1,4 @@
-package phase2.Tests;
+package phase2.Board;
 
 import static org.junit.Assert.*;
 
@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import phase2.Board.*;
 import phase2.Board.Board.InvalidInvariantException;
-import phase2.Board.Flipper.BumperSide;
 import phase2.Board.Gadget.Orientation;
 import phase2.Messaging.Message;
 import physics.Vect;
@@ -73,7 +72,7 @@ public class BoardTest {
     }
 
     // have multiple gadgets initialized in the same place
-    @Test(expected=AssertionError.class)
+    @Test
     public void testInvalidBoardOverlappingGadgets1() throws InvalidInvariantException {
         DoublePair squarePos = new DoublePair(1);
         DoublePair circlePos = new DoublePair(1);
@@ -83,52 +82,30 @@ public class BoardTest {
         gadgets.add(square);
         gadgets.add(circle);
         Board board = new Board(gadgets, "board", queue);
+        assertFalse(board.gadgetsInBounds());
         // board's constructor should assert something false!
     }
     
-    // have a flipper run into another gadget
-    @Test(expected=AssertionError.class)
-    public void testInvalidBoardOverlappingGadgets2() throws InvalidInvariantException {
-        Flipper flipper = new Flipper(1, 1, "flipper", BumperSide.LEFT, Orientation.ZERO);
-        CircleBumper circle = new CircleBumper(2, 1, "circle");
-        gadgets.add(flipper);
-        gadgets.add(circle);
-        Board board = new Board(gadgets, "board", queue);
-        // board's constructor should assert something false!
-    }
-    
-    // have another gadget be initialized in an absorber
-    @Test(expected=AssertionError.class)
-    public void testInvalidBoardOverlappingGadgets3() throws InvalidInvariantException {
-        DoublePair flipperPos = new DoublePair(17);
-        DoublePair absorberPos = new DoublePair(0, 15);
-        Flipper flipper = new Flipper(17, 17, "flipper", BumperSide.LEFT, Orientation.ZERO);
-        Absorber absorber = new Absorber(0, 15, "absorber", 18, 3); 
-        gadgets.add(flipper);
-        gadgets.add(absorber);
-        System.out.println(gadgets);
-        Board board = new Board(gadgets, "board", queue);
-        // board's constructor should assert something false!
-    }
-    
+
     // test for a gadget declared out of bounds
-    @Test(expected=AssertionError.class)
+    @Test(expected=InvalidInvariantException.class)
     public void testInvalidBoardOutOfBoundsGadgets1() throws InvalidInvariantException {
         DoublePair trianglePos = new DoublePair(20, 1);
         List<Gadget> empty = new ArrayList<Gadget>();
         TriangleBumper triangle = new TriangleBumper(20, 1, "triangle", Orientation.NINETY);
         gadgets.add(triangle);
         Board board = new Board(gadgets, "board", queue);
-        // board's constructor should assert something false!
+        // invalid invariant exception should be thrown!
     }
     
     // test for an absorber that goes out of bounds
-    @Test(expected=AssertionError.class)
+    @Test(expected=ArrayIndexOutOfBoundsException.class)
     public void testInvalidBoardOutOfBoundsGadgets2() throws InvalidInvariantException {
-        Absorber absorber = new Absorber(0, 15, "absorber", 18, 3);
+        Absorber absorber = new Absorber(0, 15, "absorber", 24, 3);
         List<Gadget> gadgetList = new ArrayList<Gadget>();
         gadgetList.add(absorber);
-        Board board = new Board(gadgets, "board", queue);
+        Board board = new Board(gadgetList, "board", queue);
+        board.printBoard();
         // board's constructor should assert something false!
     }
 }
