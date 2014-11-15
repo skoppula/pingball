@@ -616,6 +616,10 @@ public class Board {
 	        assert(gadget.getY() >= 0);
 	    }
 	    
+	    // check that no gadgets overlap
+	    for (Gadget gadget : gadgets) {
+	        overlapsWithGadget(gadget.getX(), gadget.getY());
+	    }
 	}
 	
 }
