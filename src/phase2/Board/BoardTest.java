@@ -82,7 +82,7 @@ public class BoardTest {
         gadgets.add(square);
         gadgets.add(circle);
         Board board = new Board(gadgets, "board", queue);
-        assertFalse(board.gadgetsInBounds());
+        assertTrue(board.overlappingGadgets(gadgets));
         // board's constructor should assert something false!
     }
     
