@@ -68,6 +68,7 @@ public class Pingball {
                         if(hostStr.matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b")) {
                             byte[] ip = new byte[4];
                             String[] ipTokens = hostStr.split("\\.");
+                                System.out.println(Arrays.toString(ipTokens));
                             for(int i = 0; i < ipTokens.length; ++i) {
                                 ip[i] = (byte) Integer.parseInt(ipTokens[i]);
                             }
