@@ -27,6 +27,7 @@ import phase2.BoardGrammar.PingBoardParser.RootContext;
 import phase2.Messaging.Message.MessageType;
 import phase2.Messaging.*;
 import physics.Geometry;
+import physics.Geometry.DoublePair;
 import physics.Vect;
 
 /**
@@ -117,6 +118,7 @@ public class Board {
         this.GRAVITY_VECTOR = new Vect(0, boardIngredients.getGravity());
         this.MU = boardIngredients.getMu();
         this.MU2 = boardIngredients.getMu2();
+        checkRep();
         this.wallMap = Wall.makeWalls(this);
         for(Orientation key: wallMap.keySet()){
             this.gadgets.add(wallMap.get(key));
@@ -138,7 +140,6 @@ public class Board {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        checkRep();
 
     }
     
@@ -576,6 +577,9 @@ public class Board {
         
     }
     
+    /**
+     * @return whether or not the gadgets are initialized within the board's width & height
+     */
     public boolean gadgetsInBounds() {
         for (Gadget gadget: gadgets) {
             if (gadget.getX() >= this.width || gadget.getY() >= this.height) {
@@ -587,6 +591,23 @@ public class Board {
         }
         return true;
     }
+    
+    /**
+     * @return whether or not any gadgets are initialized in the same place
+     */
+    public boolean overlappingGadgets(List<Gadget> gadgets) {
+        Map<DoublePair, Integer> gadgetsPerSpot = new HashMap<DoublePair,Integer>();
+        for (Gadget gadget : gadgets) {
+            DoublePair coordinates = new DoublePair(gadget.getX(), gadget.getY());
+            if (gadgetsPerSpot.containsKey(coordinates)) {
+                return true;
+            }
+            else {
+                gadgetsPerSpot.put(coordinates, 1);
+            }
+        }
+        return false;
+    }
 
     
     /**
@@ -596,11 +617,7 @@ public class Board {
 	public void checkRep() {
 	    // check that gadgets are in bounds
 	    assert(this.gadgetsInBounds());
-	    
-	    // check that no gadgets overlap
-	    for (Gadget gadget : gadgets) {
-	        assert(!overlapsWithGadget(gadget.getX(), gadget.getY()));
-	    }
+	    assert(!this.overlappingGadgets(gadgets));
 	}
 
 	
