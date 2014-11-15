@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 
+import org.antlr.v4.codegen.model.chunk.ThisRulePropertyRef_ctx;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -528,16 +529,8 @@ public class Board {
                     newY = newWall.getY() - newWall.height - EPSILON;
             }
             // ball's position changes, but velocity stays the same
-            newBall = new Ball(newX, newY, oldBall.getVelocity().times(-1), oldBall.getName());
-            if(overlapsWithNonWallNonAbsorberGadget(newX, newY)) {
-                try {
-                    outQ.put(new BallMessage(newBall, new BoardWallPair(this.name, newWall.orientation)));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                this.addBall(newBall);
-            }
+            newBall = new Ball(newX, newY, oldBall.getVelocity(), oldBall.getName());
+            this.addBall(newBall);
         }
         else if (message.getType().equals(MessageType.CLIENTWALLCHANGE)) {
             if (((ClientWallChangeMessage) message).isConnectOrDisconnect()) { // connecting
@@ -552,23 +545,7 @@ public class Board {
             throw new RuntimeException("Wrong message type for Board");
         }
     }
-    
-    private boolean overlapsWithNonWallNonAbsorberGadget(double x, double y) {
-        for(Gadget g:this.gadgets) {
-            if (g instanceof Wall) continue;
-            if (g instanceof Absorber) continue;
-            if (xyInXY(x, y, g.getX(), g.getY())) {
-                System.out.println("ASDFASDF YUM YUM");
-                return true;
-            }
-        }
-        return false;
-    }
 
-    private boolean xyInXY(double x, double y, int cX, int cY) {
-        if (Math.floor(x) == cX && Math.floor(y) == cY) return true;
-        else return false;
-    }
 
     /**
      * Flags a ball for removal. The next time removeFlaggedBalls() is called, this ball will be removed.
