@@ -44,10 +44,6 @@ public class LocalManager {
      * 
      * CHECK FOR THREAD SAFETY KIDS
      */
-    
-    /*
-     * OH FUCK OH FUCK
-     */
 
     /**
      * Creates a local manager that will connect to a server.
