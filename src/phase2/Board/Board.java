@@ -529,7 +529,7 @@ public class Board {
             }
             // ball's position changes, but velocity stays the same
             newBall = new Ball(newX, newY, oldBall.getVelocity().times(-1), oldBall.getName());
-            if(overlapsWithGadget(newX, newY)) {
+            if(overlapsWithNonWallNonAbsorberGadget(newX, newY)) {
                 try {
                     outQ.put(new BallMessage(newBall, new BoardWallPair(this.name, newWall.orientation)));
                 } catch (InterruptedException e) {
@@ -553,9 +553,10 @@ public class Board {
         }
     }
     
-    private boolean overlapsWithGadget(double x, double y) {
+    private boolean overlapsWithNonWallNonAbsorberGadget(double x, double y) {
         for(Gadget g:this.gadgets) {
             if (g instanceof Wall) continue;
+            if (g instanceof Absorber) continue;
             if (xyInXY(x, y, g.getX(), g.getY())) {
                 System.out.println("ASDFASDF YUM YUM");
                 return true;
