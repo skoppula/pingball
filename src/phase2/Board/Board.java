@@ -17,10 +17,10 @@ import org.antlr.v4.codegen.model.chunk.ThisRulePropertyRef_ctx;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import phase2.Board.Gadget.Orientation;
+import phase2.BoardGrammar.BoardIngredients;
 import phase2.BoardGrammar.PingBoardLexer;
 import phase2.BoardGrammar.PingBoardListenerBoardCreator;
 import phase2.BoardGrammar.PingBoardParser;
@@ -35,15 +35,12 @@ import physics.Vect;
  *
  */
 public class Board {
-	/* Rep Invariant: 
-	 * - triggerMap: if triggerMap[key] = value, then must have triggerMap[value] = key
-	* - outQ should only ever be accessed if the board is online
-	* - ball is in this.balls iff ball is a key in this.ballToCollidables
-	* - balls contains no ball twice
-	* - gadgets contains no two gadgets of the same name
-	* - wallMap has a wall for each orientation, and if gadget is in wallMap, it is also in gadgets
-	* - no two gadgets are overlapping
-	* - every gadget must be declared within the bounds of the board
+	/* Rep Invariant: triggerMap: if triggerMap[key] = value, then must have triggerMap[value] = key
+	* outQ should only ever be accessed if the board is online
+	* ball is in this.balls iff ball is a key in this.ballToCollidables
+	* balls contains no ball twice
+	* gadgets contains no two gadgets of the same name
+	* wallMap has a wall for each orientation, and if gadget is in wallMap, it is also in gadgets
 	* 
 	*/
 
@@ -114,19 +111,18 @@ public class Board {
         PingBoardListenerBoardCreator listener = new PingBoardListenerBoardCreator();
         walker.walk(listener,tree);
         
-        List<Object> boardIngredients = listener.getBoardIngredients();
+        BoardIngredients boardIngredients = listener.getBoardIngredients();
         // boardIngredients are of the form [gadgets, name, gravity, friction1, friction2, balls]
-        this.gadgets = (ArrayList<Gadget>) boardIngredients.get(0);
-        
-        this.name = (String) boardIngredients.get(1);
-        this.GRAVITY_VECTOR = new Vect(0, (double) boardIngredients.get(2));
-        this.MU = (double) boardIngredients.get(3);
-        this.MU2 = (double) boardIngredients.get(4);
+        this.gadgets = boardIngredients.getGadgetList();
+        this.name = boardIngredients.getName();
+        this.GRAVITY_VECTOR = new Vect(0, boardIngredients.getGravity());
+        this.MU = boardIngredients.getMu();
+        this.MU2 = boardIngredients.getMu2();
         this.wallMap = Wall.makeWalls(this);
         for(Orientation key: wallMap.keySet()){
             this.gadgets.add(wallMap.get(key));
         }
-        for(Ball ball:(Collection<Ball>) boardIngredients.get(5)){
+        for(Ball ball: boardIngredients.getBallList()){
         	this.addBall(ball);
         }
         
@@ -143,9 +139,15 @@ public class Board {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        checkRep();
+/*
+        for(Gadget g:gadgets) {
+            if(g instanceof SquareBumper && g.getX()==1)
+            System.out.println(g.getX() + " " + g.getY());
+        }
+        System.exit(0);;
+        */
     }
-
+    
     /**
      * Creates a board with the default values for friction1, friction2, and gravity,
      * and sends a greeting to the server.
@@ -179,7 +181,6 @@ public class Board {
         	}
         	nameToGadgetMap.put(gadget.getName(), gadget);
         }
-        checkRep();
     }
     
     
@@ -218,7 +219,6 @@ public class Board {
             }
             nameToGadgetMap.put(gadget.getName(), gadget);
         }
-        checkRep();
     }
     
 
@@ -580,21 +580,7 @@ public class Board {
         private static final long serialVersionUID = 1L;
         
     }
-    
-    /**
-     * Checks Board's representation invariants of 
-     * gadgets not overlapping and gadgets being contained in the board
-     */
-	private void checkRep() {
-	    // check that gadgets are in bounds
-	    for (Gadget gadget : gadgets) {
-	        assert(gadget.getX() < this.width);
-	        assert(gadget.getY() < this.height);
-	        assert(gadget.getX() >= 0);
-	        assert(gadget.getY() >= 0);
-	    }
-	    
-	}
+	
 	
 }
     
