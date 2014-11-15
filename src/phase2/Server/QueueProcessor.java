@@ -135,7 +135,7 @@ public class QueueProcessor implements Runnable {
         	tunnel1.addToOutQ(new ClientWallChangeMessage(boardWall2, true));
         	tunnel2.addToOutQ(new ClientWallChangeMessage(boardWall1, true));
     	} else {
-    	    System.out.println("YOU DUMB FUCKER! WRONG BOARD NAME");
+    	    System.out.println("YOU DUMB FLUFFER! WRONG BOARD NAME");
     	}
     }
     
