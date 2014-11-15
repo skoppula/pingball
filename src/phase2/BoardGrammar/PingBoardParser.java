@@ -111,9 +111,6 @@ public class PingBoardParser extends Parser {
 		public BodyLineContext bodyLine(int i) {
 			return getRuleContext(BodyLineContext.class,i);
 		}
-		public BoardInitContext boardInit() {
-			return getRuleContext(BoardInitContext.class,0);
-		}
 		public List<BodyLineContext> bodyLine() {
 			return getRuleContexts(BodyLineContext.class);
 		}
@@ -138,17 +135,16 @@ public class PingBoardParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(63); boardInit();
-			setState(67);
+			setState(66);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << COMMENT) | (1L << BALLID) | (1L << SQUAREBUMPERID) | (1L << CIRCLEBUMPERID) | (1L << TRIANGLEBUMPERID) | (1L << RIGHTFLIPPERID) | (1L << LEFTFLIPPERID) | (1L << ABSORBERID) | (1L << FIREID) | (1L << WHITESPACE) | (1L << NEWLINE))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << BOARDINITID) | (1L << COMMENT) | (1L << BALLID) | (1L << SQUAREBUMPERID) | (1L << CIRCLEBUMPERID) | (1L << TRIANGLEBUMPERID) | (1L << RIGHTFLIPPERID) | (1L << LEFTFLIPPERID) | (1L << ABSORBERID) | (1L << FIREID) | (1L << WHITESPACE) | (1L << NEWLINE))) != 0)) {
 				{
 				{
-				setState(64); bodyLine();
+				setState(63); bodyLine();
 				}
 				}
-				setState(69);
+				setState(68);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -199,29 +195,29 @@ public class PingBoardParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(70); match(BOARDINITID);
-			setState(71); name();
-			setState(73);
+			setState(69); match(BOARDINITID);
+			setState(70); name();
+			setState(72);
 			switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
 			case 1:
 				{
-				setState(72); gravity();
+				setState(71); gravity();
 				}
 				break;
 			}
-			setState(76);
+			setState(75);
 			switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
 			case 1:
 				{
-				setState(75); friction1();
+				setState(74); friction1();
 				}
 				break;
 			}
-			setState(79);
+			setState(78);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
 				{
-				setState(78); friction2();
+				setState(77); friction2();
 				}
 				break;
 			}
@@ -269,6 +265,9 @@ public class PingBoardParser extends Parser {
 		public CircleBumperContext circleBumper() {
 			return getRuleContext(CircleBumperContext.class,0);
 		}
+		public BoardInitContext boardInit() {
+			return getRuleContext(BoardInitContext.class,0);
+		}
 		public List<TerminalNode> WHITESPACE() { return getTokens(PingBoardParser.WHITESPACE); }
 		public BodyLineContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -292,21 +291,26 @@ public class PingBoardParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(84);
+			setState(83);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==WHITESPACE) {
 				{
 				{
-				setState(81); match(WHITESPACE);
+				setState(80); match(WHITESPACE);
 				}
 				}
-				setState(86);
+				setState(85);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
 			setState(96);
 			switch (_input.LA(1)) {
+			case BOARDINITID:
+				{
+				setState(86); boardInit();
+				}
+				break;
 			case BALLID:
 				{
 				setState(87); ball();
@@ -1870,8 +1874,8 @@ public class PingBoardParser extends Parser {
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
 		"\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36\4\37\t\37\3\2\3\2\3"+
-		"\2\3\3\3\3\7\3D\n\3\f\3\16\3G\13\3\3\4\3\4\3\4\5\4L\n\4\3\4\5\4O\n\4\3"+
-		"\4\5\4R\n\4\3\5\7\5U\n\5\f\5\16\5X\13\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3"+
+		"\2\3\3\7\3C\n\3\f\3\16\3F\13\3\3\4\3\4\3\4\5\4K\n\4\3\4\5\4N\n\4\3\4\5"+
+		"\4Q\n\4\3\5\7\5T\n\5\f\5\16\5W\13\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3"+
 		"\5\3\5\5\5c\n\5\3\5\7\5f\n\5\f\5\16\5i\13\5\3\6\3\6\3\6\3\6\3\6\3\6\3"+
 		"\6\3\7\3\7\3\7\3\7\3\7\3\b\3\b\3\b\3\b\3\b\3\t\3\t\3\t\3\t\3\t\3\t\3\n"+
 		"\3\n\3\n\3\n\3\n\3\n\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\f\3\f\3\f\3"+
@@ -1891,27 +1895,27 @@ public class PingBoardParser extends Parser {
 		"\n\35\f\35\16\35\u0122\13\35\3\35\3\35\3\35\3\35\3\36\7\36\u0129\n\36"+
 		"\f\36\16\36\u012c\13\36\3\36\3\36\3\36\3\36\3\37\7\37\u0133\n\37\f\37"+
 		"\16\37\u0136\13\37\3\37\3\37\3\37\3\37\3\37\2\2 \2\4\6\b\n\f\16\20\22"+
-		"\24\26\30\32\34\36 \"$&(*,.\60\62\64\668:<\2\4\3\2\27\30\3\2\34\35\u013c"+
-		"\2>\3\2\2\2\4A\3\2\2\2\6H\3\2\2\2\bV\3\2\2\2\nj\3\2\2\2\fq\3\2\2\2\16"+
+		"\24\26\30\32\34\36 \"$&(*,.\60\62\64\668:<\2\4\3\2\27\30\3\2\34\35\u013d"+
+		"\2>\3\2\2\2\4D\3\2\2\2\6G\3\2\2\2\bU\3\2\2\2\nj\3\2\2\2\fq\3\2\2\2\16"+
 		"v\3\2\2\2\20{\3\2\2\2\22\u0081\3\2\2\2\24\u0087\3\2\2\2\26\u008e\3\2\2"+
 		"\2\30\u0092\3\2\2\2\32\u0094\3\2\2\2\34\u0096\3\2\2\2\36\u009b\3\2\2\2"+
 		" \u00a8\3\2\2\2\"\u00b2\3\2\2\2$\u00bc\3\2\2\2&\u00c6\3\2\2\2(\u00d0\3"+
 		"\2\2\2*\u00da\3\2\2\2,\u00e4\3\2\2\2.\u00ee\3\2\2\2\60\u00f8\3\2\2\2\62"+
 		"\u0102\3\2\2\2\64\u010c\3\2\2\2\66\u0116\3\2\2\28\u0120\3\2\2\2:\u012a"+
-		"\3\2\2\2<\u0134\3\2\2\2>?\5\4\3\2?@\7\2\2\3@\3\3\2\2\2AE\5\6\4\2BD\5\b"+
-		"\5\2CB\3\2\2\2DG\3\2\2\2EC\3\2\2\2EF\3\2\2\2F\5\3\2\2\2GE\3\2\2\2HI\7"+
-		"\3\2\2IK\5 \21\2JL\5\"\22\2KJ\3\2\2\2KL\3\2\2\2LN\3\2\2\2MO\5$\23\2NM"+
-		"\3\2\2\2NO\3\2\2\2OQ\3\2\2\2PR\5&\24\2QP\3\2\2\2QR\3\2\2\2R\7\3\2\2\2"+
-		"SU\7\36\2\2TS\3\2\2\2UX\3\2\2\2VT\3\2\2\2VW\3\2\2\2Wb\3\2\2\2XV\3\2\2"+
-		"\2Yc\5\n\6\2Zc\5\f\7\2[c\5\16\b\2\\c\5\20\t\2]c\5\22\n\2^c\5\24\13\2_"+
-		"c\5\26\f\2`c\5\34\17\2ac\5\32\16\2bY\3\2\2\2bZ\3\2\2\2b[\3\2\2\2b\\\3"+
-		"\2\2\2b]\3\2\2\2b^\3\2\2\2b_\3\2\2\2b`\3\2\2\2ba\3\2\2\2cg\3\2\2\2df\7"+
-		"\36\2\2ed\3\2\2\2fi\3\2\2\2ge\3\2\2\2gh\3\2\2\2h\t\3\2\2\2ig\3\2\2\2j"+
-		"k\7\23\2\2kl\5 \21\2lm\5\62\32\2mn\5\64\33\2no\5\66\34\2op\58\35\2p\13"+
-		"\3\2\2\2qr\7\24\2\2rs\5 \21\2st\5(\25\2tu\5*\26\2u\r\3\2\2\2vw\7\25\2"+
-		"\2wx\5 \21\2xy\5(\25\2yz\5*\26\2z\17\3\2\2\2{|\7\26\2\2|}\5 \21\2}~\5"+
-		"(\25\2~\177\5*\26\2\177\u0080\5,\27\2\u0080\21\3\2\2\2\u0081\u0082\t\2"+
-		"\2\2\u0082\u0083\5 \21\2\u0083\u0084\5(\25\2\u0084\u0085\5*\26\2\u0085"+
+		"\3\2\2\2<\u0134\3\2\2\2>?\5\4\3\2?@\7\2\2\3@\3\3\2\2\2AC\5\b\5\2BA\3\2"+
+		"\2\2CF\3\2\2\2DB\3\2\2\2DE\3\2\2\2E\5\3\2\2\2FD\3\2\2\2GH\7\3\2\2HJ\5"+
+		" \21\2IK\5\"\22\2JI\3\2\2\2JK\3\2\2\2KM\3\2\2\2LN\5$\23\2ML\3\2\2\2MN"+
+		"\3\2\2\2NP\3\2\2\2OQ\5&\24\2PO\3\2\2\2PQ\3\2\2\2Q\7\3\2\2\2RT\7\36\2\2"+
+		"SR\3\2\2\2TW\3\2\2\2US\3\2\2\2UV\3\2\2\2Vb\3\2\2\2WU\3\2\2\2Xc\5\6\4\2"+
+		"Yc\5\n\6\2Zc\5\f\7\2[c\5\16\b\2\\c\5\20\t\2]c\5\22\n\2^c\5\24\13\2_c\5"+
+		"\26\f\2`c\5\34\17\2ac\5\32\16\2bX\3\2\2\2bY\3\2\2\2bZ\3\2\2\2b[\3\2\2"+
+		"\2b\\\3\2\2\2b]\3\2\2\2b^\3\2\2\2b_\3\2\2\2b`\3\2\2\2ba\3\2\2\2cg\3\2"+
+		"\2\2df\7\36\2\2ed\3\2\2\2fi\3\2\2\2ge\3\2\2\2gh\3\2\2\2h\t\3\2\2\2ig\3"+
+		"\2\2\2jk\7\23\2\2kl\5 \21\2lm\5\62\32\2mn\5\64\33\2no\5\66\34\2op\58\35"+
+		"\2p\13\3\2\2\2qr\7\24\2\2rs\5 \21\2st\5(\25\2tu\5*\26\2u\r\3\2\2\2vw\7"+
+		"\25\2\2wx\5 \21\2xy\5(\25\2yz\5*\26\2z\17\3\2\2\2{|\7\26\2\2|}\5 \21\2"+
+		"}~\5(\25\2~\177\5*\26\2\177\u0080\5,\27\2\u0080\21\3\2\2\2\u0081\u0082"+
+		"\t\2\2\2\u0082\u0083\5 \21\2\u0083\u0084\5(\25\2\u0084\u0085\5*\26\2\u0085"+
 		"\u0086\5,\27\2\u0086\23\3\2\2\2\u0087\u0088\7\31\2\2\u0088\u0089\5 \21"+
 		"\2\u0089\u008a\5(\25\2\u008a\u008b\5*\26\2\u008b\u008c\5.\30\2\u008c\u008d"+
 		"\5\60\31\2\u008d\25\3\2\2\2\u008e\u008f\7\32\2\2\u008f\u0090\5:\36\2\u0090"+
@@ -1967,7 +1971,7 @@ public class PingBoardParser extends Parser {
 		"\36\20\2\u012f\u0130\7\33\2\2\u0130;\3\2\2\2\u0131\u0133\7\36\2\2\u0132"+
 		"\u0131\3\2\2\2\u0133\u0136\3\2\2\2\u0134\u0132\3\2\2\2\u0134\u0135\3\2"+
 		"\2\2\u0135\u0137\3\2\2\2\u0136\u0134\3\2\2\2\u0137\u0138\7\22\2\2\u0138"+
-		"\u0139\5\36\20\2\u0139\u013a\7\33\2\2\u013a=\3\2\2\2\32EKNQVbg\u009b\u00a2"+
+		"\u0139\5\36\20\2\u0139\u013a\7\33\2\2\u013a=\3\2\2\2\32DJMPUbg\u009b\u00a2"+
 		"\u00a8\u00b2\u00bc\u00c6\u00d0\u00da\u00e4\u00ee\u00f8\u0102\u010c\u0116"+
 		"\u0120\u012a\u0134";
 	public static final ATN _ATN =
