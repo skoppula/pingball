@@ -23,7 +23,7 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
     private Map<String, Gadget> gadgetsMap = new HashMap<String, Gadget>(); // maps names to gadgets
     private Map<String, Ball> ballsMap = new HashMap<String, Ball>(); // maps names to ball
     private Map<String, ArrayList<String>> triggerToAction = new HashMap<String, ArrayList<String>>(); // key = name of gadget whose trigger it is, value = name of gadget whose action performed
-    private ArrayList<Object> boardIngredientsList = new ArrayList<Object>(); 
+    private BoardIngredients boardIngredients; 
     
     // temporary variables
     Stack<List<String>> stack = new Stack<List<String>>();
@@ -41,7 +41,7 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
                 gadget.setTriggers(gadgetsToTrigger);
             }
         }
-        boardIngredientsList.addAll(Arrays.asList(gadgets, BOARD_NAME, GRAVITY, FRICTION1, FRICTION2, ballsMap.values()));
+        boardIngredients = new BoardIngredients(gadgets, new ArrayList<Ball>(ballsMap.values()), BOARD_NAME, GRAVITY, FRICTION1, FRICTION2);
     }
     
     // initialize the board's fields
@@ -410,7 +410,7 @@ public class PingBoardListenerBoardCreator extends PingBoardBaseListener {
     /**
      * @return Board parsed from the file
      */
-    public ArrayList<Object> getBoardIngredients() {
-        return boardIngredientsList;
+    public BoardIngredients getBoardIngredients() {
+        return boardIngredients;
     }
 }
