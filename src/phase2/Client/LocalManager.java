@@ -73,7 +73,6 @@ public class LocalManager {
         lim.start();
         lom.start();
 
-
         System.out.println("Adding you to server " + address + " " + port);
     }
     

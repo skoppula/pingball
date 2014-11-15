@@ -1,4 +1,3 @@
 normal board
 board test - assertion errors
-trollboard bug
 test with trollboard networked
