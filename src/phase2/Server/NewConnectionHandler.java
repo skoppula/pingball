@@ -30,7 +30,8 @@ public class NewConnectionHandler implements Runnable {
     @Override
     public void run() {
         while (true) {
-        	Socket socket = new Socket(); // we need a non-null socket
+        	@SuppressWarnings("resource")
+			Socket socket = new Socket(); // we need a non-null socket
             try {
                 //Blocks until new connection
                 socket = serverSocket.accept();
