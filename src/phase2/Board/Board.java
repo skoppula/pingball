@@ -117,7 +117,6 @@ public class Board {
         List<Object> boardIngredients = listener.getBoardIngredients();
         // boardIngredients are of the form [gadgets, name, gravity, friction1, friction2, balls]
         this.gadgets = (ArrayList<Gadget>) boardIngredients.get(0);
-        
         this.name = (String) boardIngredients.get(1);
         this.GRAVITY_VECTOR = new Vect(0, (double) boardIngredients.get(2));
         this.MU = (double) boardIngredients.get(3);
@@ -136,7 +135,7 @@ public class Board {
             }
             nameToGadgetMap.put(gadget.getName(), gadget);
         }
-
+        
         //Send the boardinit message
         try {
             outQ.put(new BoardInitMessage(this.name));
@@ -179,7 +178,7 @@ public class Board {
         	}
         	nameToGadgetMap.put(gadget.getName(), gadget);
         }
-        checkRep();
+        // checkRep();
     }
     
     
