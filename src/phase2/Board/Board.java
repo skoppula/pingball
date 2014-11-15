@@ -35,12 +35,15 @@ import physics.Vect;
  *
  */
 public class Board {
-	/* Rep Invariant: triggerMap: if triggerMap[key] = value, then must have triggerMap[value] = key
-	* outQ should only ever be accessed if the board is online
-	* ball is in this.balls iff ball is a key in this.ballToCollidables
-	* balls contains no ball twice
-	* gadgets contains no two gadgets of the same name
-	* wallMap has a wall for each orientation, and if gadget is in wallMap, it is also in gadgets
+	/* Rep Invariant: 
+	 * - triggerMap: if triggerMap[key] = value, then must have triggerMap[value] = key
+	* - outQ should only ever be accessed if the board is online
+	* - ball is in this.balls iff ball is a key in this.ballToCollidables
+	* - balls contains no ball twice
+	* - gadgets contains no two gadgets of the same name
+	* - wallMap has a wall for each orientation, and if gadget is in wallMap, it is also in gadgets
+	* - no two gadgets are overlapping
+	* - every gadget must be declared within the bounds of the board
 	* 
 	*/
 
@@ -140,8 +143,9 @@ public class Board {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        checkRep();
     }
-    
+
     /**
      * Creates a board with the default values for friction1, friction2, and gravity,
      * and sends a greeting to the server.
@@ -175,6 +179,7 @@ public class Board {
         	}
         	nameToGadgetMap.put(gadget.getName(), gadget);
         }
+        checkRep();
     }
     
     
@@ -213,6 +218,7 @@ public class Board {
             }
             nameToGadgetMap.put(gadget.getName(), gadget);
         }
+        checkRep();
     }
     
 
@@ -576,9 +582,19 @@ public class Board {
     }
     
     /**
-     * Checks Boa
+     * Checks Board's representation invariants of 
+     * gadgets not overlapping and gadgets being contained in the board
      */
-	
+	private void checkRep() {
+	    // check that gadgets are in bounds
+	    for (Gadget gadget : gadgets) {
+	        assert(gadget.getX() < this.width);
+	        assert(gadget.getY() < this.height);
+	        assert(gadget.getX() >= 0);
+	        assert(gadget.getY() >= 0);
+	    }
+	    
+	}
 	
 }
     
