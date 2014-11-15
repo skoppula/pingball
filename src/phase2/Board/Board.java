@@ -555,6 +555,28 @@ public class Board {
         }
     }
 
+    /**
+     * @return whether or not the x,y coordinates given overlap with any gadgets
+     */
+
+    public boolean onTopOfGadget(int x, int y, List<Gadget> gadgets) {
+
+        Map<DoublePair, Gadget> gadgetCoordinates = new HashMap<DoublePair,Gadget>();
+        for (Gadget gadget : gadgets) {
+            DoublePair coordinates = new DoublePair(gadget.getX(), gadget.getY());
+            if (!gadgetCoordinates.containsKey(coordinates)) {
+
+                gadgetCoordinates.put(coordinates, gadget);
+            }
+        }
+
+        DoublePair otherCoordinates = new DoublePair(x,y);
+        if (gadgetCoordinates.containsKey(otherCoordinates)) {
+            return true;
+        }
+        return false;
+
+    }
 
     /**
      * Flags a ball for removal. The next time removeFlaggedBalls() is called, this ball will be removed.
@@ -612,24 +634,6 @@ public class Board {
             else {
                 gadgetsPerSpot.put(coordinates, 1);
             }
-        }
-        return false;
-    }
-    
-    /**
-     * @return whether or not the x,y coordinates given overlap with any gadgets
-     */
-    public boolean onTopOfGadget(int x, int y, List<Gadget> gadgets) {
-        Map<DoublePair, Gadget> gadgetCoordinates = new HashMap<DoublePair,Gadget>();
-        for (Gadget gadget : gadgets) {
-            DoublePair coordinates = new DoublePair(gadget.getX(), gadget.getY());
-            if (!gadgetCoordinates.containsKey(coordinates)) {
-                gadgetCoordinates.put(coordinates, gadget);
-            }
-        }
-        DoublePair otherCoordinates = new DoublePair(x,y);
-        if (gadgetCoordinates.containsKey(otherCoordinates)) {
-            return true;
         }
         return false;
     }
