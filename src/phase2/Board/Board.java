@@ -532,7 +532,13 @@ public class Board {
             }
             // ball's position changes, but velocity stays the same
             newBall = new Ball(newX, newY, oldBall.getVelocity(), oldBall.getName());
-            this.addBall(newBall);
+            if (!onTopOfGadget((int)Math.floor(newX), (int)Math.floor(newY), gadgets) && 
+                    !onTopOfGadget((int)Math.floor(newX), (int)Math.ceil(newY), gadgets) &&
+                    !onTopOfGadget((int)Math.ceil(newX), (int)Math.floor(newY), gadgets) &&
+                    !onTopOfGadget((int)Math.ceil(newX), (int)Math.ceil(newY), gadgets)) {
+                this.addBall(newBall);
+
+            }
         }
         else if (message.getType().equals(MessageType.CLIENTWALLCHANGE)) {
             if (((ClientWallChangeMessage) message).isConnectOrDisconnect()) { // connecting
@@ -548,6 +554,30 @@ public class Board {
         }
     }
 
+    /**
+
+     * @return whether or not the x,y coordinates given overlap with any gadgets
+
+     */
+
+    public boolean onTopOfGadget(int x, int y, List<Gadget> gadgets) {
+
+        Map<DoublePair, Gadget> gadgetCoordinates = new HashMap<DoublePair,Gadget>();
+        for (Gadget gadget : gadgets) {
+            DoublePair coordinates = new DoublePair(gadget.getX(), gadget.getY());
+            if (!gadgetCoordinates.containsKey(coordinates)) {
+
+                gadgetCoordinates.put(coordinates, gadget);
+            }
+        }
+
+        DoublePair otherCoordinates = new DoublePair(x,y);
+        if (gadgetCoordinates.containsKey(otherCoordinates)) {
+            return true;
+        }
+        return false;
+
+    }
 
     /**
      * Flags a ball for removal. The next time removeFlaggedBalls() is called, this ball will be removed.
