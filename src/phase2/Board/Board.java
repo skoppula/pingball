@@ -555,7 +555,10 @@ public class Board {
     private boolean overlapsWithGadget(double x, double y) {
         for(Gadget g:this.gadgets) {
             if (g instanceof Wall) continue;
-            if (xyInXY(x, y, g.getX(), g.getY())) return true;
+            if (xyInXY(x, y, g.getX(), g.getY())) {
+                System.out.println("ASDFASDF YUM YUM");
+                return true;
+            }
         }
         return false;
     }
