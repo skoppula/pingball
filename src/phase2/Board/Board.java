@@ -533,12 +533,25 @@ public class Board {
             // ball's position changes, but velocity stays the same
             newBall = new Ball(newX, newY, oldBall.getVelocity(), oldBall.getName());
             
-            // only place the ball in the new board if it will not immediately run into a gadget
+         // only place the ball in the new board if it will not immediately run into a gadget
+
             if (!onTopOfGadget((int)Math.floor(newX), (int)Math.floor(newY), gadgets) && 
                     !onTopOfGadget((int)Math.floor(newX), (int)Math.ceil(newY), gadgets) &&
                     !onTopOfGadget((int)Math.ceil(newX), (int)Math.floor(newY), gadgets) &&
                     !onTopOfGadget((int)Math.ceil(newX), (int)Math.ceil(newY), gadgets)) {
                 this.addBall(newBall);
+            }
+
+            else {
+                try {
+                    Vect newVelocity = Vect.ZERO.minus(oldBall.getVelocity());
+                    newBall = new Ball(newX, newY, newVelocity, oldBall.getName());
+                    outQ.put(new BallMessage(newBall, new BoardWallPair(this.name, outOrientation)));
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
             }
         }
         else if (message.getType().equals(MessageType.CLIENTWALLCHANGE)) {
